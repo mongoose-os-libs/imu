@@ -49,6 +49,34 @@ void mgos_imu_destroy(struct mgos_imu **sensor) {
   return;
 }
 
+bool mgos_imu_has_accelerometer(struct mgos_imu *sensor) {
+  if (!sensor) {
+    return false;
+  }
+  return sensor->capabilities & MGOS_IMU_CAP_ACCELEROMETER;
+}
+
+bool mgos_imu_has_gyroscope(struct mgos_imu *sensor) {
+  if (!sensor) {
+    return false;
+  }
+  return sensor->capabilities & MGOS_IMU_CAP_GYROSCOPE;
+}
+
+bool mgos_imu_has_magnetometer(struct mgos_imu *sensor) {
+  if (!sensor) {
+    return false;
+  }
+  return sensor->capabilities & MGOS_IMU_CAP_MAGNETOMETER;
+}
+
+bool mgos_imu_has_thermometer(struct mgos_imu *sensor) {
+  if (!sensor) {
+    return false;
+  }
+  return sensor->capabilities & MGOS_IMU_CAP_THERMOMETER;
+}
+
 bool mgos_imu_init(void) {
   return true;
 }
