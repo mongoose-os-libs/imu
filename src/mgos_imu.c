@@ -45,7 +45,6 @@ bool mgos_imu_create_gyroscope_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
     case GYRO_MPU9250:
       imu->gyro->detect = mgos_imu_mpu9250_gyro_detect;
       imu->gyro->create = mgos_imu_mpu9250_gyro_create;
-      imu->gyro->destroy = mgos_imu_mpu9250_gyro_destroy;
       imu->gyro->read = mgos_imu_mpu9250_gyro_read;
       break;
     default:
@@ -88,7 +87,6 @@ bool mgos_imu_create_accelerometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
     case ACC_MPU9250:
       imu->acc->detect = mgos_imu_mpu9250_acc_detect;
       imu->acc->create = mgos_imu_mpu9250_acc_create;
-      imu->acc->destroy = mgos_imu_mpu9250_acc_destroy;
       imu->acc->read = mgos_imu_mpu9250_acc_read;
       break;
     default:

@@ -31,7 +31,6 @@ struct mgos_imu {
   struct mgos_imu_mag * mag;
   struct mgos_imu_acc * acc;
   struct mgos_imu_gyro *gyro;
-  uint8_t               capabilities;
 };
 
 // Magnetometer

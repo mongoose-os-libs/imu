@@ -53,15 +53,12 @@
 
 bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev);
 bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev);
-bool mgos_imu_mpu9250_acc_destroy(struct mgos_imu_acc *dev);
 bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev);
 
 bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev);
 bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev);
-bool mgos_imu_mpu9250_gyro_destroy(struct mgos_imu_gyro *dev);
 bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev);
 
 bool mgos_imu_mpu9250_mag_detect(struct mgos_imu_mag *dev);
 bool mgos_imu_mpu9250_mag_create(struct mgos_imu_mag *dev);
-bool mgos_imu_mpu9250_mag_destroy(struct mgos_imu_mag *dev);
 bool mgos_imu_mpu9250_mag_read(struct mgos_imu_mag *dev);
