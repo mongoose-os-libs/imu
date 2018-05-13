@@ -17,6 +17,7 @@
 #include "mgos.h"
 #include "mgos_imu_internal.h"
 #include "mgos_imu_ak8963.h"
+#include "mgos_imu_ak8975.h"
 #include "mgos_imu_mag3110.h"
 
 static struct mgos_imu_mag *mgos_imu_mag_create(void) {
@@ -114,6 +115,12 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
     imu->mag->detect = mgos_imu_ak8963_detect;
     imu->mag->create = mgos_imu_ak8963_create;
     imu->mag->read   = mgos_imu_ak8963_read;
+    break;
+
+  case MAG_AK8975:
+    imu->mag->detect = mgos_imu_ak8975_detect;
+    imu->mag->create = mgos_imu_ak8975_create;
+    imu->mag->read   = mgos_imu_ak8975_read;
     break;
 
   case MAG_MAG3110:
