@@ -18,6 +18,7 @@
 #include "mgos_imu_internal.h"
 #include "mgos_imu_mpu9250.h"
 #include "mgos_imu_ak8963.h"
+#include "mgos_imu_mag3110.h"
 #include <math.h>
 
 // Private functions follow
@@ -133,6 +134,11 @@ bool mgos_imu_create_magnetometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
       imu->mag->create = mgos_imu_ak8963_create;
       imu->mag->read = mgos_imu_ak8963_read;
       break;
+    case MAG_MAG3110:
+      imu->mag->detect = mgos_imu_mag3110_detect;
+      imu->mag->create = mgos_imu_mag3110_create;
+      imu->mag->read = mgos_imu_mag3110_read;
+      break;
     default:
       LOG(LL_ERROR, ("Unknown magnetometer type %d", type));
       mgos_imu_destroy_magnetometer(imu);
@@ -236,6 +242,7 @@ const char *mgos_imu_get_magnetometer_name(struct mgos_imu *imu) {
   switch (imu->mag->type) {
   case MAG_NONE: return "NONE";
   case MAG_AK8963: return "AK8963";
+  case MAG_MAG3110: return "MAG3110";
   default: return "UNKNOWN";
   }
 }
