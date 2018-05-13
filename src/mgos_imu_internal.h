@@ -56,9 +56,6 @@ struct mgos_imu_mag {
   int16_t                mx, my, mz;
 };
 
-struct mgos_imu_mag *mgos_imu_mag_create(void);
-bool mgos_imu_mag_destroy(struct mgos_imu_mag **mag);
-
 // Accelerometer
 typedef bool (*mgos_imu_acc_detect_fn)(struct mgos_imu_acc *dev);
 typedef bool (*mgos_imu_acc_create_fn)(struct mgos_imu_acc *dev);
@@ -81,9 +78,6 @@ struct mgos_imu_acc {
   int16_t                ax, ay, az;
 };
 
-struct mgos_imu_acc *mgos_imu_acc_create(void);
-bool mgos_imu_acc_destroy(struct mgos_imu_acc **acc);
-
 // Gyroscope
 typedef bool (*mgos_imu_gyro_detect_fn)(struct mgos_imu_gyro *dev);
 typedef bool (*mgos_imu_gyro_create_fn)(struct mgos_imu_gyro *dev);
@@ -105,9 +99,6 @@ struct mgos_imu_gyro {
   float                   scale;
   int16_t                gx, gy, gz;
 };
-
-struct mgos_imu_gyro *mgos_imu_gyro_create(void);
-bool mgos_imu_gyro_destroy(struct mgos_imu_gyro **gyro);
 
 #ifdef __cplusplus
 }
