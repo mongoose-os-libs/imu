@@ -20,72 +20,103 @@
 
 static struct mgos_imu_acc *mgos_imu_acc_create(void) {
   struct mgos_imu_acc *acc;
+
   acc = calloc(1, sizeof(struct mgos_imu_acc));
-  if (!acc) return NULL;
+  if (!acc) {
+    return NULL;
+  }
   memset(acc, 0, sizeof(struct mgos_imu_acc));
 
-  acc->type=ACC_NONE;
+  acc->type = ACC_NONE;
   return acc;
 }
 
 static bool mgos_imu_acc_destroy(struct mgos_imu_acc **acc) {
-  if (!*acc) return false;
-  if ((*acc)->destroy) (*acc)->destroy(*acc);
-  if ((*acc)->user_data) free((*acc)->user_data);
+  if (!*acc) {
+    return false;
+  }
+  if ((*acc)->destroy) {
+    (*acc)->destroy(*acc);
+  }
+  if ((*acc)->user_data) {
+    free((*acc)->user_data);
+  }
   free(*acc);
-  *acc=NULL;
+  *acc = NULL;
   return true;
 }
 
 bool mgos_imu_accelerometer_destroy(struct mgos_imu *imu) {
   bool ret;
-  if (!imu || !imu->acc) return false;
-  ret=mgos_imu_acc_destroy(&(imu->acc));
-  imu->acc=NULL;
+
+  if (!imu || !imu->acc) {
+    return false;
+  }
+  ret      = mgos_imu_acc_destroy(&(imu->acc));
+  imu->acc = NULL;
   return ret;
 }
 
 const char *mgos_imu_accelerometer_get_name(struct mgos_imu *imu) {
-  if (!imu || !imu->acc) return "VOID";
+  if (!imu || !imu->acc) {
+    return "VOID";
+  }
 
   switch (imu->acc->type) {
   case ACC_NONE: return "NONE";
+
   case ACC_MPU9250: return "MPU9250";
+
   default: return "UNKNOWN";
   }
 }
 
 bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float *z) {
-  if (!imu->acc || !imu->acc->read) return false;
+  if (!imu->acc || !imu->acc->read) {
+    return false;
+  }
 
   if (!imu->acc->read(imu->acc)) {
     LOG(LL_ERROR, ("Could not read from accelerometer"));
     return false;
   }
-  if (x) *x=imu->acc->scale * imu->acc->ax;
-  if (y) *y=imu->acc->scale * imu->acc->ay;
-  if (z) *z=imu->acc->scale * imu->acc->az;
+  if (x) {
+    *x = imu->acc->scale * imu->acc->ax;
+  }
+  if (y) {
+    *y = imu->acc->scale * imu->acc->ay;
+  }
+  if (z) {
+    *z = imu->acc->scale * imu->acc->az;
+  }
   return true;
 }
 
 bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_acc_type type) {
-  if (!imu) return false;
-  if (imu->acc) mgos_imu_accelerometer_destroy(imu);
-  imu->acc=mgos_imu_acc_create();
-  if (!imu->acc) false;
-  imu->acc->i2c=i2c;
-  imu->acc->i2caddr=i2caddr;
-  imu->acc->type=type;
-  switch(type) {
-    case ACC_MPU9250:
-      imu->acc->detect = mgos_imu_mpu9250_acc_detect;
-      imu->acc->create = mgos_imu_mpu9250_acc_create;
-      imu->acc->read = mgos_imu_mpu9250_acc_read;
-      break;
-    default:
-      LOG(LL_ERROR, ("Unknown accelerometer type %d", type));
-      mgos_imu_accelerometer_destroy(imu);
-      return false;
+  if (!imu) {
+    return false;
+  }
+  if (imu->acc) {
+    mgos_imu_accelerometer_destroy(imu);
+  }
+  imu->acc = mgos_imu_acc_create();
+  if (!imu->acc) {
+    false;
+  }
+  imu->acc->i2c     = i2c;
+  imu->acc->i2caddr = i2caddr;
+  imu->acc->type    = type;
+  switch (type) {
+  case ACC_MPU9250:
+    imu->acc->detect = mgos_imu_mpu9250_acc_detect;
+    imu->acc->create = mgos_imu_mpu9250_acc_create;
+    imu->acc->read   = mgos_imu_mpu9250_acc_read;
+    break;
+
+  default:
+    LOG(LL_ERROR, ("Unknown accelerometer type %d", type));
+    mgos_imu_accelerometer_destroy(imu);
+    return false;
   }
   if (imu->acc->detect) {
     if (!imu->acc->detect(imu->acc)) {

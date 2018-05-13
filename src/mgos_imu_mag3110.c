@@ -21,7 +21,9 @@
 bool mgos_imu_mag3110_detect(struct mgos_imu_mag *dev) {
   int device_id;
 
-  if (!dev) return false;
+  if (!dev) {
+    return false;
+  }
 
   device_id = mgos_i2c_read_reg_b(dev->i2c, dev->i2caddr, MGOS_MAG3110_REG_WHO_AM_I);
   if (device_id == MGOS_MAG3110_DEVID) {
@@ -32,7 +34,9 @@ bool mgos_imu_mag3110_detect(struct mgos_imu_mag *dev) {
 }
 
 bool mgos_imu_mag3110_create(struct mgos_imu_mag *dev) {
-  if (!dev) return false;
+  if (!dev) {
+    return false;
+  }
 
   // Standby
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MAG3110_REG_CTRL_REG1, 0x00);
@@ -42,21 +46,24 @@ bool mgos_imu_mag3110_create(struct mgos_imu_mag *dev) {
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MAG3110_REG_CTRL_REG2, 0x80);
   mgos_usleep(20000);
 
-  // Put MAG3110 in active mode 10 Hz ODR with 128x oversampling, noise 0.25 uT RMS 
+  // Put MAG3110 in active mode 10 Hz ODR with 128x oversampling, noise 0.25 uT RMS
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MAG3110_REG_CTRL_REG1, 0x19);
   mgos_usleep(20000);
 
-  dev->scale=0.001;
-  dev->bias[0]=1.0;
-  dev->bias[1]=1.0;
-  dev->bias[2]=1.0;
+  dev->scale   = 0.001;
+  dev->bias[0] = 1.0;
+  dev->bias[1] = 1.0;
+  dev->bias[2] = 1.0;
 
   return true;
 }
 
 bool mgos_imu_mag3110_read(struct mgos_imu_mag *dev) {
   uint8_t data[6];
-  if (!dev) return false;
+
+  if (!dev) {
+    return false;
+  }
   if (!mgos_i2c_read_reg_n(dev->i2c, dev->i2caddr, MGOS_MAG3110_REG_OUT_X_MSB, 6, data)) {
     return false;
   }

@@ -21,7 +21,9 @@
 bool mgos_imu_ak8963_detect(struct mgos_imu_mag *dev) {
   int device_id;
 
-  if (!dev) return false;
+  if (!dev) {
+    return false;
+  }
 
   device_id = mgos_i2c_read_reg_b(dev->i2c, dev->i2caddr, MGOS_AK8963_REG_WHO_AM_I);
   if (device_id == MGOS_AK8963_DEVID) {
@@ -32,7 +34,9 @@ bool mgos_imu_ak8963_detect(struct mgos_imu_mag *dev) {
 }
 
 bool mgos_imu_ak8963_create(struct mgos_imu_mag *dev) {
-  if (!dev) return false;
+  if (!dev) {
+    return false;
+  }
 
   // Reset
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_AK8963_REG_CNTL, 0x00);
@@ -60,14 +64,17 @@ bool mgos_imu_ak8963_create(struct mgos_imu_mag *dev) {
   // Set magnetometer config: 16-bit, continuous measurement mode 2 (100Hz)
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_AK8963_REG_CNTL, 0x16);
   mgos_usleep(10000);
-  dev->scale=4192.0 / 32768.0;
+  dev->scale = 4192.0 / 32768.0;
 
   return true;
 }
 
 bool mgos_imu_ak8963_read(struct mgos_imu_mag *dev) {
   uint8_t data[7];
-  if (!dev) return false;
+
+  if (!dev) {
+    return false;
+  }
   if (!mgos_i2c_read_reg_n(dev->i2c, dev->i2caddr, MGOS_AK8963_REG_XOUT_L, 7, data)) {
     return false;
   }

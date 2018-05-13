@@ -20,72 +20,103 @@
 
 static struct mgos_imu_gyro *mgos_imu_gyro_create(void) {
   struct mgos_imu_gyro *gyro;
+
   gyro = calloc(1, sizeof(struct mgos_imu_gyro));
-  if (!gyro) return NULL;
+  if (!gyro) {
+    return NULL;
+  }
   memset(gyro, 0, sizeof(struct mgos_imu_gyro));
 
-  gyro->type=GYRO_NONE;
+  gyro->type = GYRO_NONE;
   return gyro;
 }
 
 static bool mgos_imu_gyro_destroy(struct mgos_imu_gyro **gyro) {
-  if (!*gyro) return false;
-  if ((*gyro)->destroy) (*gyro)->destroy(*gyro);
-  if ((*gyro)->user_data) free((*gyro)->user_data);
+  if (!*gyro) {
+    return false;
+  }
+  if ((*gyro)->destroy) {
+    (*gyro)->destroy(*gyro);
+  }
+  if ((*gyro)->user_data) {
+    free((*gyro)->user_data);
+  }
   free(*gyro);
-  *gyro=NULL;
+  *gyro = NULL;
   return true;
 }
 
 bool mgos_imu_gyroscope_destroy(struct mgos_imu *imu) {
   bool ret;
-  if (!imu || !imu->gyro) return false;
-  ret=mgos_imu_gyro_destroy(&(imu->gyro));
-  imu->gyro=NULL;
+
+  if (!imu || !imu->gyro) {
+    return false;
+  }
+  ret       = mgos_imu_gyro_destroy(&(imu->gyro));
+  imu->gyro = NULL;
   return ret;
 }
 
 const char *mgos_imu_gyroscope_get_name(struct mgos_imu *imu) {
-  if (!imu || !imu->gyro) return "VOID";
+  if (!imu || !imu->gyro) {
+    return "VOID";
+  }
 
   switch (imu->gyro->type) {
   case GYRO_NONE: return "NONE";
+
   case GYRO_MPU9250: return "MPU9250";
+
   default: return "UNKNOWN";
   }
 }
 
 bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z) {
-  if (!imu->gyro || !imu->gyro->read) return false;
+  if (!imu->gyro || !imu->gyro->read) {
+    return false;
+  }
 
   if (!imu->gyro->read(imu->gyro)) {
     LOG(LL_ERROR, ("Could not read from gyroscope"));
     return false;
   }
-  if (x) *x=imu->gyro->scale * imu->gyro->gx;
-  if (y) *y=imu->gyro->scale * imu->gyro->gy;
-  if (z) *z=imu->gyro->scale * imu->gyro->gz;
+  if (x) {
+    *x = imu->gyro->scale * imu->gyro->gx;
+  }
+  if (y) {
+    *y = imu->gyro->scale * imu->gyro->gy;
+  }
+  if (z) {
+    *z = imu->gyro->scale * imu->gyro->gz;
+  }
   return true;
 }
 
 bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_gyro_type type) {
-  if (!imu) return false;
-  if (imu->gyro) mgos_imu_gyroscope_destroy(imu);
-  imu->gyro=mgos_imu_gyro_create();
-  if (!imu->gyro) false;
-  imu->gyro->i2c=i2c;
-  imu->gyro->i2caddr=i2caddr;
-  imu->gyro->type=type;
-  switch(type) {
-    case GYRO_MPU9250:
-      imu->gyro->detect = mgos_imu_mpu9250_gyro_detect;
-      imu->gyro->create = mgos_imu_mpu9250_gyro_create;
-      imu->gyro->read = mgos_imu_mpu9250_gyro_read;
-      break;
-    default:
-      LOG(LL_ERROR, ("Unknown gyroscope type %d", type));
-      mgos_imu_gyroscope_destroy(imu);
-      return false;
+  if (!imu) {
+    return false;
+  }
+  if (imu->gyro) {
+    mgos_imu_gyroscope_destroy(imu);
+  }
+  imu->gyro = mgos_imu_gyro_create();
+  if (!imu->gyro) {
+    false;
+  }
+  imu->gyro->i2c     = i2c;
+  imu->gyro->i2caddr = i2caddr;
+  imu->gyro->type    = type;
+  switch (type) {
+  case GYRO_MPU9250:
+    imu->gyro->detect = mgos_imu_mpu9250_gyro_detect;
+    imu->gyro->create = mgos_imu_mpu9250_gyro_create;
+    imu->gyro->read   = mgos_imu_mpu9250_gyro_read;
+    break;
+
+  default:
+    LOG(LL_ERROR, ("Unknown gyroscope type %d", type));
+    mgos_imu_gyroscope_destroy(imu);
+    return false;
   }
   if (imu->gyro->detect) {
     if (!imu->gyro->detect(imu->gyro)) {

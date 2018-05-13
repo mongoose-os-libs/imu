@@ -19,26 +19,26 @@
 #include "mgos.h"
 #include "mgos_imu_internal.h"
 
-#define MGOS_MPU9250_DEFAULT_I2CADDR        (0x68)
+#define MGOS_MPU9250_DEFAULT_I2CADDR      (0x68)
 
-#define MGOS_MPU9250_DEVID_9250             (0x71)
-#define MGOS_MPU9250_DEVID_9255             (0x73)
+#define MGOS_MPU9250_DEVID_9250           (0x71)
+#define MGOS_MPU9250_DEVID_9255           (0x73)
 
 // MPU9250 -- Accelerometer and Gyro registers
-#define MGOS_MPU9250_REG_SMPLRT_DIV         (0x19)
-#define MGOS_MPU9250_REG_CONFIG             (0x1A)
-#define MGOS_MPU9250_REG_GYRO_CONFIG        (0x1B)
-#define MGOS_MPU9250_REG_ACCEL_CONFIG       (0x1C)
-#define MGOS_MPU9250_REG_ACCEL_CONFIG2      (0x1D)
-#define MGOS_MPU9250_REG_INT_PIN_CFG        (0x37)
-#define MGOS_MPU9250_REG_INT_ENABLE         (0x38)
-#define MGOS_MPU9250_REG_INT_STATUS         (0x3A)
-#define MGOS_MPU9250_REG_ACCEL_XOUT_H       (0x3B)
-#define MGOS_MPU9250_REG_TEMP_OUT_H         (0x41)
-#define MGOS_MPU9250_REG_GYRO_XOUT_H        (0x43)
-#define MGOS_MPU9250_REG_PWR_MGMT_1         (0x6B)
-#define MGOS_MPU9250_REG_PWR_MGMT_2         (0x6C)
-#define MGOS_MPU9250_REG_WHO_AM_I           (0x75)
+#define MGOS_MPU9250_REG_SMPLRT_DIV       (0x19)
+#define MGOS_MPU9250_REG_CONFIG           (0x1A)
+#define MGOS_MPU9250_REG_GYRO_CONFIG      (0x1B)
+#define MGOS_MPU9250_REG_ACCEL_CONFIG     (0x1C)
+#define MGOS_MPU9250_REG_ACCEL_CONFIG2    (0x1D)
+#define MGOS_MPU9250_REG_INT_PIN_CFG      (0x37)
+#define MGOS_MPU9250_REG_INT_ENABLE       (0x38)
+#define MGOS_MPU9250_REG_INT_STATUS       (0x3A)
+#define MGOS_MPU9250_REG_ACCEL_XOUT_H     (0x3B)
+#define MGOS_MPU9250_REG_TEMP_OUT_H       (0x41)
+#define MGOS_MPU9250_REG_GYRO_XOUT_H      (0x43)
+#define MGOS_MPU9250_REG_PWR_MGMT_1       (0x6B)
+#define MGOS_MPU9250_REG_PWR_MGMT_2       (0x6C)
+#define MGOS_MPU9250_REG_WHO_AM_I         (0x75)
 
 bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev);
 bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev);

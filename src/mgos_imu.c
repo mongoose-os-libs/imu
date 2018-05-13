@@ -50,21 +50,21 @@ bool mgos_imu_has_accelerometer(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }
-  return (imu->acc != NULL);
+  return imu->acc != NULL;
 }
 
 bool mgos_imu_has_gyroscope(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }
-  return (imu->gyro != NULL);
+  return imu->gyro != NULL;
 }
 
 bool mgos_imu_has_magnetometer(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }
-  return (imu->mag != NULL);
+  return imu->mag != NULL;
 }
 
 bool mgos_imu_read(struct mgos_imu *imu) {

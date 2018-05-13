@@ -40,20 +40,20 @@ typedef bool (*mgos_imu_mag_destroy_fn)(struct mgos_imu_mag *dev);
 typedef bool (*mgos_imu_mag_read_fn)(struct mgos_imu_mag *dev);
 
 struct mgos_imu_mag {
-  mgos_imu_mag_detect_fn detect;
+  mgos_imu_mag_detect_fn  detect;
   mgos_imu_mag_create_fn  create;
-  mgos_imu_mag_destroy_fn   destroy;
-  mgos_imu_mag_read_fn   read;
+  mgos_imu_mag_destroy_fn destroy;
+  mgos_imu_mag_read_fn    read;
 
-  struct mgos_i2c *      i2c;
-  uint8_t                i2caddr;
-  enum mgos_imu_mag_type type;
+  struct mgos_i2c *       i2c;
+  uint8_t                 i2caddr;
+  enum mgos_imu_mag_type  type;
 
-  void *user_data;
+  void *                  user_data;
 
-  float                  scale;
-  float                  bias[3];
-  int16_t                mx, my, mz;
+  float                   scale;
+  float                   bias[3];
+  int16_t                 mx, my, mz;
 };
 
 // Accelerometer
@@ -63,19 +63,19 @@ typedef bool (*mgos_imu_acc_destroy_fn)(struct mgos_imu_acc *dev);
 typedef bool (*mgos_imu_acc_read_fn)(struct mgos_imu_acc *dev);
 
 struct mgos_imu_acc {
-  mgos_imu_acc_detect_fn detect;
+  mgos_imu_acc_detect_fn  detect;
   mgos_imu_acc_create_fn  create;
-  mgos_imu_acc_destroy_fn   destroy;
-  mgos_imu_acc_read_fn   read;
+  mgos_imu_acc_destroy_fn destroy;
+  mgos_imu_acc_read_fn    read;
 
-  struct mgos_i2c *      i2c;
-  uint8_t                i2caddr;
-  enum mgos_imu_acc_type type;
+  struct mgos_i2c *       i2c;
+  uint8_t                 i2caddr;
+  enum mgos_imu_acc_type  type;
 
-  void *user_data;
+  void *                  user_data;
 
-  float                  scale;
-  int16_t                ax, ay, az;
+  float                   scale;
+  int16_t                 ax, ay, az;
 };
 
 // Gyroscope
@@ -85,19 +85,19 @@ typedef bool (*mgos_imu_gyro_destroy_fn)(struct mgos_imu_gyro *dev);
 typedef bool (*mgos_imu_gyro_read_fn)(struct mgos_imu_gyro *dev);
 
 struct mgos_imu_gyro {
-  mgos_imu_gyro_detect_fn detect;
+  mgos_imu_gyro_detect_fn  detect;
   mgos_imu_gyro_create_fn  create;
-  mgos_imu_gyro_destroy_fn   destroy;
-  mgos_imu_gyro_read_fn   read;
+  mgos_imu_gyro_destroy_fn destroy;
+  mgos_imu_gyro_read_fn    read;
 
-  struct mgos_i2c *       i2c;
-  uint8_t                 i2caddr;
-  enum mgos_imu_gyro_type type;
+  struct mgos_i2c *        i2c;
+  uint8_t                  i2caddr;
+  enum mgos_imu_gyro_type  type;
 
-  void *user_data;
+  void *                   user_data;
 
-  float                   scale;
-  int16_t                gx, gy, gz;
+  float                    scale;
+  int16_t                  gx, gy, gz;
 };
 
 #ifdef __cplusplus

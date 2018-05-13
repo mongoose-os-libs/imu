@@ -19,17 +19,17 @@
 #include "mgos.h"
 #include "mgos_imu_internal.h"
 
-#define MGOS_AK8963_DEFAULT_I2CADDR         (0x0C)
-#define MGOS_AK8963_DEVID           (0x48)
+#define MGOS_AK8963_DEFAULT_I2CADDR    (0x0C)
+#define MGOS_AK8963_DEVID              (0x48)
 
 // AK8963 Magnetometer Registers
-#define MGOS_AK8963_REG_WHO_AM_I    (0x00)
-#define MGOS_AK8963_REG_ST1         (0x02)
-#define MGOS_AK8963_REG_XOUT_L      (0x03)
-#define MGOS_AK8963_REG_CNTL        (0x0A)
-#define MGOS_AK8963_REG_ASAX        (0x10)
-#define MGOS_AK8963_REG_ASAY        (0x11)
-#define MGOS_AK8963_REG_ASAZ        (0x12)
+#define MGOS_AK8963_REG_WHO_AM_I       (0x00)
+#define MGOS_AK8963_REG_ST1            (0x02)
+#define MGOS_AK8963_REG_XOUT_L         (0x03)
+#define MGOS_AK8963_REG_CNTL           (0x0A)
+#define MGOS_AK8963_REG_ASAX           (0x10)
+#define MGOS_AK8963_REG_ASAY           (0x11)
+#define MGOS_AK8963_REG_ASAZ           (0x12)
 
 bool mgos_imu_ak8963_detect(struct mgos_imu_mag *dev);
 bool mgos_imu_ak8963_create(struct mgos_imu_mag *dev);

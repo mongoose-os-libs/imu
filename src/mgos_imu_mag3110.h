@@ -19,21 +19,21 @@
 #include "mgos.h"
 #include "mgos_imu_internal.h"
 
-#define MGOS_MAG3110_DEFAULT_I2CADDR (0x0E)
-#define MGOS_MAG3110_DEVID           (0xC4)
+#define MGOS_MAG3110_DEFAULT_I2CADDR    (0x0E)
+#define MGOS_MAG3110_DEVID              (0xC4)
 
 // MAG3110 Magnetometer Registers
-#define MGOS_MAG3110_REG_OUT_X_MSB   (0x01)
-#define MGOS_MAG3110_REG_OUT_X_LSB   (0x02)
-#define MGOS_MAG3110_REG_OUT_Y_MSB   (0x03)
-#define MGOS_MAG3110_REG_OUT_Y_LSB   (0x04)
-#define MGOS_MAG3110_REG_OUT_Z_MSB   (0x05)
-#define MGOS_MAG3110_REG_OUT_Z_LSB   (0x06)
-#define MGOS_MAG3110_REG_WHO_AM_I    (0x07)
-#define MGOS_MAG3110_REG_SYSMOD      (0x08)
-#define MGOS_MAG3110_REG_DIE_TEMP    (0x0F)
-#define MGOS_MAG3110_REG_CTRL_REG1   (0x10)
-#define MGOS_MAG3110_REG_CTRL_REG2   (0x11)
+#define MGOS_MAG3110_REG_OUT_X_MSB      (0x01)
+#define MGOS_MAG3110_REG_OUT_X_LSB      (0x02)
+#define MGOS_MAG3110_REG_OUT_Y_MSB      (0x03)
+#define MGOS_MAG3110_REG_OUT_Y_LSB      (0x04)
+#define MGOS_MAG3110_REG_OUT_Z_MSB      (0x05)
+#define MGOS_MAG3110_REG_OUT_Z_LSB      (0x06)
+#define MGOS_MAG3110_REG_WHO_AM_I       (0x07)
+#define MGOS_MAG3110_REG_SYSMOD         (0x08)
+#define MGOS_MAG3110_REG_DIE_TEMP       (0x0F)
+#define MGOS_MAG3110_REG_CTRL_REG1      (0x10)
+#define MGOS_MAG3110_REG_CTRL_REG2      (0x11)
 
 bool mgos_imu_mag3110_detect(struct mgos_imu_mag *dev);
 bool mgos_imu_mag3110_create(struct mgos_imu_mag *dev);
