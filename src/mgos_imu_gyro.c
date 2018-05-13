@@ -29,6 +29,8 @@ struct mgos_imu_gyro *mgos_imu_gyro_create(void) {
 
 bool mgos_imu_gyro_destroy(struct mgos_imu_gyro **gyro) {
   if (!*gyro) return false;
+  if ((*gyro)->destroy) (*gyro)->destroy(*gyro);
+  if ((*gyro)->user_data) free((*gyro)->user_data);
   free(*gyro);
   *gyro=NULL;
   return true;

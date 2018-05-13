@@ -29,6 +29,8 @@ struct mgos_imu_mag *mgos_imu_mag_create(void) {
 
 bool mgos_imu_mag_destroy(struct mgos_imu_mag **mag) {
   if (!*mag) return false;
+  if ((*mag)->destroy) (*mag)->destroy(*mag);
+  if ((*mag)->user_data) free((*mag)->user_data);
   free(*mag);
   *mag=NULL;
   return true;

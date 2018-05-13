@@ -29,6 +29,8 @@ struct mgos_imu_acc *mgos_imu_acc_create(void) {
 
 bool mgos_imu_acc_destroy(struct mgos_imu_acc **acc) {
   if (!*acc) return false;
+  if ((*acc)->destroy) (*acc)->destroy(*acc);
+  if ((*acc)->user_data) free((*acc)->user_data);
   free(*acc);
   *acc=NULL;
   return true;
