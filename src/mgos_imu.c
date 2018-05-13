@@ -21,60 +21,95 @@
 // Private functions end
 
 // Public functions follow
-struct mgos_imu *mgos_imu_create_i2c(struct mgos_i2c *i2c) {
-  struct mgos_imu *sensor;
+struct mgos_imu *mgos_imu_create(void) {
+  struct mgos_imu *imu;
 
-  if (!i2c) {
+  imu = calloc(1, sizeof(struct mgos_imu));
+  if (!imu) {
     return NULL;
   }
-
-  sensor = calloc(1, sizeof(struct mgos_imu));
-  if (!sensor) {
-    return NULL;
-  }
-  memset(sensor, 0, sizeof(struct mgos_imu));
-  return sensor;
+  memset(imu, 0, sizeof(struct mgos_imu));
+  return imu;
 }
 
-void mgos_imu_destroy(struct mgos_imu **sensor) {
-  if (!*sensor) {
+bool mgos_imu_create_gyroscope_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_gyro_type type) {
+  return false;
+  (void) imu;
+  (void) i2c;
+  (void) i2caddr;
+  (void) type;
+}
+
+bool mgos_imu_create_accelerometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_acc_type type) {
+  return false;
+  (void) imu;
+  (void) i2c;
+  (void) i2caddr;
+  (void) type;
+}
+
+bool mgos_imu_create_magnetometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_mag_type type) {
+  return false;
+  (void) imu;
+  (void) i2c;
+  (void) i2caddr;
+  (void) type;
+}
+
+bool mgos_imu_destroy_gyroscope(struct mgos_imu *imu) {
+  return false;
+  (void) imu;
+}
+
+bool mgos_imu_destroy_accelerometer(struct mgos_imu *imu) {
+  return false;
+  (void) imu;
+}
+
+bool mgos_imu_destroy_magnetometer(struct mgos_imu *imu) {
+  return false;
+  (void) imu;
+}
+
+void mgos_imu_destroy(struct mgos_imu **imu) {
+  if (!*imu) {
     return;
   }
-  if ((*sensor)->gyro) mgos_imu_gyro_destroy(&((*sensor)->gyro));
-  if ((*sensor)->acc) mgos_imu_acc_destroy(&((*sensor)->acc));
-  if ((*sensor)->mag) mgos_imu_mag_destroy(&((*sensor)->mag));
+  if ((*imu)->gyro) mgos_imu_gyro_destroy(&((*imu)->gyro));
+  if ((*imu)->acc) mgos_imu_acc_destroy(&((*imu)->acc));
+  if ((*imu)->mag) mgos_imu_mag_destroy(&((*imu)->mag));
 
-  free(*sensor);
-  *sensor = NULL;
+  free(*imu);
+  *imu = NULL;
   return;
 }
 
-bool mgos_imu_has_accelerometer(struct mgos_imu *sensor) {
-  if (!sensor) {
+bool mgos_imu_has_accelerometer(struct mgos_imu *imu) {
+  if (!imu) {
     return false;
   }
-  return sensor->capabilities & MGOS_IMU_CAP_ACCELEROMETER;
+  return imu->capabilities & MGOS_IMU_CAP_ACCELEROMETER;
 }
 
-bool mgos_imu_has_gyroscope(struct mgos_imu *sensor) {
-  if (!sensor) {
+bool mgos_imu_has_gyroscope(struct mgos_imu *imu) {
+  if (!imu) {
     return false;
   }
-  return sensor->capabilities & MGOS_IMU_CAP_GYROSCOPE;
+  return imu->capabilities & MGOS_IMU_CAP_GYROSCOPE;
 }
 
-bool mgos_imu_has_magnetometer(struct mgos_imu *sensor) {
-  if (!sensor) {
+bool mgos_imu_has_magnetometer(struct mgos_imu *imu) {
+  if (!imu) {
     return false;
   }
-  return sensor->capabilities & MGOS_IMU_CAP_MAGNETOMETER;
+  return imu->capabilities & MGOS_IMU_CAP_MAGNETOMETER;
 }
 
-bool mgos_imu_has_thermometer(struct mgos_imu *sensor) {
-  if (!sensor) {
+bool mgos_imu_has_thermometer(struct mgos_imu *imu) {
+  if (!imu) {
     return false;
   }
-  return sensor->capabilities & MGOS_IMU_CAP_THERMOMETER;
+  return imu->capabilities & MGOS_IMU_CAP_THERMOMETER;
 }
 
 bool mgos_imu_init(void) {
