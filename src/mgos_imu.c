@@ -17,6 +17,7 @@
 #include "mgos.h"
 #include "mgos_imu_internal.h"
 #include "mgos_imu_mpu9250.h"
+#include <math.h>
 
 // Private functions follow
 // Private functions end
@@ -244,20 +245,48 @@ const char *mgos_imu_get_accelerometer_name(struct mgos_imu *imu) {
 }
 
 bool mgos_imu_read(struct mgos_imu *imu) {
-  if (!imu) return false;
+  mgos_imu_get_accelerometer(imu, NULL, NULL, NULL);
+  mgos_imu_get_gyroscope(imu, NULL, NULL, NULL);
+  mgos_imu_get_magnetometer(imu, NULL, NULL, NULL);
+  return true;
+}
 
-  if (imu->gyro && imu->gyro->read) {
-    if (!imu->gyro->read(imu->gyro))
-      LOG(LL_ERROR, ("Could not read from gyroscope"));
+bool mgos_imu_get_accelerometer(struct mgos_imu *imu, float *x, float *y, float *z) {
+  if (!imu->acc || !imu->acc->read) return false;
+
+  if (!imu->acc->read(imu->acc)) {
+    LOG(LL_ERROR, ("Could not read from accelerometer"));
+    return false;
   }
-  if (imu->acc && imu->acc->read) {
-    if (!imu->acc->read(imu->acc))
-      LOG(LL_ERROR, ("Could not read from accelerometer"));
+  if (*x) *x=NAN;
+  if (*y) *y=NAN;
+  if (*z) *z=NAN;
+  return true;
+}
+
+bool mgos_imu_get_gyroscope(struct mgos_imu *imu, float *x, float *y, float *z) {
+  if (!imu->gyro || !imu->gyro->read) return false;
+
+  if (!imu->gyro->read(imu->gyro)) {
+    LOG(LL_ERROR, ("Could not read from gyroscope"));
+    return false;
   }
-  if (imu->mag && imu->mag->read) {
-    if (!imu->mag->read(imu->mag))
-      LOG(LL_ERROR, ("Could not read from magnetometer"));
+  if (*x) *x=NAN;
+  if (*y) *y=NAN;
+  if (*z) *z=NAN;
+  return true;
+}
+
+bool mgos_imu_get_magnetometer(struct mgos_imu *imu, float *x, float *y, float *z) {
+  if (!imu->mag || !imu->mag->read) return false;
+
+  if (!imu->mag->read(imu->mag)) {
+    LOG(LL_ERROR, ("Could not read from magnetometer"));
+    return false;
   }
+  if (*x) *x=NAN;
+  if (*y) *y=NAN;
+  if (*z) *z=NAN;
   return true;
 }
 

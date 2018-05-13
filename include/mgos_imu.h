@@ -60,7 +60,6 @@ void mgos_imu_destroy(struct mgos_imu **imu);
 bool mgos_imu_has_accelerometer(struct mgos_imu *imu);
 bool mgos_imu_has_gyroscope(struct mgos_imu *imu);
 bool mgos_imu_has_magnetometer(struct mgos_imu *imu);
-bool mgos_imu_has_thermometer(struct mgos_imu *imu);
 
 /* Read all available imu data from the IMU */
 bool mgos_imu_read(struct mgos_imu *imu);
@@ -73,9 +72,6 @@ bool mgos_imu_get_gyroscope(struct mgos_imu *imu, float *x, float *y, float *z);
 
 /* Return magnetometer data in units of microtesla (1 microtesla = 10 milligauss) */
 bool mgos_imu_get_magnetometer(struct mgos_imu *imu, float *x, float *y, float *z);
-
-/* Return thermometer data in units of celcius */
-bool mgos_imu_get_temperature(struct mgos_imu *imu, float *t);
 
 /* Return compass heading based on magnetometer data, from [0..359] */
 bool mgos_imu_get_compass_heading(struct mgos_imu *imu, uint16_t *heading);
