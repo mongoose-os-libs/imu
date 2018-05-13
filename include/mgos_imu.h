@@ -80,6 +80,12 @@ bool mgos_imu_get_temperature(struct mgos_imu *imu, float *t);
 /* Return compass heading based on magnetometer data, from [0..359] */
 bool mgos_imu_get_compass_heading(struct mgos_imu *imu, uint16_t *heading);
 
+/* String representation of the sensor types, guaranteed to be le 10 characters. */
+const char *mgos_imu_get_gyroscope_name(struct mgos_imu *imu);
+const char *mgos_imu_get_magnetometer_name(struct mgos_imu *imu);
+const char *mgos_imu_get_accelerometer_name(struct mgos_imu *imu);
+
+
 /*
  * Initialization function for MGOS -- currently a noop.
  */

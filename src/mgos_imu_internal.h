@@ -23,11 +23,6 @@
 extern "C" {
 #endif
 
-#define MGOS_IMU_CAP_GYROSCOPE      (0x01)
-#define MGOS_IMU_CAP_ACCELEROMETER    (0x02)
-#define MGOS_IMU_CAP_MAGNETOMETER     (0x04)
-#define MGOS_IMU_CAP_THERMOMETER     (0x08)
-
 struct mgos_imu_mag;
 struct mgos_imu_acc;
 struct mgos_imu_gyro;

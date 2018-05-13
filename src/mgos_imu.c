@@ -55,21 +55,21 @@ bool mgos_imu_create_gyroscope_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
   }
   if (imu->gyro->detect) {
     if (!imu->gyro->detect(imu->gyro)) {
-      LOG(LL_ERROR, ("Could not detect gyroscope type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_ERROR, ("Could not detect gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_get_gyroscope_name(imu), i2caddr));
       mgos_imu_destroy_gyroscope(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully detected gyroscope type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_DEBUG, ("Successfully detected gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_get_gyroscope_name(imu), i2caddr));
     }
   }
 
   if (imu->gyro->create) {
     if (!imu->gyro->create(imu->gyro)) {
-      LOG(LL_ERROR, ("Could not create gyroscope type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_ERROR, ("Could not create gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_get_gyroscope_name(imu), i2caddr));
       mgos_imu_destroy_gyroscope(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully created gyroscope type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_DEBUG, ("Successfully created gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_get_gyroscope_name(imu), i2caddr));
     }
   }
 
@@ -98,21 +98,21 @@ bool mgos_imu_create_accelerometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
   }
   if (imu->acc->detect) {
     if (!imu->acc->detect(imu->acc)) {
-      LOG(LL_ERROR, ("Could not detect accelerometer type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_ERROR, ("Could not detect accelerometer type %d (%s) at I2C 0x%02x", type, mgos_imu_get_accelerometer_name(imu), i2caddr));
       mgos_imu_destroy_accelerometer(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully detected accelerometer type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_DEBUG, ("Successfully detected accelerometer type %d (%s) at I2C 0x%02x", type, mgos_imu_get_accelerometer_name(imu), i2caddr));
     }
   }
 
   if (imu->acc->create) {
     if (!imu->acc->create(imu->acc)) {
-      LOG(LL_ERROR, ("Could not create accelerometer type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_ERROR, ("Could not create accelerometer type %d (%s) at I2C 0x%02x", type, mgos_imu_get_accelerometer_name(imu), i2caddr));
       mgos_imu_destroy_accelerometer(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully created accelerometer type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_DEBUG, ("Successfully created accelerometer type %d (%s) at I2C 0x%02x", type, mgos_imu_get_accelerometer_name(imu), i2caddr));
     }
   }
 
@@ -136,21 +136,21 @@ bool mgos_imu_create_magnetometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
 
   if (imu->mag->detect) {
     if (!imu->mag->detect(imu->mag)) {
-      LOG(LL_ERROR, ("Could not detect magnetometer type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_ERROR, ("Could not detect magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_get_magnetometer_name(imu), i2caddr));
       mgos_imu_destroy_magnetometer(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully detected magnetometer type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_DEBUG, ("Successfully detected magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_get_magnetometer_name(imu), i2caddr));
     }
   }
 
   if (imu->mag->create) {
     if (!imu->mag->create(imu->mag)) {
-      LOG(LL_ERROR, ("Could not create magnetometer type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_ERROR, ("Could not create magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_get_magnetometer_name(imu), i2caddr));
       mgos_imu_destroy_magnetometer(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully created magnetometer type %d at I2C 0x%02x", type, i2caddr));
+      LOG(LL_DEBUG, ("Successfully created magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_get_magnetometer_name(imu), i2caddr));
     }
   }
 
@@ -198,28 +198,69 @@ bool mgos_imu_has_accelerometer(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }
-  return imu->capabilities & MGOS_IMU_CAP_ACCELEROMETER;
+  return (imu->acc != NULL);
 }
 
 bool mgos_imu_has_gyroscope(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }
-  return imu->capabilities & MGOS_IMU_CAP_GYROSCOPE;
+  return (imu->gyro != NULL);
 }
 
 bool mgos_imu_has_magnetometer(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }
-  return imu->capabilities & MGOS_IMU_CAP_MAGNETOMETER;
+  return (imu->mag != NULL);
 }
 
-bool mgos_imu_has_thermometer(struct mgos_imu *imu) {
-  if (!imu) {
-    return false;
+const char *mgos_imu_get_gyroscope_name(struct mgos_imu *imu) {
+  if (!imu || !imu->gyro) return "VOID";
+
+  switch (imu->gyro->type) {
+  case GYRO_NONE: return "NONE";
+  case GYRO_MPU9250: return "MPU9250";
+  default: return "UNKNOWN";
   }
-  return imu->capabilities & MGOS_IMU_CAP_THERMOMETER;
+}
+
+const char *mgos_imu_get_magnetometer_name(struct mgos_imu *imu) {
+  if (!imu || !imu->mag) return "VOID";
+
+  switch (imu->mag->type) {
+  case MAG_NONE: return "NONE";
+  case MAG_AK8963: return "AK8963";
+  default: return "UNKNOWN";
+  }
+}
+
+const char *mgos_imu_get_accelerometer_name(struct mgos_imu *imu) {
+  if (!imu || !imu->acc) return "VOID";
+
+  switch (imu->acc->type) {
+  case ACC_NONE: return "NONE";
+  case ACC_MPU9250: return "MPU9250";
+  default: return "UNKNOWN";
+  }
+}
+
+bool mgos_imu_read(struct mgos_imu *imu) {
+  if (!imu) return false;
+
+  if (imu->gyro && imu->gyro->read) {
+    if (!imu->gyro->read(imu->gyro))
+      LOG(LL_ERROR, ("Could not read from gyroscope"));
+  }
+  if (imu->acc && imu->acc->read) {
+    if (!imu->acc->read(imu->acc))
+      LOG(LL_ERROR, ("Could not read from accelerometer"));
+  }
+  if (imu->mag && imu->mag->read) {
+    if (!imu->mag->read(imu->mag))
+      LOG(LL_ERROR, ("Could not read from magnetometer"));
+  }
+  return true;
 }
 
 bool mgos_imu_init(void) {
