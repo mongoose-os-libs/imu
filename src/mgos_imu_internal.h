@@ -51,8 +51,8 @@ struct mgos_imu_mag {
 
   void *user_data;
 
-  float                  gain[3];
-  int16_t                data[3];
+  float                  scale[3];
+  int16_t                mx, my, mz;
 };
 
 struct mgos_imu_mag *mgos_imu_mag_create(void);
@@ -77,7 +77,7 @@ struct mgos_imu_acc {
   void *user_data;
 
   float                  scale;
-  int16_t                data[3];
+  int16_t                ax, ay, az;
 };
 
 struct mgos_imu_acc *mgos_imu_acc_create(void);
@@ -102,9 +102,7 @@ struct mgos_imu_gyro {
   void *user_data;
 
   float                   scale;
-  float                   bias[3];
-  int16_t                 data[3];
-  int16_t                 temperature;
+  int16_t                gx, gy, gz;
 };
 
 struct mgos_imu_gyro *mgos_imu_gyro_create(void);

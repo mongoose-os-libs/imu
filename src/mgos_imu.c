@@ -258,9 +258,9 @@ bool mgos_imu_get_accelerometer(struct mgos_imu *imu, float *x, float *y, float 
     LOG(LL_ERROR, ("Could not read from accelerometer"));
     return false;
   }
-  if (*x) *x=NAN;
-  if (*y) *y=NAN;
-  if (*z) *z=NAN;
+  if (x) *x=imu->acc->scale * imu->acc->ax;
+  if (y) *y=imu->acc->scale * imu->acc->ay;
+  if (z) *z=imu->acc->scale * imu->acc->az;
   return true;
 }
 
@@ -271,9 +271,9 @@ bool mgos_imu_get_gyroscope(struct mgos_imu *imu, float *x, float *y, float *z) 
     LOG(LL_ERROR, ("Could not read from gyroscope"));
     return false;
   }
-  if (*x) *x=NAN;
-  if (*y) *y=NAN;
-  if (*z) *z=NAN;
+  if (x) *x=imu->gyro->scale * imu->gyro->gx;
+  if (y) *y=imu->gyro->scale * imu->gyro->gy;
+  if (z) *z=imu->gyro->scale * imu->gyro->gz;
   return true;
 }
 
@@ -284,9 +284,9 @@ bool mgos_imu_get_magnetometer(struct mgos_imu *imu, float *x, float *y, float *
     LOG(LL_ERROR, ("Could not read from magnetometer"));
     return false;
   }
-  if (*x) *x=NAN;
-  if (*y) *y=NAN;
-  if (*z) *z=NAN;
+  if (x) *x=imu->mag->scale[0] * imu->mag->mx;
+  if (y) *y=imu->mag->scale[1] * imu->mag->my;
+  if (z) *z=imu->mag->scale[2] * imu->mag->mz;
   return true;
 }
 
