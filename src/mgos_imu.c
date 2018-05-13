@@ -37,9 +37,9 @@ void mgos_imu_destroy(struct mgos_imu **imu) {
   if (!*imu) {
     return;
   }
-  mgos_imu_destroy_gyroscope(*imu);
-  mgos_imu_destroy_accelerometer(*imu);
-  mgos_imu_destroy_magnetometer(*imu);
+  mgos_imu_gyroscope_destroy(*imu);
+  mgos_imu_accelerometer_destroy(*imu);
+  mgos_imu_magnetometer_destroy(*imu);
 
   free(*imu);
   *imu = NULL;
@@ -68,9 +68,9 @@ bool mgos_imu_has_magnetometer(struct mgos_imu *imu) {
 }
 
 bool mgos_imu_read(struct mgos_imu *imu) {
-  mgos_imu_get_accelerometer(imu, NULL, NULL, NULL);
-  mgos_imu_get_gyroscope(imu, NULL, NULL, NULL);
-  mgos_imu_get_magnetometer(imu, NULL, NULL, NULL);
+  mgos_imu_accelerometer_get(imu, NULL, NULL, NULL);
+  mgos_imu_gyroscope_get(imu, NULL, NULL, NULL);
+  mgos_imu_magnetometer_get(imu, NULL, NULL, NULL);
   return true;
 }
 
