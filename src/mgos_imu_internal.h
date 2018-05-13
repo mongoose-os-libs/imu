@@ -23,6 +23,11 @@
 extern "C" {
 #endif
 
+#define MGOS_IMU_CAP_GYROSCOPE      (0x01)
+#define MGOS_IMU_CAP_ACCELEROMETER    (0x02)
+#define MGOS_IMU_CAP_MAGNETOMETER     (0x04)
+#define MGOS_IMU_CAP_THERMOMETER     (0x08)
+
 struct mgos_imu_mag;
 struct mgos_imu_acc;
 struct mgos_imu_gyro;
@@ -31,21 +36,26 @@ struct mgos_imu {
   struct mgos_imu_mag * mag;
   struct mgos_imu_acc * acc;
   struct mgos_imu_gyro *gyro;
+  uint8_t               capabilities
 };
 
 // Magnetometer
 typedef bool (*mgos_imu_mag_detect_fn)(struct mgos_imu_mag *dev);
-typedef bool (*mgos_imu_mag_start_fn)(struct mgos_imu_mag *dev);
+typedef bool (*mgos_imu_mag_create_fn)(struct mgos_imu_mag *dev);
+typedef bool (*mgos_imu_mag_destroy_fn)(struct mgos_imu_mag *dev);
 typedef bool (*mgos_imu_mag_read_fn)(struct mgos_imu_mag *dev);
 
 struct mgos_imu_mag {
   mgos_imu_mag_detect_fn detect;
-  mgos_imu_mag_start_fn  start;
+  mgos_imu_mag_create_fn  start;
+  mgos_imu_mag_destroy_fn   destroy;
   mgos_imu_mag_read_fn   read;
 
   struct mgos_i2c *      i2c;
   uint8_t                i2caddr;
   enum mgos_imu_mag_type type;
+
+  void *user_data;
 
   float                  gain[3];
   int16_t                data[3];
@@ -56,17 +66,21 @@ bool mgos_imu_mag_destroy(struct mgos_imu_mag **mag);
 
 // Accelerometer
 typedef bool (*mgos_imu_acc_detect_fn)(struct mgos_imu_acc *dev);
-typedef bool (*mgos_imu_acc_start_fn)(struct mgos_imu_acc *dev);
+typedef bool (*mgos_imu_acc_create_fn)(struct mgos_imu_acc *dev);
+typedef bool (*mgos_imu_acc_destroy_fn)(struct mgos_imu_acc *dev);
 typedef bool (*mgos_imu_acc_read_fn)(struct mgos_imu_acc *dev);
 
 struct mgos_imu_acc {
   mgos_imu_acc_detect_fn detect;
-  mgos_imu_acc_start_fn  start;
+  mgos_imu_acc_create_fn  start;
+  mgos_imu_acc_destroy_fn   destroy;
   mgos_imu_acc_read_fn   read;
 
   struct mgos_i2c *      i2c;
   uint8_t                i2caddr;
   enum mgos_imu_acc_type type;
+
+  void *user_data;
 
   float                  scale;
   int16_t                data[3];
@@ -77,17 +91,21 @@ bool mgos_imu_acc_destroy(struct mgos_imu_acc **acc);
 
 // Gyroscope
 typedef bool (*mgos_imu_gyro_detect_fn)(struct mgos_imu_gyro *dev);
-typedef bool (*mgos_imu_gyro_start_fn)(struct mgos_imu_gyro *dev);
+typedef bool (*mgos_imu_gyro_create_fn)(struct mgos_imu_gyro *dev);
+typedef bool (*mgos_imu_gyro_destroy_fn)(struct mgos_imu_gyro *dev);
 typedef bool (*mgos_imu_gyro_read_fn)(struct mgos_imu_gyro *dev);
 
 struct mgos_imu_gyro {
   mgos_imu_gyro_detect_fn detect;
-  mgos_imu_gyro_start_fn  start;
+  mgos_imu_gyro_create_fn  start;
+  mgos_imu_gyro_destroy_fn   destroy;
   mgos_imu_gyro_read_fn   read;
 
   struct mgos_i2c *       i2c;
   uint8_t                 i2caddr;
   enum mgos_imu_gyro_type type;
+
+  void *user_data;
 
   float                   scale;
   float                   bias[3];
