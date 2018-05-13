@@ -41,10 +41,6 @@ bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev) {
   return mgos_imu_mpu9250_detect(dev->i2c, dev->i2caddr);
 }
 
-bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev) {
-  return mgos_imu_mpu9250_detect(dev->i2c, dev->i2caddr);
-}
-
 bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev) {
   if (!dev) return false;
   return false;
@@ -56,6 +52,25 @@ bool mgos_imu_mpu9250_acc_destroy(struct mgos_imu_acc *dev) {
 }
 
 bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev) {
+  if (!dev) return false;
+  return false;
+}
+
+bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev) {
+  return mgos_imu_mpu9250_detect(dev->i2c, dev->i2caddr);
+}
+
+bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev) {
+  if (!dev) return false;
+  return false;
+}
+
+bool mgos_imu_mpu9250_gyro_destroy(struct mgos_imu_gyro *dev) {
+  if (!dev) return false;
+  return false;
+}
+
+bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev) {
   if (!dev) return false;
   return false;
 }

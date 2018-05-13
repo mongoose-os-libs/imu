@@ -16,6 +16,7 @@
 
 #include "mgos.h"
 #include "mgos_imu_internal.h"
+#include "mgos_imu_mpu9250.h"
 
 // Private functions follow
 // Private functions end
@@ -33,51 +34,99 @@ struct mgos_imu *mgos_imu_create(void) {
 }
 
 bool mgos_imu_create_gyroscope_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_gyro_type type) {
+  if (!imu) return false;
+  if (imu->gyro) mgos_imu_destroy_gyroscope(imu);
+  imu->gyro=mgos_imu_gyro_create();
+  if (!imu->gyro) false;
+  imu->gyro->i2c=i2c;
+  imu->gyro->i2caddr=i2caddr;
+  imu->gyro->type=type;
+  switch(type) {
+    case GYRO_MPU9250:
+      imu->gyro->detect = mgos_imu_mpu9250_gyro_detect;
+      imu->gyro->create = mgos_imu_mpu9250_gyro_create;
+      imu->gyro->destroy = mgos_imu_mpu9250_gyro_destroy;
+      imu->gyro->read = mgos_imu_mpu9250_gyro_read;
+      break;
+    default:
+      LOG(LL_ERROR, ("Unknown gyroscope type %d", type));
+      mgos_imu_destroy_gyroscope(imu);
+      return false;
+  }
   return false;
-  (void) imu;
-  (void) i2c;
-  (void) i2caddr;
-  (void) type;
 }
 
 bool mgos_imu_create_accelerometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_acc_type type) {
+  if (!imu) return false;
+  if (imu->acc) mgos_imu_destroy_accelerometer(imu);
+  imu->acc=mgos_imu_acc_create();
+  if (!imu->acc) false;
+  imu->acc->i2c=i2c;
+  imu->acc->i2caddr=i2caddr;
+  imu->acc->type=type;
+  switch(type) {
+    case ACC_MPU9250:
+      imu->acc->detect = mgos_imu_mpu9250_acc_detect;
+      imu->acc->create = mgos_imu_mpu9250_acc_create;
+      imu->acc->destroy = mgos_imu_mpu9250_acc_destroy;
+      imu->acc->read = mgos_imu_mpu9250_acc_read;
+      break;
+    default:
+      LOG(LL_ERROR, ("Unknown accelerometer type %d", type));
+      mgos_imu_destroy_accelerometer(imu);
+      return false;
+  }
   return false;
-  (void) imu;
-  (void) i2c;
-  (void) i2caddr;
-  (void) type;
 }
 
 bool mgos_imu_create_magnetometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_mag_type type) {
+  if (!imu) return false;
+  if (imu->mag) mgos_imu_destroy_magnetometer(imu);
+  imu->mag=mgos_imu_mag_create();
+  if (!imu->mag) false;
+  imu->mag->i2c=i2c;
+  imu->mag->i2caddr=i2caddr;
+  imu->mag->type=type;
+  switch(type) {
+    default:
+      LOG(LL_ERROR, ("Unknown magnetometer type %d", type));
+      mgos_imu_destroy_magnetometer(imu);
+      return false;
+  }
   return false;
-  (void) imu;
-  (void) i2c;
-  (void) i2caddr;
-  (void) type;
 }
 
 bool mgos_imu_destroy_gyroscope(struct mgos_imu *imu) {
-  return false;
-  (void) imu;
+  bool ret;
+  if (!imu || !imu->gyro) return false;
+  ret=mgos_imu_gyro_destroy(&(imu->gyro));
+  imu->gyro=NULL;
+  return ret;
 }
 
 bool mgos_imu_destroy_accelerometer(struct mgos_imu *imu) {
-  return false;
-  (void) imu;
+  bool ret;
+  if (!imu || !imu->acc) return false;
+  ret=mgos_imu_acc_destroy(&(imu->acc));
+  imu->acc=NULL;
+  return ret;
 }
 
 bool mgos_imu_destroy_magnetometer(struct mgos_imu *imu) {
-  return false;
-  (void) imu;
+  bool ret;
+  if (!imu || !imu->mag) return false;
+  ret=mgos_imu_mag_destroy(&(imu->mag));
+  imu->mag=NULL;
+  return ret;
 }
 
 void mgos_imu_destroy(struct mgos_imu **imu) {
   if (!*imu) {
     return;
   }
-  if ((*imu)->gyro) mgos_imu_gyro_destroy(&((*imu)->gyro));
-  if ((*imu)->acc) mgos_imu_acc_destroy(&((*imu)->acc));
-  if ((*imu)->mag) mgos_imu_mag_destroy(&((*imu)->mag));
+  mgos_imu_destroy_gyroscope(*imu);
+  mgos_imu_destroy_accelerometer(*imu);
+  mgos_imu_destroy_magnetometer(*imu);
 
   free(*imu);
   *imu = NULL;

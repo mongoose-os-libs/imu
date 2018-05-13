@@ -47,7 +47,7 @@ typedef bool (*mgos_imu_mag_read_fn)(struct mgos_imu_mag *dev);
 
 struct mgos_imu_mag {
   mgos_imu_mag_detect_fn detect;
-  mgos_imu_mag_create_fn  start;
+  mgos_imu_mag_create_fn  create;
   mgos_imu_mag_destroy_fn   destroy;
   mgos_imu_mag_read_fn   read;
 
@@ -72,7 +72,7 @@ typedef bool (*mgos_imu_acc_read_fn)(struct mgos_imu_acc *dev);
 
 struct mgos_imu_acc {
   mgos_imu_acc_detect_fn detect;
-  mgos_imu_acc_create_fn  start;
+  mgos_imu_acc_create_fn  create;
   mgos_imu_acc_destroy_fn   destroy;
   mgos_imu_acc_read_fn   read;
 
@@ -97,7 +97,7 @@ typedef bool (*mgos_imu_gyro_read_fn)(struct mgos_imu_gyro *dev);
 
 struct mgos_imu_gyro {
   mgos_imu_gyro_detect_fn detect;
-  mgos_imu_gyro_create_fn  start;
+  mgos_imu_gyro_create_fn  create;
   mgos_imu_gyro_destroy_fn   destroy;
   mgos_imu_gyro_read_fn   read;
 

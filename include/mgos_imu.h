@@ -40,35 +40,45 @@ enum mgos_imu_mag_type {
 
 struct mgos_imu;
 
-struct mgos_imu *mgos_imu_create_i2c(struct mgos_i2c *i2c);
-bool mgos_imu_add_gyroscope_i2c(struct mgos_imu *sensor, uint8_t i2caddr, enum mgos_imu_gyro_type type);
-bool mgos_imu_add_accelerometer_i2c(struct mgos_imu *sensor, uint8_t i2caddr, enum mgos_imu_acc_type type);
-bool mgos_imu_add_magnetometer_i2c(struct mgos_imu *sensor, uint8_t i2caddr, enum mgos_imu_mag_type type);
+struct mgos_imu *mgos_imu_create(void);
+bool mgos_imu_create_gyroscope_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_gyro_type type);
+bool mgos_imu_create_accelerometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_acc_type type);
+bool mgos_imu_create_magnetometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_mag_type type);
 
-void mgos_imu_destroy(struct mgos_imu **sensor);
+/* TODO(pim): Add SPI adders
+bool mgos_imu_create_gyroscope_spi(struct mgos_imu *imu, struct mgos_spi *spi, uint8_t cs_gpio, enum mgos_imu_gyro_type type);
+bool mgos_imu_create_accelerometer_spi(struct mgos_imu *imu, struct mgos_spi *spi, uint8_t cs_gpio, enum mgos_imu_acc_type type);
+bool mgos_imu_create_magnetometer_spi(struct mgos_imu *imu, struct mgos_spi *spi, uint8_t cs_gpio, enum mgos_imu_mag_type type);
+*/
 
-bool mgos_imu_has_accelerometer(struct mgos_imu *sensor);
-bool mgos_imu_has_gyroscope(struct mgos_imu *sensor);
-bool mgos_imu_has_magnetometer(struct mgos_imu *sensor);
-bool mgos_imu_has_thermometer(struct mgos_imu *sensor);
+bool mgos_imu_destroy_gyroscope(struct mgos_imu *imu);
+bool mgos_imu_destroy_accelerometer(struct mgos_imu *imu);
+bool mgos_imu_destroy_magnetometer(struct mgos_imu *imu);
 
-/* Read all available sensor data from the IMU */
-bool mgos_imu_read(struct mgos_imu *sensor);
+void mgos_imu_destroy(struct mgos_imu **imu);
+
+bool mgos_imu_has_accelerometer(struct mgos_imu *imu);
+bool mgos_imu_has_gyroscope(struct mgos_imu *imu);
+bool mgos_imu_has_magnetometer(struct mgos_imu *imu);
+bool mgos_imu_has_thermometer(struct mgos_imu *imu);
+
+/* Read all available imu data from the IMU */
+bool mgos_imu_read(struct mgos_imu *imu);
 
 /* Return accelerometer data in units of m/s/s */
-bool mgos_imu_get_accelerometer(struct mgos_imu *sensor, float *x, float *y, float *z);
+bool mgos_imu_get_accelerometer(struct mgos_imu *imu, float *x, float *y, float *z);
 
 /* Return accelerometer data in units of deg/sec rotation rate */
-bool mgos_imu_get_gyroscope(struct mgos_imu *sensor, float *x, float *y, float *z);
+bool mgos_imu_get_gyroscope(struct mgos_imu *imu, float *x, float *y, float *z);
 
 /* Return magnetometer data in units of microtesla (1 microtesla = 10 milligauss) */
-bool mgos_imu_get_magnetometer(struct mgos_imu *sensor, float *x, float *y, float *z);
+bool mgos_imu_get_magnetometer(struct mgos_imu *imu, float *x, float *y, float *z);
 
 /* Return thermometer data in units of celcius */
-bool mgos_imu_get_temperature(struct mgos_imu *sensor, float *t);
+bool mgos_imu_get_temperature(struct mgos_imu *imu, float *t);
 
 /* Return compass heading based on magnetometer data, from [0..359] */
-bool mgos_imu_get_compass_heading(struct mgos_imu *sensor, uint16_t *heading);
+bool mgos_imu_get_compass_heading(struct mgos_imu *imu, uint16_t *heading);
 
 /*
  * Initialization function for MGOS -- currently a noop.
