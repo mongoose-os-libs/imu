@@ -17,6 +17,7 @@
 #include "mgos.h"
 #include "mgos_imu_internal.h"
 #include "mgos_imu_mpu9250.h"
+#include "mgos_imu_ak8963.h"
 #include <math.h>
 
 // Private functions follow
@@ -127,6 +128,11 @@ bool mgos_imu_create_magnetometer_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
   imu->mag->i2caddr=i2caddr;
   imu->mag->type=type;
   switch(type) {
+    case MAG_AK8963:
+      imu->mag->detect = mgos_imu_ak8963_detect;
+      imu->mag->create = mgos_imu_ak8963_create;
+      imu->mag->read = mgos_imu_ak8963_read;
+      break;
     default:
       LOG(LL_ERROR, ("Unknown magnetometer type %d", type));
       mgos_imu_destroy_magnetometer(imu);
@@ -284,9 +290,9 @@ bool mgos_imu_get_magnetometer(struct mgos_imu *imu, float *x, float *y, float *
     LOG(LL_ERROR, ("Could not read from magnetometer"));
     return false;
   }
-  if (x) *x=imu->mag->scale[0] * imu->mag->mx;
-  if (y) *y=imu->mag->scale[1] * imu->mag->my;
-  if (z) *z=imu->mag->scale[2] * imu->mag->mz;
+  if (x) *x=imu->mag->scale * imu->mag->bias[0] * imu->mag->mx;
+  if (y) *y=imu->mag->scale * imu->mag->bias[1] * imu->mag->my;
+  if (z) *z=imu->mag->scale * imu->mag->bias[2] * imu->mag->mz;
   return true;
 }
 

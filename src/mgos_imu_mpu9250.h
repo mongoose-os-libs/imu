@@ -20,11 +20,9 @@
 #include "mgos_imu_internal.h"
 
 #define MGOS_MPU9250_DEFAULT_I2CADDR        (0x68)
-#define MGOS_AK8963_DEFAULT_I2CADDR         (0x0C)
 
 #define MGOS_MPU9250_DEVID_9250             (0x71)
 #define MGOS_MPU9250_DEVID_9255             (0x73)
-#define MGOS_MPU9250_DEVID_AK8963           (0x48)
 
 // MPU9250 -- Accelerometer and Gyro registers
 #define MGOS_MPU9250_REG_SMPLRT_DIV         (0x19)
@@ -42,15 +40,6 @@
 #define MGOS_MPU9250_REG_PWR_MGMT_2         (0x6C)
 #define MGOS_MPU9250_REG_WHO_AM_I           (0x75)
 
-// AK8963 Companion -- Magnetometer Registers
-#define MGOS_MPU9250_REG_AK8963_WHO_AM_I    (0x00)
-#define MGOS_MPU9250_REG_AK8963_ST1         (0x02)
-#define MGOS_MPU9250_REG_AK8963_XOUT_L      (0x03)
-#define MGOS_MPU9250_REG_AK8963_CNTL        (0x0A)
-#define MGOS_MPU9250_REG_AK8963_ASAX        (0x10)
-#define MGOS_MPU9250_REG_AK8963_ASAY        (0x11)
-#define MGOS_MPU9250_REG_AK8963_ASAZ        (0x12)
-
 bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev);
 bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev);
 bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev);
@@ -58,7 +47,3 @@ bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev);
 bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev);
 bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev);
 bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev);
-
-bool mgos_imu_mpu9250_mag_detect(struct mgos_imu_mag *dev);
-bool mgos_imu_mpu9250_mag_create(struct mgos_imu_mag *dev);
-bool mgos_imu_mpu9250_mag_read(struct mgos_imu_mag *dev);

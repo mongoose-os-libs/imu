@@ -51,7 +51,8 @@ struct mgos_imu_mag {
 
   void *user_data;
 
-  float                  scale[3];
+  float                  scale;
+  float                  bias[3];
   int16_t                mx, my, mz;
 };
 
