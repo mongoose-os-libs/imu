@@ -129,7 +129,7 @@ This is a fairly straight forward process:
     *   `bool mgos_imu_adxl345_destroy()` -- this function deinitializes the
         chip, and optionally clears and frees the driver-specific memory
         structure in `user_data`. Not all chips need additional memory
-        structures or deinitialization code, in chiwh case it's OK to not
+        structures or deinitialization code, in which case it's OK to not
         define this function at all.
 1.  Implement the `detect`, `create`, `destroy` and `read` functions in the
     source code file `src/mgos_imu_adxl345.c`.
@@ -144,6 +144,16 @@ This is a fairly straight forward process:
 1.  Update this document to add the driver to the list of supported drivers.
 1.  Test code on a working sample, and send a PR using the guidelines laid
     out in [contributing](CONTRIBUTING.md).
+
+### Example driver (AK8975)
+
+Another example, for the magnetometer chip `AK8975`, here's a set of commits
+that shows how this works in practice:
+
+1.  Add `src/mgos_imu_ak8975.[ch]` [commit](https://github.com/mongoose-os-libs/imu/commit/64d29e32f7633ec22c5296c27c3faf6df75f929d)
+1.  Extend `enum mgos_imu_mag_type` in `include/mgos_imu.h` [commit](https://github.com/mongoose-os-libs/imu/commit/67b121c9f0dd511e3f3b5279c310c2e135895d02)
+1.  Add to `mgos_imu_magnetometer_get_name()` in `src/mgos_imu_magnetometer.c` [commit](https://github.com/mongoose-os-libs/imu/commit/286d53a199df124e793e9e428657fcd28ea7b3c3)
+1.  Add to `mgos_imu_magnetometer_create_i2c()` in `src/mgos_imu_magnetometer.c` [commit](https://github.com/mongoose-os-libs/imu/commit/8e33a0fbd805b5f840761266c03163deeb1cc3f3)
 
 # Example Code
 
