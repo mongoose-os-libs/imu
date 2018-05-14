@@ -16,7 +16,8 @@ Users create a `struct mgos_imu` object, to which they add sensors (gyroscope,
 acellerometer and magnetometer) either via I2C or SPI. Some chips have all
 three sensor types, some have only two (typically accelerometer and gyroscope)
 and some have only one type. After successfully adding the sensors to the
-`mgos_imu` object, reads can be performed. 
+`mgos_imu` object, reads can be performed, mostly by performing
+ `mgos_imu_*_get()` calls.
 
 All implementation offer the calls described below in the `IMU API`. 
 Some implementations offer chip-specific addendums, mostly setting sensitivity
@@ -24,7 +25,7 @@ and range options.
 
 ## IMU API
 
-### High level
+### IMU primitives
 
 `struct mgos_imu *mgos_imu_create()` -- This call creates a new (opaque) object
 which represents the IMU device. Upon success, a pointer to the object will be
@@ -41,15 +42,15 @@ as the `mgos_imu_*_get()` calls internally schedule reads from the sensors as
 well.
 
 `bool mgos_imu_has_accelerometer()` -- This returns `true` if the IMU has an
-attached accelerometer sensor, or false otherwise.
+attached accelerometer sensor, or `false` otherwise.
 
 `bool mgos_imu_has_gyroscope()` -- This returns `true` if the IMU has an
-attached gyroscope sensor, or false otherwise.
+attached gyroscope sensor, or `false` otherwise.
 
 `bool mgos_imu_has_magnetometer()` -- This returns `true` if the IMU has an
-attached magnetometer, or false otherwise.
+attached magnetometer, or `false` otherwise.
 
-### Low level primitives
+### IMU Sensor primitives
 
 For each of ***accelerometer***, ***gyroscope*** and ***magnetometer***, the
 following primitives exist:
@@ -69,7 +70,7 @@ It takes care of cleaning up all resources associated with the sensor, and
 detaches it from the `i2c` or `spi` bus. The higher level `mgos_imu_destroy()`
 call uses these lower level calls to clean up sensors as well.
 
-`bool mgos_imu_accelerometer_get()` -- This call returns sensor data after
+`bool mgos_imu_*_get()` -- This call returns sensor data after
 polling the sensor for the data. It returns `true` if the read succeeded, in
  which case the floats pointed to by `x`, `y` and `z` are filled in. If an
 error occurred, `false` is returned and the contents of `x`, `y` and `z` are
@@ -106,7 +107,8 @@ the chip manufacturer / type will be returned, for example `MPU9250` or
 
 ## Adding devices
 
-This is a fairly straight forward process:
+This is a fairly straight forward process, taking the `ADXL345` accelerometer
+as example:
 
 1.  Add a new driver header and C file, say `src/mgos_imu_adxl345.[ch]`. The
     header file exposes all of the `#define`'s for registers and constants.
@@ -145,10 +147,21 @@ This is a fairly straight forward process:
 1.  Test code on a working sample, and send a PR using the guidelines laid
     out in [contributing](CONTRIBUTING.md).
 
+It is important to note a few implementation rules when adding drivers:
+
+*   New drivers MUST NOT change any semantics of the abstraction layer
+    (`mgos_imu` and `mgos_imu_*` members) nor the `mgos_imu_*_get()` functions.
+*   Implementations of drivers MUST provide bias, scaling and other
+    normalization in the driver itself. What this means, in practice, is that
+    the correct units must be produced (`m/s/s`, `deg/s` and `uT`).
+*   Pull Requests MUST NOT mix driver and abstraction changes. Separate them.
+*   Changes to the abstraction layer MUST be proven to work on all existing
+    drivers, and will generally be scrutinized.
+
 ### Example driver (AK8975)
 
-Another example, for the magnetometer chip `AK8975`, here's a set of commits
-that shows how this works in practice:
+Here's an example, for the magnetometer chip `AK8975`, showing a set of commits
+for each of the steps above (and honoring the driver implementation rules).
 
 1.  Add `src/mgos_imu_ak8975.[ch]` [commit](https://github.com/mongoose-os-libs/imu/commit/64d29e32f7633ec22c5296c27c3faf6df75f929d)
 1.  Extend `enum mgos_imu_mag_type` in `include/mgos_imu.h` [commit](https://github.com/mongoose-os-libs/imu/commit/67b121c9f0dd511e3f3b5279c310c2e135895d02)
