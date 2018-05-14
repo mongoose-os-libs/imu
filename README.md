@@ -138,17 +138,14 @@ static void imu_cb(void *user_data) {
 }
 
 enum mgos_app_init_result mgos_app_init(void) {
-  struct mgos_imu *imu;
-  struct mgos_i2c *i2c;
-
-  i2c=mgos_i2c_get_global();
+  struct mgos_i2c *i2c = mgos_i2c_get_global();
+  struct mgos_imu *imu = mgos_imu_create();
 
   if (!i2c) {
     LOG(LL_ERROR, ("I2C bus missing, set i2c.enable=true in mos.yml"));
     return false;
   }
 
-  imu=mgos_imu_create(); 
   if (!imu) {
     LOG(LL_ERROR, ("Cannot create IMU"));
     return false;
