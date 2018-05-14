@@ -106,7 +106,44 @@ the chip manufacturer / type will be returned, for example `MPU9250` or
 
 ## Adding devices
 
-(TBD)
+This is a fairly straight forward process:
+
+1.  Add a new driver header and C file, say `src/mgos_imu_adxl345.[ch]`. The
+    header file exposes all of the `#define`'s for registers and constants.
+1.  In the header file, declare a `detect`, `create`, `destroy` and `read`
+    function.
+    *   `bool mgos_imu_adxl345_detect()` -- this function optionally attempts
+        to detect the chip, often times by reading a register or set of
+        registers which uniquely identifies it. Not all chips can actually be
+        detected, so it's OK to not define this function at all.
+    *   `bool mgos_imu_adxl345_create()` -- this function has to perform the
+        initialization of the chip, typically by setting the right registers
+        and possibly creating a driver-specific memory structure (for, say,
+        coefficients or some such). If used, that memory structure is attached
+        to the `user_data` pointer, and if so, the implementation of the
+        `_destroy()` function must clean up and free this memory again.
+    *   `bool mgos_imu_adxl345_read()` -- this function performs the chip
+        specific read functionality. This will be called whenever the user asks
+        for data, either by calling `mgos_imu_read()` or by calling
+        `mgos_imu_*_get()`.
+    *   `bool mgos_imu_adxl345_destroy()` -- this function deinitializes the
+        chip, and optionally clears and frees the driver-specific memory
+        structure in `user_data`. Not all chips need additional memory
+        structures or deinitialization code, in chiwh case it's OK to not
+        define this function at all.
+1.  Implement the `detect`, `create`, `destroy` and `read` functions in the
+    source code file `src/mgos_imu_adxl345.c`.
+1.  Add the device to one of the `enum mgos_imu_*_type` in `include/mgos_imu.h`.
+    In the example case of adxl345 (which is an accelerometer), add it to
+    `enum mgos_imu_acc_type`.
+1.  Add a string version of this to function `mgos_imu_*_get_name()` so that
+    callers can resolve the sensor to a human readable format. Make sure that
+    the string name is not greater than 10 characters.
+1.  Add the type to the `switch()` in `mgos_imu_*_create_i2c()` (or `_spi()`)
+    functions.
+1.  Update this document to add the driver to the list of supported drivers.
+1.  Test code on a working sample, and send a PR using the guidelines laid
+    out in [contributing](CONTRIBUTING.md).
 
 # Example Code
 
