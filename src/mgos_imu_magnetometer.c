@@ -69,6 +69,8 @@ const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu) {
 
   case MAG_AK8963: return "AK8963";
 
+  case MAG_AK8975: return "AK8975";
+
   case MAG_MAG3110: return "MAG3110";
 
   default: return "UNKNOWN";
