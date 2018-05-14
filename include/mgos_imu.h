@@ -25,7 +25,8 @@ extern "C" {
 
 enum mgos_imu_acc_type {
   ACC_NONE = 0,
-  ACC_MPU9250
+  ACC_MPU9250,
+  ACC_ADXL345
 };
 
 enum mgos_imu_gyro_type {
