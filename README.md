@@ -115,6 +115,7 @@ accelerometer, a gyroscope and a magnetometer all in one tiny package):
 
 ```
 #include "mgos.h"
+#include "mgos_i2c.h"
 #include "mgos_imu.h"
 
 static void imu_cb(void *user_data) {
@@ -137,22 +138,31 @@ static void imu_cb(void *user_data) {
 }
 
 enum mgos_app_init_result mgos_app_init(void) {
-  struct mgos_imu *s_imu;
+  struct mgos_imu *imu;
+  struct mgos_i2c *i2c;
 
-  if (!(s_imu=mgos_imu_create())) {
-    LOG(LL_ERROR, ("Cannot create IMU"));
-  } else {
-    if (!mgos_imu_accelerometer_create_i2c(s_imu, i2c, 0x68, ACC_MPU9250))
-      LOG(LL_ERROR, ("Cannot create accelerometer on IMU"));
-    if (!mgos_imu_gyroscope_create_i2c(s_imu, i2c, 0x68, GYRO_MPU9250))
-      LOG(LL_ERROR, ("Cannot create gyroscope on IMU"));
-    if (!mgos_imu_magnetometer_create_i2c(s_imu, i2c, 0x0C, MAG_AK8963))
-      LOG(LL_ERROR, ("Cannot create magnetometer on IMU"));
+  i2c=mgos_i2c_get_global();
 
-    mgos_set_timer(1000, true, imu_cb, s_imu);
+  if (!i2c) {
+    LOG(LL_ERROR, ("I2C bus missing, set i2c.enable=true in mos.yml"));
+    return false;
   }
 
-  return MGOS_APP_INIT_SUCCESS;
+  imu=mgos_imu_create(); 
+  if (!imu) {
+    LOG(LL_ERROR, ("Cannot create IMU"));
+    return false;
+  }
+
+  if (!mgos_imu_accelerometer_create_i2c(imu, i2c, 0x68, ACC_MPU9250))
+    LOG(LL_ERROR, ("Cannot create accelerometer on IMU"));
+  if (!mgos_imu_gyroscope_create_i2c(imu, i2c, 0x68, GYRO_MPU9250))
+    LOG(LL_ERROR, ("Cannot create gyroscope on IMU"));
+  if (!mgos_imu_magnetometer_create_i2c(imu, i2c, 0x0C, MAG_AK8963))
+    LOG(LL_ERROR, ("Cannot create magnetometer on IMU"));
+
+  mgos_set_timer(1000, true, imu_cb, imu);
+  return true;
 }
 ```
 
