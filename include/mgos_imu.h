@@ -70,7 +70,7 @@ bool mgos_imu_read(struct mgos_imu *imu);
 /* Return accelerometer data in units of m/s/s */
 bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
-/* Return accelerometer data in units of deg/sec rotation rate */
+/* Return gyroscope data in units of Rads/sec */
 bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
 /* Return magnetometer data in units of microtesla (1 microtesla = 10 milligauss) */
