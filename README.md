@@ -78,7 +78,7 @@ unmodified. Note the units of the return values:
 
 *   ***magnetometer*** returns units of `microTesla`.
 *   ***accelerometer*** returns units of `m/s/s` (or standard G).
-*   ***gyroscope*** returns units of `degrees per second`.
+*   ***gyroscope*** returns units of `radians per second`.
 
 `const char *mgos_imu_*_get_name()` -- This returns a symbolic name of the
 attached sensor, which is guaranteed to be less than or equal to 10 characters
