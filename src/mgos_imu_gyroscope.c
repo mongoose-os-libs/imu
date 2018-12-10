@@ -31,12 +31,12 @@ static struct mgos_imu_gyro *mgos_imu_gyro_create(void) {
   return gyro;
 }
 
-static bool mgos_imu_gyro_destroy(struct mgos_imu_gyro **gyro) {
+static bool mgos_imu_gyro_destroy(struct mgos_imu_gyro **gyro, void *imu_user_data) {
   if (!*gyro) {
     return false;
   }
   if ((*gyro)->destroy) {
-    (*gyro)->destroy(*gyro);
+    (*gyro)->destroy(*gyro, imu_user_data);
   }
   if ((*gyro)->user_data) {
     free((*gyro)->user_data);
@@ -52,7 +52,7 @@ bool mgos_imu_gyroscope_destroy(struct mgos_imu *imu) {
   if (!imu || !imu->gyro) {
     return false;
   }
-  ret       = mgos_imu_gyro_destroy(&(imu->gyro));
+  ret       = mgos_imu_gyro_destroy(&(imu->gyro), imu->user_data);
   imu->gyro = NULL;
   return ret;
 }
@@ -76,7 +76,7 @@ bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z) 
     return false;
   }
 
-  if (!imu->gyro->read(imu->gyro)) {
+  if (!imu->gyro->read(imu->gyro, imu->user_data)) {
     LOG(LL_ERROR, ("Could not read from gyroscope"));
     return false;
   }
@@ -111,6 +111,9 @@ bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
     imu->gyro->detect = mgos_imu_mpu9250_gyro_detect;
     imu->gyro->create = mgos_imu_mpu9250_gyro_create;
     imu->gyro->read   = mgos_imu_mpu9250_gyro_read;
+    if (!imu->user_data) {
+      imu->user_data = mgos_imu_mpu9250_userdata_create();
+    }
     break;
 
   default:
@@ -119,7 +122,7 @@ bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
     return false;
   }
   if (imu->gyro->detect) {
-    if (!imu->gyro->detect(imu->gyro)) {
+    if (!imu->gyro->detect(imu->gyro, imu->user_data)) {
       LOG(LL_ERROR, ("Could not detect gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_gyroscope_get_name(imu), i2caddr));
       mgos_imu_gyroscope_destroy(imu);
       return false;
@@ -129,7 +132,7 @@ bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
   }
 
   if (imu->gyro->create) {
-    if (!imu->gyro->create(imu->gyro)) {
+    if (!imu->gyro->create(imu->gyro, imu->user_data)) {
       LOG(LL_ERROR, ("Could not create gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_gyroscope_get_name(imu), i2caddr));
       mgos_imu_gyroscope_destroy(imu);
       return false;

@@ -18,7 +18,7 @@
 #include "mgos_i2c.h"
 #include "mgos_imu_adxl345.h"
 
-bool mgos_imu_adxl345_detect(struct mgos_imu_acc *dev) {
+bool mgos_imu_adxl345_detect(struct mgos_imu_acc *dev, void *imu_user_data) {
   int device_id;
 
   if (!dev) {
@@ -31,9 +31,11 @@ bool mgos_imu_adxl345_detect(struct mgos_imu_acc *dev) {
   }
   LOG(LL_ERROR, ("Failed to detect MPU925x at I2C 0x%02x (device_id=0x%02x)", dev->i2caddr, device_id));
   return false;
+
+  (void)imu_user_data;
 }
 
-bool mgos_imu_adxl345_create(struct mgos_imu_acc *dev) {
+bool mgos_imu_adxl345_create(struct mgos_imu_acc *dev, void *imu_user_data) {
   if (!dev) {
     return false;
   }
@@ -44,9 +46,11 @@ bool mgos_imu_adxl345_create(struct mgos_imu_acc *dev) {
 
   dev->scale = 1. / 1024;
   return true;
+
+  (void)imu_user_data;
 }
 
-bool mgos_imu_adxl345_read(struct mgos_imu_acc *dev) {
+bool mgos_imu_adxl345_read(struct mgos_imu_acc *dev, void *imu_user_data) {
   uint8_t data[6];
 
   if (!dev) {
@@ -60,4 +64,6 @@ bool mgos_imu_adxl345_read(struct mgos_imu_acc *dev) {
   dev->az = (data[4]) | (data[5] << 8);
   LOG(LL_DEBUG, ("ax=%d ay=%d az=%d", dev->ax, dev->ay, dev->az));
   return true;
+
+  (void)imu_user_data;
 }

@@ -35,6 +35,6 @@
 #define MGOS_MAG3110_REG_CTRL_REG1      (0x10)
 #define MGOS_MAG3110_REG_CTRL_REG2      (0x11)
 
-bool mgos_imu_mag3110_detect(struct mgos_imu_mag *dev);
-bool mgos_imu_mag3110_create(struct mgos_imu_mag *dev);
-bool mgos_imu_mag3110_read(struct mgos_imu_mag *dev);
+bool mgos_imu_mag3110_detect(struct mgos_imu_mag *dev, void *imu_user_data);
+bool mgos_imu_mag3110_create(struct mgos_imu_mag *dev, void *imu_user_data);
+bool mgos_imu_mag3110_read(struct mgos_imu_mag *dev, void *imu_user_data);

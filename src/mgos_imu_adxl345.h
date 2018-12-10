@@ -49,6 +49,6 @@
 #define MGOS_ADXL345_RANGE_16G          (0x03)
 #define MGOS_ADXL345_FIFO_STREAM        (0x80)
 
-bool mgos_imu_adxl345_detect(struct mgos_imu_acc *dev);
-bool mgos_imu_adxl345_create(struct mgos_imu_acc *dev);
-bool mgos_imu_adxl345_read(struct mgos_imu_acc *dev);
+bool mgos_imu_adxl345_detect(struct mgos_imu_acc *dev, void *imu_user_data);
+bool mgos_imu_adxl345_create(struct mgos_imu_acc *dev, void *imu_user_data);
+bool mgos_imu_adxl345_read(struct mgos_imu_acc *dev, void *imu_user_data);

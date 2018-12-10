@@ -33,12 +33,12 @@ static struct mgos_imu_mag *mgos_imu_mag_create(void) {
   return mag;
 }
 
-static bool mgos_imu_mag_destroy(struct mgos_imu_mag **mag) {
+static bool mgos_imu_mag_destroy(struct mgos_imu_mag **mag, void *imu_user_data) {
   if (!*mag) {
     return false;
   }
   if ((*mag)->destroy) {
-    (*mag)->destroy(*mag);
+    (*mag)->destroy(*mag, imu_user_data);
   }
   if ((*mag)->user_data) {
     free((*mag)->user_data);
@@ -54,7 +54,7 @@ bool mgos_imu_magnetometer_destroy(struct mgos_imu *imu) {
   if (!imu || !imu->mag) {
     return false;
   }
-  ret      = mgos_imu_mag_destroy(&(imu->mag));
+  ret      = mgos_imu_mag_destroy(&(imu->mag), imu->user_data);
   imu->mag = NULL;
   return ret;
 }
@@ -82,7 +82,7 @@ bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *
     return false;
   }
 
-  if (!imu->mag->read(imu->mag)) {
+  if (!imu->mag->read(imu->mag, imu->user_data)) {
     LOG(LL_ERROR, ("Could not read from magnetometer"));
     return false;
   }
@@ -138,7 +138,7 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
   }
 
   if (imu->mag->detect) {
-    if (!imu->mag->detect(imu->mag)) {
+    if (!imu->mag->detect(imu->mag, imu->user_data)) {
       LOG(LL_ERROR, ("Could not detect magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_magnetometer_get_name(imu), i2caddr));
       mgos_imu_magnetometer_destroy(imu);
       return false;
@@ -148,7 +148,7 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
   }
 
   if (imu->mag->create) {
-    if (!imu->mag->create(imu->mag)) {
+    if (!imu->mag->create(imu->mag, imu->user_data)) {
       LOG(LL_ERROR, ("Could not create magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_magnetometer_get_name(imu), i2caddr));
       mgos_imu_magnetometer_destroy(imu);
       return false;

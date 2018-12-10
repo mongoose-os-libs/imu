@@ -49,10 +49,16 @@
 #define MGOS_MPU9250_GYRO_FS_SEL_1000DPS    (0x10)
 #define MGOS_MPU9250_GYRO_FS_SEL_2000DPS    (0x18)
 
-bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev);
-bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev);
-bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev);
+struct mgos_imu_mpu9250_userdata {
+  bool initialized;
+};
 
-bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev);
-bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev);
-bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev);
+struct mgos_imu_mpu9250_userdata *mgos_imu_mpu9250_userdata_create(void);
+
+bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev, void *imu_user_data);
+bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev, void *imu_user_data);
+bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev, void *imu_user_data);
+
+bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data);
+bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data);
+bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data);

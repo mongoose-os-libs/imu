@@ -34,13 +34,14 @@ struct mgos_imu {
   struct mgos_imu_mag * mag;
   struct mgos_imu_acc * acc;
   struct mgos_imu_gyro *gyro;
+  void *                user_data;
 };
 
 // Magnetometer
-typedef bool (*mgos_imu_mag_detect_fn)(struct mgos_imu_mag *dev);
-typedef bool (*mgos_imu_mag_create_fn)(struct mgos_imu_mag *dev);
-typedef bool (*mgos_imu_mag_destroy_fn)(struct mgos_imu_mag *dev);
-typedef bool (*mgos_imu_mag_read_fn)(struct mgos_imu_mag *dev);
+typedef bool (*mgos_imu_mag_detect_fn)(struct mgos_imu_mag *dev, void *imu_user_data);
+typedef bool (*mgos_imu_mag_create_fn)(struct mgos_imu_mag *dev, void *imu_user_data);
+typedef bool (*mgos_imu_mag_destroy_fn)(struct mgos_imu_mag *dev, void *imu_user_data);
+typedef bool (*mgos_imu_mag_read_fn)(struct mgos_imu_mag *dev, void *imu_user_data);
 
 struct mgos_imu_mag {
   mgos_imu_mag_detect_fn  detect;
@@ -60,10 +61,10 @@ struct mgos_imu_mag {
 };
 
 // Accelerometer
-typedef bool (*mgos_imu_acc_detect_fn)(struct mgos_imu_acc *dev);
-typedef bool (*mgos_imu_acc_create_fn)(struct mgos_imu_acc *dev);
-typedef bool (*mgos_imu_acc_destroy_fn)(struct mgos_imu_acc *dev);
-typedef bool (*mgos_imu_acc_read_fn)(struct mgos_imu_acc *dev);
+typedef bool (*mgos_imu_acc_detect_fn)(struct mgos_imu_acc *dev, void *imu_user_data);
+typedef bool (*mgos_imu_acc_create_fn)(struct mgos_imu_acc *dev, void *imu_user_data);
+typedef bool (*mgos_imu_acc_destroy_fn)(struct mgos_imu_acc *dev, void *imu_user_data);
+typedef bool (*mgos_imu_acc_read_fn)(struct mgos_imu_acc *dev, void *imu_user_data);
 
 struct mgos_imu_acc {
   mgos_imu_acc_detect_fn  detect;
@@ -82,10 +83,10 @@ struct mgos_imu_acc {
 };
 
 // Gyroscope
-typedef bool (*mgos_imu_gyro_detect_fn)(struct mgos_imu_gyro *dev);
-typedef bool (*mgos_imu_gyro_create_fn)(struct mgos_imu_gyro *dev);
-typedef bool (*mgos_imu_gyro_destroy_fn)(struct mgos_imu_gyro *dev);
-typedef bool (*mgos_imu_gyro_read_fn)(struct mgos_imu_gyro *dev);
+typedef bool (*mgos_imu_gyro_detect_fn)(struct mgos_imu_gyro *dev, void *imu_user_data);
+typedef bool (*mgos_imu_gyro_create_fn)(struct mgos_imu_gyro *dev, void *imu_user_data);
+typedef bool (*mgos_imu_gyro_destroy_fn)(struct mgos_imu_gyro *dev, void *imu_user_data);
+typedef bool (*mgos_imu_gyro_read_fn)(struct mgos_imu_gyro *dev, void *imu_user_data);
 
 struct mgos_imu_gyro {
   mgos_imu_gyro_detect_fn  detect;

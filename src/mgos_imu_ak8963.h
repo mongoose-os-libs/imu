@@ -31,6 +31,6 @@
 #define MGOS_AK8963_REG_ASAY           (0x11)
 #define MGOS_AK8963_REG_ASAZ           (0x12)
 
-bool mgos_imu_ak8963_detect(struct mgos_imu_mag *dev);
-bool mgos_imu_ak8963_create(struct mgos_imu_mag *dev);
-bool mgos_imu_ak8963_read(struct mgos_imu_mag *dev);
+bool mgos_imu_ak8963_detect(struct mgos_imu_mag *dev, void *imu_user_data);
+bool mgos_imu_ak8963_create(struct mgos_imu_mag *dev, void *imu_user_data);
+bool mgos_imu_ak8963_read(struct mgos_imu_mag *dev, void *imu_user_data);

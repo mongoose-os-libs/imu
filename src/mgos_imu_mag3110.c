@@ -18,7 +18,7 @@
 #include "mgos_i2c.h"
 #include "mgos_imu_mag3110.h"
 
-bool mgos_imu_mag3110_detect(struct mgos_imu_mag *dev) {
+bool mgos_imu_mag3110_detect(struct mgos_imu_mag *dev, void *imu_user_data) {
   int device_id;
 
   if (!dev) {
@@ -31,9 +31,11 @@ bool mgos_imu_mag3110_detect(struct mgos_imu_mag *dev) {
   }
   LOG(LL_ERROR, ("Failed to detect MAG3110 at I2C 0x%02x (device_id=0x%02x)", dev->i2caddr, device_id));
   return false;
+
+  (void)imu_user_data;
 }
 
-bool mgos_imu_mag3110_create(struct mgos_imu_mag *dev) {
+bool mgos_imu_mag3110_create(struct mgos_imu_mag *dev, void *imu_user_data) {
   if (!dev) {
     return false;
   }
@@ -56,9 +58,11 @@ bool mgos_imu_mag3110_create(struct mgos_imu_mag *dev) {
   dev->bias[2] = 1.0;
 
   return true;
+
+  (void)imu_user_data;
 }
 
-bool mgos_imu_mag3110_read(struct mgos_imu_mag *dev) {
+bool mgos_imu_mag3110_read(struct mgos_imu_mag *dev, void *imu_user_data) {
   uint8_t data[6];
 
   if (!dev) {
@@ -73,4 +77,6 @@ bool mgos_imu_mag3110_read(struct mgos_imu_mag *dev) {
   dev->mz = (data[5] << 8) | (data[4]);
   LOG(LL_DEBUG, ("mx=%d my=%d mz=%d", dev->mx, dev->my, dev->mz));
   return true;
+
+  (void)imu_user_data;
 }

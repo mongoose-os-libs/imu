@@ -57,24 +57,34 @@ static bool mgos_imu_mpu9250_create(struct mgos_i2c *i2c, uint8_t i2caddr) {
   return true;
 }
 
-bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev) {
+bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev, void *imu_user_data) {
   return mgos_imu_mpu9250_detect(dev->i2c, dev->i2caddr);
+
+  (void)imu_user_data;
 }
 
-bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev) {
+bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) {
+  struct mgos_imu_mpu9250_userdata *iud = (struct mgos_imu_mpu9250_userdata *)imu_user_data;
+
   if (!dev) {
     return false;
   }
 
-  dev->scale = G * 16.0f / 32768.0f; // 16G default - scale to m/s/s
-
-  if (!mgos_imu_mpu9250_create(dev->i2c, dev->i2caddr)) {
+  // Only initialize the MPU9250 if gyro hasn't done so yet
+  if (!iud->initialized) {
+    if (!mgos_imu_mpu9250_create(dev->i2c, dev->i2caddr)) {
+      return false;
+    }
+    iud->initialized = true;
+  }
+  if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, MGOS_MPU9250_ACCEL_FS_SEL_16G)) {
     return false;
   }
-  return mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, MGOS_MPU9250_ACCEL_FS_SEL_16G);
+  dev->scale = G * 16.0f / 32768.0f;
+  return true;
 }
 
-bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev) {
+bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev, void *imu_user_data) {
   uint8_t data[6];
 
   if (!dev) {
@@ -88,25 +98,38 @@ bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev) {
   dev->az = (data[4] << 8) | (data[5]);
   LOG(LL_DEBUG, ("ax=%d ay=%d az=%d", dev->ax, dev->ay, dev->az));
   return true;
+
+  (void)imu_user_data;
 }
 
-bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev) {
+bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data) {
   return mgos_imu_mpu9250_detect(dev->i2c, dev->i2caddr);
+
+  (void)imu_user_data;
 }
 
-bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev) {
+bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data) {
+  struct mgos_imu_mpu9250_userdata *iud = (struct mgos_imu_mpu9250_userdata *)imu_user_data;
+
   if (!dev) {
     return false;
   }
-  dev->scale = 2000.0f / 32767.5f * DEG2RAD;
 
-  if (!mgos_imu_mpu9250_create(dev->i2c, dev->i2caddr)) {
+  // Only initialize the MPU9250 if acc hasn't done so yet
+  if (!iud->initialized) {
+    if (!mgos_imu_mpu9250_create(dev->i2c, dev->i2caddr)) {
+      return false;
+    }
+    iud->initialized = true;
+  }
+  if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, MGOS_MPU9250_GYRO_FS_SEL_2000DPS)) {
     return false;
   }
-  return mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, MGOS_MPU9250_GYRO_FS_SEL_2000DPS);
+  dev->scale = 2000.0f / 32767.5f * DEG2RAD;
+  return true;
 }
 
-bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev) {
+bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data) {
   uint8_t data[6];
 
   if (!dev) {
@@ -121,4 +144,17 @@ bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev) {
   LOG(LL_DEBUG, ("gx=%d gy=%d gz=%d", dev->gx, dev->gy, dev->gz));
 
   return true;
+
+  (void)imu_user_data;
+}
+
+struct mgos_imu_mpu9250_userdata *mgos_imu_mpu9250_userdata_create(void) {
+  struct mgos_imu_mpu9250_userdata *iud;
+
+  iud = calloc(1, sizeof(struct mgos_imu_mpu9250_userdata));
+  if (!iud) {
+    return NULL;
+  }
+  iud->initialized = false;
+  return iud;
 }

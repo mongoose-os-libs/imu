@@ -32,12 +32,12 @@ static struct mgos_imu_acc *mgos_imu_acc_create(void) {
   return acc;
 }
 
-static bool mgos_imu_acc_destroy(struct mgos_imu_acc **acc) {
+static bool mgos_imu_acc_destroy(struct mgos_imu_acc **acc, void *imu_user_data) {
   if (!*acc) {
     return false;
   }
   if ((*acc)->destroy) {
-    (*acc)->destroy(*acc);
+    (*acc)->destroy(*acc, imu_user_data);
   }
   if ((*acc)->user_data) {
     free((*acc)->user_data);
@@ -53,7 +53,7 @@ bool mgos_imu_accelerometer_destroy(struct mgos_imu *imu) {
   if (!imu || !imu->acc) {
     return false;
   }
-  ret      = mgos_imu_acc_destroy(&(imu->acc));
+  ret      = mgos_imu_acc_destroy(&(imu->acc), imu->user_data);
   imu->acc = NULL;
   return ret;
 }
@@ -79,7 +79,7 @@ bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float 
     return false;
   }
 
-  if (!imu->acc->read(imu->acc)) {
+  if (!imu->acc->read(imu->acc, imu->user_data)) {
     LOG(LL_ERROR, ("Could not read from accelerometer"));
     return false;
   }
@@ -114,6 +114,9 @@ bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
     imu->acc->detect = mgos_imu_mpu9250_acc_detect;
     imu->acc->create = mgos_imu_mpu9250_acc_create;
     imu->acc->read   = mgos_imu_mpu9250_acc_read;
+    if (!imu->user_data) {
+      imu->user_data = mgos_imu_mpu9250_userdata_create();
+    }
     break;
 
   case ACC_ADXL345:
@@ -128,7 +131,7 @@ bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
     return false;
   }
   if (imu->acc->detect) {
-    if (!imu->acc->detect(imu->acc)) {
+    if (!imu->acc->detect(imu->acc, imu->user_data)) {
       LOG(LL_ERROR, ("Could not detect accelerometer type %d (%s) at I2C 0x%02x", type, mgos_imu_accelerometer_get_name(imu), i2caddr));
       mgos_imu_accelerometer_destroy(imu);
       return false;
@@ -138,7 +141,7 @@ bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
   }
 
   if (imu->acc->create) {
-    if (!imu->acc->create(imu->acc)) {
+    if (!imu->acc->create(imu->acc, imu->user_data)) {
       LOG(LL_ERROR, ("Could not create accelerometer type %d (%s) at I2C 0x%02x", type, mgos_imu_accelerometer_get_name(imu), i2caddr));
       mgos_imu_accelerometer_destroy(imu);
       return false;

@@ -41,6 +41,10 @@ void mgos_imu_destroy(struct mgos_imu **imu) {
   mgos_imu_accelerometer_destroy(*imu);
   mgos_imu_magnetometer_destroy(*imu);
 
+  if ((*imu)->user_data) {
+    free((*imu)->user_data);
+  }
+
   free(*imu);
   *imu = NULL;
   return;
