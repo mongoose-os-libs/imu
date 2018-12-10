@@ -64,9 +64,6 @@ bool mgos_imu_has_accelerometer(struct mgos_imu *imu);
 bool mgos_imu_has_gyroscope(struct mgos_imu *imu);
 bool mgos_imu_has_magnetometer(struct mgos_imu *imu);
 
-/* Read all available imu data from the IMU */
-bool mgos_imu_read(struct mgos_imu *imu);
-
 /* Return accelerometer data in units of m/s/s */
 bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
 

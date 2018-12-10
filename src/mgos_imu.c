@@ -67,13 +67,6 @@ bool mgos_imu_has_magnetometer(struct mgos_imu *imu) {
   return imu->mag != NULL;
 }
 
-bool mgos_imu_read(struct mgos_imu *imu) {
-  mgos_imu_accelerometer_get(imu, NULL, NULL, NULL);
-  mgos_imu_gyroscope_get(imu, NULL, NULL, NULL);
-  mgos_imu_magnetometer_get(imu, NULL, NULL, NULL);
-  return true;
-}
-
 bool mgos_imu_init(void) {
   return true;
 }
