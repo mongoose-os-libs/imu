@@ -23,6 +23,9 @@
 extern "C" {
 #endif
 
+#define G          (9.807f)
+#define DEG2RAD    (3.14159265359f / 180.0f)
+
 struct mgos_imu_mag;
 struct mgos_imu_acc;
 struct mgos_imu_gyro;

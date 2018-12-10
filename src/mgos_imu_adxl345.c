@@ -42,7 +42,7 @@ bool mgos_imu_adxl345_create(struct mgos_imu_acc *dev) {
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ADXL345_REG_DATA_FORMAT, MGOS_ADXL345_FULL_RANGE | MGOS_ADXL345_RANGE_2G);
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ADXL345_REG_BW_RATE, MGOS_ADXL345_RATE_100);
 
-  dev->scale = 1./1024;
+  dev->scale = 1. / 1024;
   return true;
 }
 
@@ -55,9 +55,9 @@ bool mgos_imu_adxl345_read(struct mgos_imu_acc *dev) {
   if (!mgos_i2c_read_reg_n(dev->i2c, dev->i2caddr, MGOS_ADXL345_REG_DATA_OUT, 6, data)) {
     return false;
   }
-  dev->ax = (data[0]) | (data[1]<<8);
-  dev->ay = (data[2]) | (data[3]<<8);
-  dev->az = (data[4]) | (data[5]<<8);
+  dev->ax = (data[0]) | (data[1] << 8);
+  dev->ay = (data[2]) | (data[3] << 8);
+  dev->az = (data[4]) | (data[5] << 8);
   LOG(LL_DEBUG, ("ax=%d ay=%d az=%d", dev->ax, dev->ay, dev->az));
   return true;
 }

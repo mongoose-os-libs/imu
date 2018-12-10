@@ -66,15 +66,12 @@ bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev) {
     return false;
   }
 
-  /*
-   * case RANGE_16G: divider = 2048; break;
-   * case RANGE_8G: divider = 4096; break;
-   * case RANGE_4G: divider = 8192; break;
-   * case RANGE_2G: divider = 16384; break;
-   */
+  dev->scale = G * 16.0f / 32768.0f; // 16G default - scale to m/s/s
 
-  dev->scale = 1.0 / 16384; // 2G default
-  return mgos_imu_mpu9250_create(dev->i2c, dev->i2caddr);
+  if (!mgos_imu_mpu9250_create(dev->i2c, dev->i2caddr)) {
+    return false;
+  }
+  return mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, MGOS_MPU9250_ACCEL_FS_SEL_16G);
 }
 
 bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev) {
@@ -101,8 +98,12 @@ bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev) {
   if (!dev) {
     return false;
   }
-  dev->scale = 0.00053292f;  // TODO(pim) -- check (4/131) * pi/180   (32.75 LSB = 1 DPS)
-  return mgos_imu_mpu9250_create(dev->i2c, dev->i2caddr);
+  dev->scale = 2000.0f / 32767.5f * DEG2RAD;
+
+  if (!mgos_imu_mpu9250_create(dev->i2c, dev->i2caddr)) {
+    return false;
+  }
+  return mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, MGOS_MPU9250_GYRO_FS_SEL_2000DPS);
 }
 
 bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev) {

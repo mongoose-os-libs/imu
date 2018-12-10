@@ -68,20 +68,21 @@ bool mgos_imu_ak8975_create(struct mgos_imu_mag *dev) {
 
 bool mgos_imu_ak8975_read(struct mgos_imu_mag *dev) {
   uint8_t data[6];
-  int drdy;
+  int     drdy;
 
   if (!dev) {
     return false;
   }
-  
+
   // Set single shot measurement
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_AK8975_REG_CNTL, 0x01);
   mgos_usleep(9500);
 
   // Check Data Ready
   drdy = mgos_i2c_read_reg_b(dev->i2c, dev->i2caddr, MGOS_AK8975_REG_ST1);
-  if (drdy != 0x01)
+  if (drdy != 0x01) {
     return false;
+  }
 
   if (!mgos_i2c_read_reg_n(dev->i2c, dev->i2caddr, MGOS_AK8975_REG_XOUT_L, 6, data)) {
     return false;
