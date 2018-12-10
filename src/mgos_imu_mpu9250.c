@@ -81,6 +81,9 @@ bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
     return false;
   }
   dev->scale = G * 16.0f / 32768.0f;
+  if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG2, MGOS_MPU9250_DLPF_184)) {
+    return false;
+  }
   return true;
 }
 
@@ -126,6 +129,9 @@ bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data
     return false;
   }
   dev->scale = 2000.0f / 32767.5f * DEG2RAD;
+  if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_CONFIG, MGOS_MPU9250_DLPF_184)) {
+    return false;
+  }
   return true;
 }
 

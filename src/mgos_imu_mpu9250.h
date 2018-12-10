@@ -49,6 +49,13 @@
 #define MGOS_MPU9250_GYRO_FS_SEL_1000DPS    (0x10)
 #define MGOS_MPU9250_GYRO_FS_SEL_2000DPS    (0x18)
 
+#define MGOS_MPU9250_DLPF_184               (0x01)
+#define MGOS_MPU9250_DLPF_92                (0x02)
+#define MGOS_MPU9250_DLPF_41                (0x03)
+#define MGOS_MPU9250_DLPF_20                (0x04)
+#define MGOS_MPU9250_DLPF_10                (0x05)
+#define MGOS_MPU9250_DLPF_5                 (0x06)
+
 struct mgos_imu_mpu9250_userdata {
   bool initialized;
 };
