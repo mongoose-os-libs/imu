@@ -74,11 +74,20 @@ bool mgos_imu_has_magnetometer(struct mgos_imu *imu) {
 bool mgos_imu_get_euler(struct mgos_imu *imu, float *roll, float *pitch, float *yaw) {
   // TODO(pim): Grab Quaternion from the running Madgwick/Mahony filter.
   float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;
-  if (!imu) return false;
 
-  if (roll) *roll = RAD2DEG * (atan2(2.0f * (q2 * q3 - q0 * q1), 2.0f * q0 * q0 - 1.0f + 2.0f * q3 * q3));
-  if (pitch) *pitch = RAD2DEG * (-atan((2.0f * (q1 * q3 + q0 * q2)) / sqrt(1.0f - pow((2.0f * q1 * q3 + 2.0f * q0 * q2), 2.0f))));
-  if (yaw) *yaw = RAD2DEG * (atan2(2.0f * (q1 * q2 - q0 * q3), 2.0f * q0 * q0 - 1.0f + 2.0f * q1 * q1));
+  if (!imu) {
+    return false;
+  }
+
+  if (roll) {
+    *roll = RAD2DEG * (atan2(2.0f * (q2 * q3 - q0 * q1), 2.0f * q0 * q0 - 1.0f + 2.0f * q3 * q3));
+  }
+  if (pitch) {
+    *pitch = RAD2DEG * (-atan((2.0f * (q1 * q3 + q0 * q2)) / sqrt(1.0f - pow((2.0f * q1 * q3 + 2.0f * q0 * q2), 2.0f))));
+  }
+  if (yaw) {
+    *yaw = RAD2DEG * (atan2(2.0f * (q1 * q2 - q0 * q3), 2.0f * q0 * q0 - 1.0f + 2.0f * q1 * q1));
+  }
   return true;
 }
 

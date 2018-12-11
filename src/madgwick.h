@@ -21,13 +21,14 @@
 
 /* Madgwick filter structure. */
 struct mgos_imu_madgwick {
-    float beta;
-    float q0;
-    float q1;
-    float q2;
-    float q3;
-    float freq;
-    float inv_freq;
+  float    beta;
+  float    q0;
+  float    q1;
+  float    q2;
+  float    q3;
+  float    freq;
+  float    inv_freq;
+  uint32_t counter;
 };
 
 /* Create a new filter and initialize it by resetting the Quaternion and setting
@@ -75,3 +76,11 @@ bool mgos_imu_madgwick_get_quaternion(struct mgos_imu_madgwick *filter, float *q
  * roll, pitch and yaw are undetermined.
  */
 bool mgos_imu_madgwick_get_angles(struct mgos_imu_madgwick *filter, float *roll, float *pitch, float *yaw);
+
+/*
+ * Returns filter counter. Each call to `mgos_imu_madgwick_update()` increments the
+ * counter by one.
+ * Returns true on success, false in case of error, in which case the value of
+ * counter is undetermined.
+ */
+bool mgos_imu_madgwick_get_counter(struct mgos_imu_madgwick *filter, uint32_t *counter);
