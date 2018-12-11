@@ -24,7 +24,8 @@ extern "C" {
 #endif
 
 #define G          (9.807f)
-#define DEG2RAD    (3.14159265359f / 180.0f)
+#define DEG2RAD    (.017453292519943f) /* PI / 180 */
+#define RAD2DEG    (57.2957795130823f) /* 180 / PI */
 
 struct mgos_imu_mag;
 struct mgos_imu_acc;
