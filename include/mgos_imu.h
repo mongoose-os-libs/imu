@@ -73,9 +73,6 @@ bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z);
 /* Return magnetometer data in units of microtesla (1 microtesla = 10 milligauss) */
 bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
-/* Return Roll, Pitch, Yaw in degrees, based on IMU data, all in [-180..180> */
-bool mgos_imu_get_euler(struct mgos_imu *imu, float *roll, float *pitch, float *yaw);
-
 /* String representation of the sensor types, guaranteed to be le 10 characters. */
 const char *mgos_imu_gyroscope_get_name(struct mgos_imu *imu);
 const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu);

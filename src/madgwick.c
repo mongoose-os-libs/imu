@@ -281,10 +281,10 @@ bool mgos_imu_madgwick_get_angles(struct mgos_imu_madgwick *filter, float *roll,
     return false;
   }
   if (roll) {
-    *roll = atan2f(filter->q0 * filter->q1 + filter->q2 * filter->q3, 0.5f - filter->q1 * filter->q1 - filter->q2 * filter->q2);
+    *roll = asinf(-2.0f * (filter->q1 * filter->q3 - filter->q0 * filter->q2));
   }
   if (pitch) {
-    *pitch = asinf(-2.0f * (filter->q1 * filter->q3 - filter->q0 * filter->q2));
+    *pitch = atan2f(filter->q0 * filter->q1 + filter->q2 * filter->q3, 0.5f - filter->q1 * filter->q1 - filter->q2 * filter->q2);
   }
   if (yaw) {
     *yaw = atan2f(filter->q1 * filter->q2 + filter->q0 * filter->q3, 0.5f - filter->q2 * filter->q2 - filter->q3 * filter->q3);
