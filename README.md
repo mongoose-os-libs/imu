@@ -19,7 +19,7 @@ and some have only one type. After successfully adding the sensors to the
 `mgos_imu` object, reads can be performed, mostly by performing
  `mgos_imu_*_get()` calls.
 
-All implementation offer the calls described below in the `IMU API`. 
+All implementations offer the calls described below in the `IMU API`.
 Some implementations offer chip-specific addendums, mostly setting sensitivity
 and range options.
 
@@ -77,7 +77,7 @@ error occurred, `false` is returned and the contents of `x`, `y` and `z` are
 unmodified. Note the units of the return values:
 
 *   ***magnetometer*** returns units of `microTesla`.
-*   ***accelerometer*** returns units of `m/s/s` (or standard G).
+*   ***accelerometer*** returns units of `m/s/s`.
 *   ***gyroscope*** returns units of `radians per second`.
 
 `const char *mgos_imu_*_get_name()` -- This returns a symbolic name of the
