@@ -84,13 +84,13 @@ bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float 
     return false;
   }
   if (x) {
-    *x = imu->acc->scale * imu->acc->ax;
+    *x = (imu->acc->scale * imu->acc->ax) + imu->acc->offset_ax;
   }
   if (y) {
-    *y = imu->acc->scale * imu->acc->ay;
+    *y = (imu->acc->scale * imu->acc->ay) + imu->acc->offset_ay;
   }
   if (z) {
-    *z = imu->acc->scale * imu->acc->az;
+    *z = (imu->acc->scale * imu->acc->az) + imu->acc->offset_az;
   }
   return true;
 }
@@ -150,5 +150,31 @@ bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
     }
   }
 
+  return true;
+}
+
+bool mgos_imu_accelerometer_set_offset(struct mgos_imu *imu, float x, float y, float z) {
+  if (!imu || !imu->acc) {
+    return false;
+  }
+  imu->acc->offset_ax = x;
+  imu->acc->offset_ay = y;
+  imu->acc->offset_az = z;
+  return true;
+}
+
+bool mgos_imu_accelerometer_get_offset(struct mgos_imu *imu, float *x, float *y, float *z) {
+  if (!imu || !imu->acc) {
+    return false;
+  }
+  if (x) {
+    *x = imu->acc->offset_ax;
+  }
+  if (y) {
+    *y = imu->acc->offset_ay;
+  }
+  if (z) {
+    *z = imu->acc->offset_az;
+  }
   return true;
 }

@@ -80,6 +80,7 @@ struct mgos_imu_acc {
   void *                  user_data;
 
   float                   scale;
+  float                   offset_ax, offset_ay, offset_az;
   int16_t                 ax, ay, az;
 };
 
@@ -102,6 +103,7 @@ struct mgos_imu_gyro {
   void *                   user_data;
 
   float                    scale;
+  float                    offset_gx, offset_gy, offset_gz;
   int16_t                  gx, gy, gz;
 };
 

@@ -81,13 +81,13 @@ bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z) 
     return false;
   }
   if (x) {
-    *x = imu->gyro->scale * imu->gyro->gx;
+    *x = (imu->gyro->scale * imu->gyro->gx) + imu->gyro->offset_gx;
   }
   if (y) {
-    *y = imu->gyro->scale * imu->gyro->gy;
+    *y = (imu->gyro->scale * imu->gyro->gy) + imu->gyro->offset_gy;
   }
   if (z) {
-    *z = imu->gyro->scale * imu->gyro->gz;
+    *z = (imu->gyro->scale * imu->gyro->gz) + imu->gyro->offset_gz;
   }
   return true;
 }
@@ -141,5 +141,31 @@ bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
     }
   }
 
+  return true;
+}
+
+bool mgos_imu_gyroscope_set_offset(struct mgos_imu *imu, float x, float y, float z) {
+  if (!imu || !imu->gyro) {
+    return false;
+  }
+  imu->gyro->offset_gx = x;
+  imu->gyro->offset_gy = y;
+  imu->gyro->offset_gz = z;
+  return true;
+}
+
+bool mgos_imu_gyroscope_get_offset(struct mgos_imu *imu, float *x, float *y, float *z) {
+  if (!imu || !imu->gyro) {
+    return false;
+  }
+  if (x) {
+    *x = imu->gyro->offset_gx;
+  }
+  if (y) {
+    *y = imu->gyro->offset_gy;
+  }
+  if (z) {
+    *z = imu->gyro->offset_gz;
+  }
   return true;
 }
