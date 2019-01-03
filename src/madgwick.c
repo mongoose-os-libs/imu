@@ -37,7 +37,7 @@ static float invSqrt(float x) {
   return conv.f;
 }
 
-struct mgos_imu_madgwick *mgos_imu_madgwick_create() {
+struct mgos_imu_madgwick *mgos_imu_madgwick_create(void) {
   struct mgos_imu_madgwick *filter;
 
   filter = calloc(1, sizeof(struct mgos_imu_madgwick));

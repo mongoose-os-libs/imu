@@ -35,7 +35,7 @@ struct mgos_imu_madgwick {
  * the update rate to 100Hz and the gain to 0.1
  * Returns a pointer to a `struct mgos_imu_madgwick`, or NULL otherwise.
  */
-struct mgos_imu_madgwick *mgos_imu_madgwick_create();
+struct mgos_imu_madgwick *mgos_imu_madgwick_create(void);
 
 /* Clean up and return memory for the filter
  */
