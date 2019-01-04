@@ -18,6 +18,7 @@
 #include "mgos_imu_internal.h"
 #include "mgos_imu_mpu925x.h"
 #include "mgos_imu_adxl345.h"
+#include "mgos_imu_lsm303d.h"
 
 static struct mgos_imu_acc *mgos_imu_acc_create(void) {
   struct mgos_imu_acc *acc;
@@ -65,9 +66,17 @@ const char *mgos_imu_accelerometer_get_name(struct mgos_imu *imu) {
 
   switch (imu->acc->type) {
   case ACC_NONE: return "NONE";
+
   case ACC_MPU9250: return "MPU9250";
+
   case ACC_MPU9255: return "MPU9255";
+
   case ACC_ADXL345: return "ADXL345";
+
+  case ACC_LSM303D: return "LSM303D";
+
+  case ACC_LSM303DLM: return "LSM303DLM";
+
   default: return "UNKNOWN";
   }
 }
@@ -108,6 +117,16 @@ bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
   imu->acc->i2caddr = i2caddr;
   imu->acc->type    = type;
   switch (type) {
+  case ACC_LSM303DLM:
+  case ACC_LSM303D:
+    imu->acc->detect = mgos_imu_lsm303d_acc_detect;
+    imu->acc->create = mgos_imu_lsm303d_acc_create;
+    imu->acc->read   = mgos_imu_lsm303d_acc_read;
+    if (!imu->user_data) {
+      imu->user_data = mgos_imu_lsm303d_userdata_create();
+    }
+    break;
+
   case ACC_MPU9250:
   case ACC_MPU9255:
     imu->acc->detect = mgos_imu_mpu925x_acc_detect;

@@ -27,7 +27,9 @@ enum mgos_imu_acc_type {
   ACC_NONE = 0,
   ACC_MPU9250,
   ACC_MPU9255,
-  ACC_ADXL345
+  ACC_ADXL345,
+  ACC_LSM303D,
+  ACC_LSM303DLM
 };
 
 enum mgos_imu_gyro_type {
@@ -42,7 +44,9 @@ enum mgos_imu_mag_type {
   MAG_NONE = 0,
   MAG_AK8963,
   MAG_AK8975,
-  MAG_MAG3110
+  MAG_MAG3110,
+  MAG_LSM303D,
+  MAG_LSM303DLM
 };
 
 struct mgos_imu;
@@ -82,7 +86,7 @@ bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z);
 bool mgos_imu_gyroscope_get_offset(struct mgos_imu *imu, float *x, float *y, float *z);
 bool mgos_imu_gyroscope_set_offset(struct mgos_imu *imu, float x, float y, float z);
 
-/* Return magnetometer data in units of microtesla (1 microtesla = 10 milligauss) */
+/* Return magnetometer data in units of microtesla (1000 microTesla = 10 Gauss) */
 bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
 /* String representation of the sensor types, guaranteed to be le 10 characters. */

@@ -94,6 +94,7 @@ the chip manufacturer / type will be returned, for example `MPU9250` or
 
 *   MPU9250 and MPU9255
 *   ADXL345
+*   LSM303D and LSM303DLM
 
 ### Gyroscope
 
@@ -105,6 +106,7 @@ the chip manufacturer / type will be returned, for example `MPU9250` or
 *   MAG3110
 *   AK8963 (as found in MPU9250/MPU9255)
 *   AK8975
+*   LSM303D and LSM303DLM
 
 ## Adding devices
 
