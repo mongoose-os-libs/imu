@@ -56,16 +56,16 @@
 #define MGOS_MPU9250_DLPF_10                (0x05)
 #define MGOS_MPU9250_DLPF_5                 (0x06)
 
-struct mgos_imu_mpu9250_userdata {
+struct mgos_imu_mpu925x_userdata {
   bool initialized;
 };
 
-struct mgos_imu_mpu9250_userdata *mgos_imu_mpu9250_userdata_create(void);
+struct mgos_imu_mpu925x_userdata *mgos_imu_mpu925x_userdata_create(void);
 
-bool mgos_imu_mpu9250_acc_detect(struct mgos_imu_acc *dev, void *imu_user_data);
-bool mgos_imu_mpu9250_acc_create(struct mgos_imu_acc *dev, void *imu_user_data);
-bool mgos_imu_mpu9250_acc_read(struct mgos_imu_acc *dev, void *imu_user_data);
+bool mgos_imu_mpu925x_acc_detect(struct mgos_imu_acc *dev, void *imu_user_data);
+bool mgos_imu_mpu925x_acc_create(struct mgos_imu_acc *dev, void *imu_user_data);
+bool mgos_imu_mpu925x_acc_read(struct mgos_imu_acc *dev, void *imu_user_data);
 
-bool mgos_imu_mpu9250_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data);
-bool mgos_imu_mpu9250_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data);
-bool mgos_imu_mpu9250_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data);
+bool mgos_imu_mpu925x_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data);
+bool mgos_imu_mpu925x_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data);
+bool mgos_imu_mpu925x_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data);

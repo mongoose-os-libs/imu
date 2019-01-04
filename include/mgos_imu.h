@@ -26,12 +26,14 @@ extern "C" {
 enum mgos_imu_acc_type {
   ACC_NONE = 0,
   ACC_MPU9250,
+  ACC_MPU9255,
   ACC_ADXL345
 };
 
 enum mgos_imu_gyro_type {
   GYRO_NONE = 0,
-  GYRO_MPU9250
+  GYRO_MPU9250,
+  GYRO_MPU9255
 };
 
 enum mgos_imu_mag_type {
