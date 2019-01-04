@@ -23,7 +23,8 @@
 extern "C" {
 #endif
 
-#define G          (9.807f)
+#define MSS2G      (.10196798f)
+#define G2MSS      (9.807f)
 #define DEG2RAD    (.017453292519943f) /* PI / 180 */
 #define RAD2DEG    (57.2957795130823f) /* 180 / PI */
 

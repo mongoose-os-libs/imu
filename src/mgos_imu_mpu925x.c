@@ -92,7 +92,7 @@ bool mgos_imu_mpu925x_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
   if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, MGOS_MPU9250_ACCEL_FS_SEL_16G)) {
     return false;
   }
-  dev->scale = G * 16.0f / 32768.0f;
+  dev->scale = (16.0f * G2MSS) / 32768.0f;
   if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG2, MGOS_MPU9250_DLPF_41)) {
     return false;
   }
