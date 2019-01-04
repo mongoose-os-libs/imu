@@ -50,7 +50,7 @@ void mgos_imu_destroy(struct mgos_imu **imu) {
   return;
 }
 
-bool mgos_imu_acceleromter_present(struct mgos_imu *imu) {
+bool mgos_imu_accelerometer_present(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }

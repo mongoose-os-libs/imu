@@ -30,7 +30,16 @@ static struct mgos_imu_mag *mgos_imu_mag_create(void) {
   }
   memset(mag, 0, sizeof(struct mgos_imu_mag));
 
-  mag->type = MAG_NONE;
+  mag->type           = MAG_NONE;
+  mag->orientation[0] = 1.f;
+  mag->orientation[1] = 0.f;
+  mag->orientation[2] = 0.f;
+  mag->orientation[3] = 0.f;
+  mag->orientation[4] = 1.f;
+  mag->orientation[5] = 0.f;
+  mag->orientation[6] = 0.f;
+  mag->orientation[7] = 0.f;
+  mag->orientation[8] = 1.f;
   return mag;
 }
 
@@ -83,6 +92,8 @@ const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu) {
 }
 
 bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *z) {
+  float mxb, myb, mzb;
+
   if (!imu->mag || !imu->mag->read) {
     return false;
   }
@@ -91,14 +102,17 @@ bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *
     LOG(LL_ERROR, ("Could not read from magnetometer"));
     return false;
   }
+  mxb = imu->mag->bias[0] * imu->mag->mx * imu->mag->scale;
+  myb = imu->mag->bias[1] * imu->mag->my * imu->mag->scale;
+  mzb = imu->mag->bias[2] * imu->mag->mz * imu->mag->scale;
   if (x) {
-    *x = imu->mag->scale * imu->mag->bias[0] * imu->mag->mx;
+    *x = (mxb * imu->mag->orientation[0] + myb * imu->mag->orientation[1] + mzb * imu->mag->orientation[2]);
   }
   if (y) {
-    *y = imu->mag->scale * imu->mag->bias[1] * imu->mag->my;
+    *y = (mxb * imu->mag->orientation[3] + myb * imu->mag->orientation[4] + mzb * imu->mag->orientation[5]);
   }
   if (z) {
-    *z = imu->mag->scale * imu->mag->bias[2] * imu->mag->mz;
+    *z = (mxb * imu->mag->orientation[6] + myb * imu->mag->orientation[7] + mzb * imu->mag->orientation[8]);
   }
   return true;
 }
@@ -172,5 +186,21 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
     }
   }
 
+  return true;
+}
+
+bool mgos_imu_magnetometer_get_orientation(struct mgos_imu *imu, float v[9]) {
+  if (!imu || !imu->mag || !v) {
+    return false;
+  }
+  memcpy(v, imu->mag->orientation, sizeof(float) * 9);
+  return true;
+}
+
+bool mgos_imu_magnetometer_set_orientation(struct mgos_imu *imu, float v[9]) {
+  if (!imu || !imu->mag || !v) {
+    return false;
+  }
+  memcpy(imu->mag->orientation, v, sizeof(float) * 9);
   return true;
 }

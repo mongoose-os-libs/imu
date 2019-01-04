@@ -52,52 +52,73 @@ enum mgos_imu_mag_type {
 struct mgos_imu;
 
 struct mgos_imu *mgos_imu_create(void);
-bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_gyro_type type);
-bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_acc_type type);
-bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_mag_type type);
-
-/* TODO(pim): Add SPI adders
- * bool mgos_imu_gyroscope_create_spi(struct mgos_imu *imu, struct mgos_spi *spi, uint8_t cs_gpio, enum mgos_imu_gyro_type type);
- * bool mgos_imu_accelerometer_create_spi(struct mgos_imu *imu, struct mgos_spi *spi, uint8_t cs_gpio, enum mgos_imu_acc_type type);
- * bool mgos_imu_magnetometer_create_spi(struct mgos_imu *imu, struct mgos_spi *spi, uint8_t cs_gpio, enum mgos_imu_mag_type type);
- */
-
-bool mgos_imu_gyroscope_destroy(struct mgos_imu *imu);
-bool mgos_imu_accelerometer_destroy(struct mgos_imu *imu);
-bool mgos_imu_magnetometer_destroy(struct mgos_imu *imu);
-
 void mgos_imu_destroy(struct mgos_imu **imu);
 
-bool mgos_imu_acceleromter_present(struct mgos_imu *imu);
+// Gyroscope functions
+bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_gyro_type type);
+bool mgos_imu_gyroscope_destroy(struct mgos_imu *imu);
 bool mgos_imu_gyroscope_present(struct mgos_imu *imu);
-bool mgos_imu_magnetometer_present(struct mgos_imu *imu);
 
-/* Return accelerometer data in units of m/s/s */
-bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
+// String representation of the sensor types, guaranteed to be less than or equal to 10 chars
+const char *mgos_imu_gyroscope_get_name(struct mgos_imu *imu);
 
-/* Get/set accelerometer offset in units of m/s/s */
-bool mgos_imu_accelerometer_get_offset(struct mgos_imu *imu, float *x, float *y, float *z);
-bool mgos_imu_accelerometer_set_offset(struct mgos_imu *imu, float x, float y, float z);
-
-/* Return gyroscope data in units of Rads/sec */
+// Return gyroscope data in units of Rads/sec
 bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
-/* Get/set gyroscope offset in units of m/s/s */
+// Get/set gyroscope offset in units of m/s/s
 bool mgos_imu_gyroscope_get_offset(struct mgos_imu *imu, float *x, float *y, float *z);
 bool mgos_imu_gyroscope_set_offset(struct mgos_imu *imu, float x, float y, float z);
 
-/* Return magnetometer data in units of microtesla (1000 microTesla = 10 Gauss) */
-bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
+// Get/set gyroscope axes orientation relatve to accelerometer
+// *vector is a list of 9 floats which determine how much of a certain sensor axis
+// should be blended into calls to mgos_imu_gyroscope_get().
+// Examples: swap x/y axes, and flip direction of z-axis
+// float v[9]={0, 1, 0,     // x gets 0% of x-sensor, 100% of y-sensor, 0% of z-sensor
+//             1, 0, 0,     // y gets 100% of x-sensor, 0% of y-sensor, 0% of z-sensor
+//             0, 0, -1};   // z gets 0% of x-sensor, 0% of y-sensor, -100% of z-sensor
+bool mgos_imu_gyroscope_get_orientation(struct mgos_imu *imu, float v[9]);
+bool mgos_imu_gyroscope_set_orientation(struct mgos_imu *imu, float v[9]);
 
-/* String representation of the sensor types, guaranteed to be le 10 characters. */
-const char *mgos_imu_gyroscope_get_name(struct mgos_imu *imu);
-const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu);
+
+// Accelerometer functions
+bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_acc_type type);
+bool mgos_imu_accelerometer_destroy(struct mgos_imu *imu);
+bool mgos_imu_accelerometer_present(struct mgos_imu *imu);
+
+// String representation of the sensor types, guaranteed to be less than or equal to 10 chars
 const char *mgos_imu_accelerometer_get_name(struct mgos_imu *imu);
 
+// Return accelerometer data in units of m/s/s
+bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
-/*
- * Initialization function for MGOS -- currently a noop.
- */
+// Get/set accelerometer offset in units of m/s/s
+bool mgos_imu_accelerometer_get_offset(struct mgos_imu *imu, float *x, float *y, float *z);
+bool mgos_imu_accelerometer_set_offset(struct mgos_imu *imu, float x, float y, float z);
+
+
+// Magnetometer functions
+bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_mag_type type);
+bool mgos_imu_magnetometer_destroy(struct mgos_imu *imu);
+bool mgos_imu_magnetometer_present(struct mgos_imu *imu);
+
+// String representation of the sensor types, guaranteed to be less than or equal to 10 chars
+const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu);
+
+// Return magnetometer data in units of microtesla (1000 microTesla = 10 Gauss)
+bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
+
+// Get/set magnetometer axes orientation relative to accelerometer
+// *vector is a list of 9 floats which determine how much of a certain sensor axis
+// should be blended into calls to mgos_imu_magnetometer_get().
+// Examples: swap x/y axes, and flip direction of z-axis
+// float v[9]={0, 1, 0,     // x gets 0% of x-sensor, 100% of y-sensor, 0% of z-sensor
+//             1, 0, 0,     // y gets 100% of x-sensor, 0% of y-sensor, 0% of z-sensor
+//             0, 0, -1};   // z gets 0% of x-sensor, 0% of y-sensor, -100% of z-sensor
+bool mgos_imu_magnetometer_get_orientation(struct mgos_imu *imu, float v[9]);
+bool mgos_imu_magnetometer_set_orientation(struct mgos_imu *imu, float v[9]);
+
+
+// Initialization function for MGOS -- currently a noop.
 bool mgos_imu_init(void);
 
 #ifdef __cplusplus

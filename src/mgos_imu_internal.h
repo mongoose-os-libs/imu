@@ -66,6 +66,7 @@ struct mgos_imu_mag {
 
   float                   scale;
   float                   bias[3];
+  float                   orientation[9];
   int16_t                 mx, my, mz;
 };
 
@@ -112,6 +113,7 @@ struct mgos_imu_gyro {
 
   float                    scale;
   float                    offset_gx, offset_gy, offset_gz;
+  float                    orientation[9];
   int16_t                  gx, gy, gz;
 };
 

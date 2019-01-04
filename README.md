@@ -41,7 +41,7 @@ to be read from. It is not generally necessary to call this method directly,
 as the `mgos_imu_*_get()` calls internally schedule reads from the sensors as
 well.
 
-`bool mgos_imu_acceleromter_present()` -- This returns `true` if the IMU has an
+`bool mgos_imu_accelerometer_present()` -- This returns `true` if the IMU has an
 attached accelerometer sensor, or `false` otherwise.
 
 `bool mgos_imu_gyroscope_present()` -- This returns `true` if the IMU has an
@@ -87,6 +87,13 @@ returned. If the sensor is not known, `UNKNOWN` will be returned. Otherwise,
 the chip manufacturer / type will be returned, for example `MPU9250` or
 `ADXL345` or `MAG3110`.
 
+`bool mgos_imu_*_set_orientation()` and `bool mgos_imu_*_get_orientation()` --
+Often times a 9DOF sensor will have multiple chips, whose axes do not line up
+correctly. Even within a single chip (eg `MPU-9250`) the acceleromter, gyroscope
+and magnetometer axes might not line up. To ensure that the `x`, `y`, and `z`
+axes on all sensors are pointed in the same direction, we can set the
+orientation on the gyroscope and magnetometer. See `mgos_imu.h` for more details
+and an example of this.
 
 ## Supported devices
 

@@ -28,7 +28,16 @@ static struct mgos_imu_gyro *mgos_imu_gyro_create(void) {
   }
   memset(gyro, 0, sizeof(struct mgos_imu_gyro));
 
-  gyro->type = GYRO_NONE;
+  gyro->type           = GYRO_NONE;
+  gyro->orientation[0] = 1.f;
+  gyro->orientation[1] = 0.f;
+  gyro->orientation[2] = 0.f;
+  gyro->orientation[3] = 0.f;
+  gyro->orientation[4] = 1.f;
+  gyro->orientation[5] = 0.f;
+  gyro->orientation[6] = 0.f;
+  gyro->orientation[7] = 0.f;
+  gyro->orientation[8] = 1.f;
   return gyro;
 }
 
@@ -88,13 +97,19 @@ bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z) 
     return false;
   }
   if (x) {
-    *x = (imu->gyro->scale * imu->gyro->gx) + imu->gyro->offset_gx;
+    *x = (imu->gyro->scale *
+          (imu->gyro->gx * imu->gyro->orientation[0] + imu->gyro->gy * imu->gyro->orientation[1] + imu->gyro->gz * imu->gyro->orientation[2])
+          ) + imu->gyro->offset_gx;
   }
   if (y) {
-    *y = (imu->gyro->scale * imu->gyro->gy) + imu->gyro->offset_gy;
+    *y = (imu->gyro->scale *
+          (imu->gyro->gx * imu->gyro->orientation[3] + imu->gyro->gy * imu->gyro->orientation[4] + imu->gyro->gz * imu->gyro->orientation[5])
+          ) + imu->gyro->offset_gy;
   }
   if (z) {
-    *z = (imu->gyro->scale * imu->gyro->gz) + imu->gyro->offset_gz;
+    *z = (imu->gyro->scale *
+          (imu->gyro->gx * imu->gyro->orientation[6] + imu->gyro->gy * imu->gyro->orientation[7] + imu->gyro->gz * imu->gyro->orientation[8])
+          ) + imu->gyro->offset_gz;
   }
   return true;
 }
@@ -182,5 +197,21 @@ bool mgos_imu_gyroscope_get_offset(struct mgos_imu *imu, float *x, float *y, flo
   if (z) {
     *z = imu->gyro->offset_gz;
   }
+  return true;
+}
+
+bool mgos_imu_gyroscope_get_orientation(struct mgos_imu *imu, float v[9]) {
+  if (!imu || !imu->gyro || !v) {
+    return false;
+  }
+  memcpy(v, imu->gyro->orientation, sizeof(float) * 9);
+  return true;
+}
+
+bool mgos_imu_gyroscope_set_orientation(struct mgos_imu *imu, float v[9]) {
+  if (!imu || !imu->gyro || !v) {
+    return false;
+  }
+  memcpy(imu->gyro->orientation, v, sizeof(float) * 9);
   return true;
 }
