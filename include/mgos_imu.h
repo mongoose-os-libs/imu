@@ -37,7 +37,8 @@ enum mgos_imu_gyro_type {
   GYRO_MPU9250,
   GYRO_MPU9255,
   GYRO_L3GD20,
-  GYRO_L3GD20H
+  GYRO_L3GD20H,
+  GYRO_ITG3205
 };
 
 enum mgos_imu_mag_type {
