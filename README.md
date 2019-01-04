@@ -108,6 +108,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 
 *   MPU9250 and MPU9255
 *   L3GD20 and L3GD20H
+*   ITG3205
 
 ### Magnetometer
 
