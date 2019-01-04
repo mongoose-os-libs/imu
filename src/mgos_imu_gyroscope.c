@@ -17,6 +17,7 @@
 #include "mgos.h"
 #include "mgos_imu_internal.h"
 #include "mgos_imu_mpu925x.h"
+#include "mgos_imu_l3gd20.h"
 
 static struct mgos_imu_gyro *mgos_imu_gyro_create(void) {
   struct mgos_imu_gyro *gyro;
@@ -64,8 +65,15 @@ const char *mgos_imu_gyroscope_get_name(struct mgos_imu *imu) {
 
   switch (imu->gyro->type) {
   case GYRO_NONE: return "NONE";
+
   case GYRO_MPU9250: return "MPU9250";
+
   case GYRO_MPU9255: return "MPU9255";
+
+  case GYRO_L3GD20: return "L3GD20";
+
+  case GYRO_L3GD20H: return "L3GD20H";
+
   default: return "UNKNOWN";
   }
 }
@@ -106,6 +114,13 @@ bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
   imu->gyro->i2caddr = i2caddr;
   imu->gyro->type    = type;
   switch (type) {
+  case GYRO_L3GD20:
+  case GYRO_L3GD20H:
+    imu->gyro->detect = mgos_imu_l3gd20_detect;
+    imu->gyro->create = mgos_imu_l3gd20_create;
+    imu->gyro->read   = mgos_imu_l3gd20_read;
+    break;
+
   case GYRO_MPU9250:
   case GYRO_MPU9255:
     imu->gyro->detect = mgos_imu_mpu925x_gyro_detect;

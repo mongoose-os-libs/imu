@@ -33,7 +33,9 @@ enum mgos_imu_acc_type {
 enum mgos_imu_gyro_type {
   GYRO_NONE = 0,
   GYRO_MPU9250,
-  GYRO_MPU9255
+  GYRO_MPU9255,
+  GYRO_L3GD20,
+  GYRO_L3GD20H
 };
 
 enum mgos_imu_mag_type {

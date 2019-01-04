@@ -98,6 +98,7 @@ the chip manufacturer / type will be returned, for example `MPU9250` or
 ### Gyroscope
 
 *   MPU9250 and MPU9255
+*   L3GD20 and L3GD20H
 
 ### Magnetometer
 
