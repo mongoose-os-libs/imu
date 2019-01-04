@@ -62,7 +62,7 @@ bool mgos_imu_adxl345_read(struct mgos_imu_acc *dev, void *imu_user_data) {
   dev->ax = (data[0]) | (data[1] << 8);
   dev->ay = (data[2]) | (data[3] << 8);
   dev->az = (data[4]) | (data[5] << 8);
-  LOG(LL_DEBUG, ("ax=%d ay=%d az=%d", dev->ax, dev->ay, dev->az));
+  // LOG(LL_DEBUG, ("ax=%d ay=%d az=%d", dev->ax, dev->ay, dev->az));
   return true;
 
   (void)imu_user_data;
