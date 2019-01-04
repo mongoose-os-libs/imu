@@ -89,11 +89,12 @@ the chip manufacturer / type will be returned, for example `MPU9250` or
 
 `bool mgos_imu_*_set_orientation()` and `bool mgos_imu_*_get_orientation()` --
 Often times a 9DOF sensor will have multiple chips, whose axes do not line up
-correctly. Even within a single chip (eg `MPU-9250`) the acceleromter, gyroscope
-and magnetometer axes might not line up. To ensure that the `x`, `y`, and `z`
-axes on all sensors are pointed in the same direction, we can set the
-orientation on the gyroscope and magnetometer. See `mgos_imu.h` for more details
-and an example of this.
+correctly. Even within a single chip the accelerometer, gyroscope and
+magnetometer axes might not line up (for an example of this, see [MPU9250
+chapter 9.1](http://www.invensense.com/wp-content/uploads/2015/02/PS-MPU-9250A-01-v1.1.pdf)).
+To ensure that the `x`, `y`, and `z` axes on all sensors are pointed in the same
+direction, we can set the orientation on the gyroscope and magnetometer.
+See `mgos_imu.h` for more details and an example of how to do this.
 
 ## Supported devices
 
