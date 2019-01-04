@@ -41,13 +41,13 @@ to be read from. It is not generally necessary to call this method directly,
 as the `mgos_imu_*_get()` calls internally schedule reads from the sensors as
 well.
 
-`bool mgos_imu_has_accelerometer()` -- This returns `true` if the IMU has an
+`bool mgos_imu_acceleromter_present()` -- This returns `true` if the IMU has an
 attached accelerometer sensor, or `false` otherwise.
 
-`bool mgos_imu_has_gyroscope()` -- This returns `true` if the IMU has an
+`bool mgos_imu_gyroscope_present()` -- This returns `true` if the IMU has an
 attached gyroscope sensor, or `false` otherwise.
 
-`bool mgos_imu_has_magnetometer()` -- This returns `true` if the IMU has an
+`bool mgos_imu_magnetometer_present()` -- This returns `true` if the IMU has an
 attached magnetometer, or `false` otherwise.
 
 ### IMU Sensor primitives

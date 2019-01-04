@@ -50,21 +50,21 @@ void mgos_imu_destroy(struct mgos_imu **imu) {
   return;
 }
 
-bool mgos_imu_has_accelerometer(struct mgos_imu *imu) {
+bool mgos_imu_acceleromter_present(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }
   return imu->acc != NULL;
 }
 
-bool mgos_imu_has_gyroscope(struct mgos_imu *imu) {
+bool mgos_imu_gyroscope_present(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }
   return imu->gyro != NULL;
 }
 
-bool mgos_imu_has_magnetometer(struct mgos_imu *imu) {
+bool mgos_imu_magnetometer_present(struct mgos_imu *imu) {
   if (!imu) {
     return false;
   }

@@ -68,9 +68,9 @@ bool mgos_imu_magnetometer_destroy(struct mgos_imu *imu);
 
 void mgos_imu_destroy(struct mgos_imu **imu);
 
-bool mgos_imu_has_accelerometer(struct mgos_imu *imu);
-bool mgos_imu_has_gyroscope(struct mgos_imu *imu);
-bool mgos_imu_has_magnetometer(struct mgos_imu *imu);
+bool mgos_imu_acceleromter_present(struct mgos_imu *imu);
+bool mgos_imu_gyroscope_present(struct mgos_imu *imu);
+bool mgos_imu_magnetometer_present(struct mgos_imu *imu);
 
 /* Return accelerometer data in units of m/s/s */
 bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
