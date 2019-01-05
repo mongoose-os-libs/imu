@@ -235,6 +235,12 @@ enum mgos_app_init_result mgos_app_init(void) {
 }
 ```
 
+# Demo Code
+
+For a cool demo, take a look at my [Demo Apps](https://github.com/mongoose-os-apps/imu-demo):
+
+![Chrome Demo](docs/chrome-client.png)
+
 # Disclaimer
 
 This project is not an official Google project. It is not supported by Google
