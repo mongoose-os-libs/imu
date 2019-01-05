@@ -103,6 +103,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   MPU9250 and MPU9255
 *   ADXL345
 *   LSM303D and LSM303DLM
+*   MMA8451
 
 ### Gyroscope
 

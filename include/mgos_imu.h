@@ -29,7 +29,8 @@ enum mgos_imu_acc_type {
   ACC_MPU9255,
   ACC_ADXL345,
   ACC_LSM303D,
-  ACC_LSM303DLM
+  ACC_LSM303DLM,
+  ACC_MMA8451
 };
 
 enum mgos_imu_gyro_type {
