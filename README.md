@@ -104,12 +104,14 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   ADXL345
 *   LSM303D and LSM303DLM
 *   MMA8451
+*   LSM9DS1
 
 ### Gyroscope
 
 *   MPU9250 and MPU9255
 *   L3GD20 and L3GD20H
 *   ITG3205
+*   LSM9DS1
 
 ### Magnetometer
 
@@ -118,6 +120,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   AK8975
 *   LSM303D and LSM303DLM
 *   HMC5883L
+*   LSM9DS1
 
 ## Adding devices
 

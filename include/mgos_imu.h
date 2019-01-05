@@ -30,7 +30,8 @@ enum mgos_imu_acc_type {
   ACC_ADXL345,
   ACC_LSM303D,
   ACC_LSM303DLM,
-  ACC_MMA8451
+  ACC_MMA8451,
+  ACC_LSM9DS1
 };
 
 enum mgos_imu_gyro_type {
@@ -39,7 +40,8 @@ enum mgos_imu_gyro_type {
   GYRO_MPU9255,
   GYRO_L3GD20,
   GYRO_L3GD20H,
-  GYRO_ITG3205
+  GYRO_ITG3205,
+  GYRO_LSM9DS1
 };
 
 enum mgos_imu_mag_type {
@@ -49,7 +51,8 @@ enum mgos_imu_mag_type {
   MAG_MAG3110,
   MAG_LSM303D,
   MAG_LSM303DLM,
-  MAG_HMC5883L
+  MAG_HMC5883L,
+  MAG_LSM9DS1
 };
 
 struct mgos_imu;
