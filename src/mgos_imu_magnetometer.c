@@ -20,6 +20,7 @@
 #include "mgos_imu_ak8975.h"
 #include "mgos_imu_mag3110.h"
 #include "mgos_imu_lsm303d.h"
+#include "mgos_imu_hmc5883l.h"
 
 static struct mgos_imu_mag *mgos_imu_mag_create(void) {
   struct mgos_imu_mag *mag;
@@ -87,6 +88,8 @@ const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu) {
 
   case MAG_LSM303DLM: return "LSM303DLM";
 
+  case MAG_HMC5883L: return "HMC5883L";
+
   default: return "UNKNOWN";
   }
 }
@@ -132,6 +135,12 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
   imu->mag->i2caddr = i2caddr;
   imu->mag->type    = type;
   switch (type) {
+  case MAG_HMC5883L:
+    imu->mag->detect = mgos_imu_hmc5883l_detect;
+    imu->mag->create = mgos_imu_hmc5883l_create;
+    imu->mag->read   = mgos_imu_hmc5883l_read;
+    break;
+
   case MAG_LSM303DLM:
   case MAG_LSM303D:
     imu->mag->detect = mgos_imu_lsm303d_mag_detect;

@@ -116,6 +116,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   AK8963 (as found in MPU9250/MPU9255)
 *   AK8975
 *   LSM303D and LSM303DLM
+*   HMC5883L
 
 ## Adding devices
 

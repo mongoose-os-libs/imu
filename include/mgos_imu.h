@@ -47,7 +47,8 @@ enum mgos_imu_mag_type {
   MAG_AK8975,
   MAG_MAG3110,
   MAG_LSM303D,
-  MAG_LSM303DLM
+  MAG_LSM303DLM,
+  MAG_HMC5883L
 };
 
 struct mgos_imu;
