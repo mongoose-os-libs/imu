@@ -29,7 +29,6 @@ bool mgos_imu_ak8963_detect(struct mgos_imu_mag *dev, void *imu_user_data) {
   if (device_id == MGOS_AK8963_DEVID) {
     return true;
   }
-  LOG(LL_ERROR, ("Failed to detect AK8963 at I2C 0x%02x (device_id=0x%02x)", dev->i2caddr, device_id));
   return false;
 
   (void)imu_user_data;

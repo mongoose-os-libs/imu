@@ -32,7 +32,6 @@ bool mgos_imu_hmc5883l_detect(struct mgos_imu_mag *dev, void *imu_user_data) {
     return true;
   }
 
-  LOG(LL_ERROR, ("Failed to detect HMC5883L at I2C 0x%02x (idA=0x%02x idB=0x%02x idC=0x%02x)", dev->i2caddr, (uint8_t)idA, (uint8_t)idB, (uint8_t)idC));
   return false;
 
   (void)imu_user_data;

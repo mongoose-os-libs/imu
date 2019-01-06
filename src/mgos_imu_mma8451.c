@@ -29,7 +29,6 @@ bool mgos_imu_mma8451_detect(struct mgos_imu_acc *dev, void *imu_user_data) {
   if (device_id == MGOS_MMA8451_DEVID) {
     return true;
   }
-  LOG(LL_ERROR, ("Failed to detect MMA8451 at I2C 0x%02x (device_id=0x%02x)", dev->i2caddr, (uint8_t)device_id));
   return false;
 
   (void)imu_user_data;

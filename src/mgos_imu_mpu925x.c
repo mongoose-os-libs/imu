@@ -37,7 +37,6 @@ static bool mgos_imu_mpu925x_detect(struct mgos_i2c *i2c, uint8_t i2caddr, uint8
     *devid = MGOS_MPU9250_DEVID_9255;
     return true;
   }
-  LOG(LL_ERROR, ("Failed to detect MPU925x at I2C 0x%02x (device_id=0x%02x)", i2caddr, device_id));
   return false;
 }
 

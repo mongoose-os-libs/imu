@@ -34,7 +34,6 @@ bool mgos_imu_l3gd20_detect(struct mgos_imu_gyro *dev, void *imu_user_data) {
   default:
     break;
   }
-  LOG(LL_ERROR, ("Failed to detect L3GD20(H) at I2C 0x%02x (device_id=0x%02x)", dev->i2caddr, device_id));
   return false;
 
   (void)imu_user_data;

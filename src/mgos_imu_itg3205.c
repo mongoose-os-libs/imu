@@ -29,7 +29,6 @@ bool mgos_imu_itg3205_detect(struct mgos_imu_gyro *dev, void *imu_user_data) {
   if (device_id == MGOS_ITG3205_DEVID) {
     return true;
   }
-  LOG(LL_ERROR, ("Failed to detect ITG3205 at I2C 0x%02x (device_id=0x%02x)", dev->i2caddr, device_id));
   return false;
 
   (void)imu_user_data;

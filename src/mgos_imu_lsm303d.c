@@ -38,7 +38,6 @@ static bool mgos_imu_lsm303d_detect(struct mgos_i2c *i2c, uint8_t i2caddr, uint8
   default:
     break;
   }
-  LOG(LL_ERROR, ("Failed to detect LSM303D at I2C 0x%02x (device_id=0x%02x)", i2caddr, device_id));
   return false;
 }
 

@@ -29,7 +29,6 @@ static bool mgos_imu_lsm9ds1_detect(struct mgos_i2c *i2c, uint8_t i2caddr) {
   if (device_id == MGOS_LSM9DS1_DEVID) {
     return true;
   }
-  LOG(LL_ERROR, ("Failed to detect LSM9DS1 at I2C 0x%02x (device_id=0x%02x)", i2caddr, (uint8_t)device_id));
   return false;
 }
 
@@ -180,7 +179,6 @@ bool mgos_imu_lsm9ds1_mag_detect(struct mgos_imu_mag *dev, void *imu_user_data) 
   if (device_id == MGOS_LSM9DS1_DEVID_M) {
     return true;
   }
-  LOG(LL_ERROR, ("Failed to detect LSM9DS1 at I2C 0x%02x (device_id=0x%02x)", dev->i2caddr, (uint8_t)device_id));
   return false;
 
   (void)imu_user_data;
