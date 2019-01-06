@@ -79,7 +79,6 @@ bool mgos_imu_itg3205_read(struct mgos_imu_gyro *dev, void *imu_user_data) {
   dev->gx = (int16_t)((data[0] << 8) | data[1]);
   dev->gy = (int16_t)((data[2] << 8) | data[3]);
   dev->gz = (int16_t)((data[4] << 8) | data[5]);
-  LOG(LL_DEBUG, ("gx=%d gy=%d gz=%d", dev->gx, dev->gy, dev->gz));
 
   return true;
 

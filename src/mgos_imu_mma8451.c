@@ -66,7 +66,6 @@ bool mgos_imu_mma8451_read(struct mgos_imu_acc *dev, void *imu_user_data) {
   dev->ay = (data[3]) | (data[2] << 8);
   dev->az = (data[5]) | (data[4] << 8);
 
-  LOG(LL_DEBUG, ("ax=%d ay=%d az=%d", dev->ax, dev->ay, dev->az));
   return true;
 
   (void)imu_user_data;

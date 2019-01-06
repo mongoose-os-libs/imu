@@ -75,7 +75,6 @@ bool mgos_imu_mag3110_read(struct mgos_imu_mag *dev, void *imu_user_data) {
   dev->mx = (data[1] << 8) | (data[0]);
   dev->my = (data[3] << 8) | (data[2]);
   dev->mz = (data[5] << 8) | (data[4]);
-  // LOG(LL_DEBUG, ("mx=%d my=%d mz=%d", dev->mx, dev->my, dev->mz));
   return true;
 
   (void)imu_user_data;

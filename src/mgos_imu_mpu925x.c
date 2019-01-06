@@ -111,7 +111,6 @@ bool mgos_imu_mpu925x_acc_read(struct mgos_imu_acc *dev, void *imu_user_data) {
   dev->ax = (data[0] << 8) | (data[1]);
   dev->ay = (data[2] << 8) | (data[3]);
   dev->az = (data[4] << 8) | (data[5]);
-  // LOG(LL_DEBUG, ("ax=%d ay=%d az=%d", dev->ax, dev->ay, dev->az));
   return true;
 
   (void)imu_user_data;
@@ -169,7 +168,6 @@ bool mgos_imu_mpu925x_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data) 
   dev->gx = (data[0] << 8) | (data[1]);
   dev->gy = (data[2] << 8) | (data[3]);
   dev->gz = (data[4] << 8) | (data[5]);
-  // LOG(LL_DEBUG, ("gx=%d gy=%d gz=%d", dev->gx, dev->gy, dev->gz));
 
   return true;
 

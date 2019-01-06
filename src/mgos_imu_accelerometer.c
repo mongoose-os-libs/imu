@@ -96,6 +96,7 @@ bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float 
     LOG(LL_ERROR, ("Could not read from accelerometer"));
     return false;
   }
+  // LOG(LL_DEBUG, ("Raw: ax=%d ay=%d az=%d", imu->acc->ax, imu->acc->ay, imu->acc->az));
   if (x) {
     *x = (imu->acc->scale * imu->acc->ax) + imu->acc->offset_ax;
   }

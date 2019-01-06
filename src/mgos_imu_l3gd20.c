@@ -85,7 +85,6 @@ bool mgos_imu_l3gd20_read(struct mgos_imu_gyro *dev, void *imu_user_data) {
   dev->gx = (int16_t)((data[1] << 8) | data[0]);
   dev->gy = (int16_t)((data[3] << 8) | data[2]);
   dev->gz = (int16_t)((data[5] << 8) | data[4]);
-  // LOG(LL_DEBUG, ("gx=%d gy=%d gz=%d", dev->gx, dev->gy, dev->gz));
 
   return true;
 

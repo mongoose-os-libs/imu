@@ -112,7 +112,6 @@ bool mgos_imu_lsm303d_acc_read(struct mgos_imu_acc *dev, void *imu_user_data) {
   dev->ay = (data[3] << 8) | (data[2]);
   dev->az = (data[5] << 8) | (data[4]);
 
-  // LOG(LL_DEBUG, ("ax=%d ay=%d az=%d", dev->ax, dev->ay, dev->az));
   return true;
 
   (void)imu_user_data;
@@ -180,7 +179,6 @@ bool mgos_imu_lsm303d_mag_read(struct mgos_imu_mag *dev, void *imu_user_data) {
   dev->my = (data[3] << 8) | (data[2]);
   dev->mz = (data[5] << 8) | (data[4]);
 
-  // LOG(LL_DEBUG, ("mx=%d my=%d mz=%d", dev->mx, dev->my, dev->mz));
   return true;
 
   (void)imu_user_data;

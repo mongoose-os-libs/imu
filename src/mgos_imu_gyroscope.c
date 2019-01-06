@@ -102,6 +102,7 @@ bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z) 
     LOG(LL_ERROR, ("Could not read from gyroscope"));
     return false;
   }
+  // LOG(LL_DEBUG, ("Raw: gx=%d gy=%d gz=%d", imu->gyro->gx, imu->gyro->gy, imu->gyro->gz));
   if (x) {
     *x = (imu->gyro->scale *
           (imu->gyro->gx * imu->gyro->orientation[0] + imu->gyro->gy * imu->gyro->orientation[1] + imu->gyro->gz * imu->gyro->orientation[2])

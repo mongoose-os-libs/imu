@@ -108,6 +108,7 @@ bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *
     LOG(LL_ERROR, ("Could not read from magnetometer"));
     return false;
   }
+  // LOG(LL_DEBUG, ("Raw: mx=%d my=%d mz=%d", imu->mag->mx, imu->mag->my, imu->mag->mz));
   mxb = imu->mag->bias[0] * imu->mag->mx * imu->mag->scale;
   myb = imu->mag->bias[1] * imu->mag->my * imu->mag->scale;
   mzb = imu->mag->bias[2] * imu->mag->mz * imu->mag->scale;

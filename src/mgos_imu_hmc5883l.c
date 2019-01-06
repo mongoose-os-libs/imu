@@ -80,7 +80,6 @@ bool mgos_imu_hmc5883l_read(struct mgos_imu_mag *dev, void *imu_user_data) {
   dev->mx = (data[0] << 8) | (data[1]);
   dev->my = (data[2] << 8) | (data[3]);
   dev->mz = (data[4] << 8) | (data[5]);
-  LOG(LL_DEBUG, ("mx=%d my=%d mz=%d", dev->mx, dev->my, dev->mz));
   return true;
 
   (void)imu_user_data;
