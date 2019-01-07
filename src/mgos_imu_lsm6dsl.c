@@ -44,8 +44,6 @@ static bool mgos_imu_lsm6dsl_accgyro_create(struct mgos_i2c *i2c, uint8_t i2cadd
   // CTRL3_C: BOOT=0; BDU=1; H_LACTIVE=1; PP_OD=0; SIM=0; IF_INC=1; BLE=0; SW_RESET=0;
   mgos_i2c_write_reg_b(i2c, i2caddr, MGOS_LSM6DSL_REG_CTRL3_C, 0xc4);
 
-  // NOTE(rojer): INT1_CTRL to send interrupts on motion
-  // NOTE(rojer): CTRL10_C to enable motion
   return true;
 
   (void)i2caddr;
@@ -158,4 +156,58 @@ struct mgos_imu_lsm6dsl_userdata *mgos_imu_lsm6dsl_userdata_create(void) {
   }
   iud->initialized = false;
   return iud;
+}
+
+static void mgos_imu_lsm6dsl_irq(int pin, void *arg) {
+  struct mgos_imu_lsm6dsl_userdata *iud;
+  struct mgos_imu *imu = (struct mgos_imu *)arg;
+  int val;
+
+  if (!imu || !imu->acc || !imu->user_data) {
+    return;
+  }
+  iud = (struct mgos_imu_lsm6dsl_userdata *)imu->user_data;
+
+  LOG(LL_DEBUG, ("Interrupt on GPIO %d", pin));
+
+  // TODO(rojer) FUNC_SRC1: contains significant motion detection -- Its the one I think we want.
+  // TODO(rojer) WAKE_UP_SRC, TAP_SRC, D6D_SRC are sources of motion.
+  // TODO(rojer) test which one of those has the interrupt bit we're looking for
+  // TODO(rojer) ensure that reading from the registers clears the interrupt?
+  val = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_FUNC_SRC1);
+  LOG(LL_DEBUG, ("FUNC_SRC1=0x%02x", val));
+
+  // Callback to user
+  if (iud->int_cb) {
+    iud->int_cb(imu, iud->int_cb_user_data);
+  }
+  return;
+}
+
+bool mgos_imu_lsm6dsl_set_int_handler(struct mgos_imu *imu, int gpio, mgos_imu_lsm6dsl_int_cb cb, void *user_data) {
+  struct mgos_imu_lsm6dsl_userdata *iud;
+
+  if (!imu || !imu->acc || !imu->user_data) {
+    return false;
+  }
+
+  iud = (struct mgos_imu_lsm6dsl_userdata *)imu->user_data;
+
+  // INT1_CTLR: STEP_DETECT=0; SIGN_MOT=1; FULL=0; FIFO_OVR=0; FTH=0; BOOT=0; DRDY_G=0; DRDY_XL=0
+  mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT1_CTRL, 0x40);
+
+  // CTRL10_C: WRIST=0; 0; TIMER=0; PEDO=0; TILT=0; FUNC=1; PEDO_RST=0; SIGN_MOTION=1;
+  mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_CTRL10_C, 0x05);
+
+  LOG(LL_INFO, ("Installing interrupt handler on GPIO %d", gpio));
+  mgos_gpio_set_mode(gpio, MGOS_GPIO_MODE_INPUT);
+  mgos_gpio_set_pull(gpio, MGOS_GPIO_PULL_UP);
+  mgos_gpio_set_int_handler(gpio, MGOS_GPIO_INT_EDGE_NEG, mgos_imu_lsm6dsl_irq, imu);
+  mgos_gpio_clear_int(gpio);
+  mgos_gpio_enable_int(gpio);
+
+  iud->int_cb           = cb;
+  iud->int_cb_user_data = user_data;
+  iud->int_gpio         = gpio;
+  return true;
 }

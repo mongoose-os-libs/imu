@@ -116,8 +116,13 @@
 #define MGOS_LSM6DSL_REG_Y_OFS_USR                   (0x74)
 #define MGOS_LSM6DSL_REG_Z_OFS_USR                   (0x75)
 
+typedef void (*mgos_imu_lsm6dsl_int_cb)(struct mgos_imu *imu, void *user_data);
+
 struct mgos_imu_lsm6dsl_userdata {
-  bool initialized;
+  bool                    initialized;
+  mgos_imu_lsm6dsl_int_cb int_cb;
+  void *                  int_cb_user_data;
+  int                     int_gpio;
 };
 
 struct mgos_imu_lsm6dsl_userdata *mgos_imu_lsm6dsl_userdata_create(void);
@@ -129,3 +134,6 @@ bool mgos_imu_lsm6dsl_acc_read(struct mgos_imu_acc *dev, void *imu_user_data);
 bool mgos_imu_lsm6dsl_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data);
 bool mgos_imu_lsm6dsl_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data);
 bool mgos_imu_lsm6dsl_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data);
+
+// Interrupts
+bool mgos_imu_lsm6dsl_set_int_handler(struct mgos_imu *imu, int gpio, mgos_imu_lsm6dsl_int_cb cb, void *user_data);
