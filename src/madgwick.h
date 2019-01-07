@@ -53,8 +53,8 @@ bool mgos_imu_madgwick_reset(struct mgos_imu_madgwick *filter);
 
 /* Run an update cycle on the filter. Inputs gx/gy/gz are in any calibrated input (for example,
  * m/s/s or G), inputs of ax/ay/az are in Rads/sec, inputs of mx/my/mz are in any calibrated
- * input (for example uTesla). The inputs of mx/my/mz can be passed as 0.0, in which case the
- * magnetometer fusion will occur.
+ * input (for example, uTesla or Gauss). The inputs of mx/my/mz can be passed as 0.0, in which
+ * case the magnetometer fusion will not occur.
  * Returns true on success, false on failure.
  */
 bool mgos_imu_madgwick_update(struct mgos_imu_madgwick *filter, float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
