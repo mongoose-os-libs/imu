@@ -185,19 +185,43 @@ struct mgos_imu_mpu925x_userdata *mgos_imu_mpu925x_userdata_create(void) {
 }
 
 bool mgos_imu_mpu925x_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_data, float *scale) {
-  return false;
+  uint8_t sel;
 
-  (void)dev;
+  if (!mgos_i2c_getbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, 3, 2, &sel)) {
+    return false;
+  }
+  switch (sel) {
+  case 3: *scale = 16 * G2MSS; break;
+
+  case 2: *scale = 8 * G2MSS; break;
+
+  case 1: *scale = 4 * G2MSS; break;
+
+  default: *scale = 2 * G2MSS; break;
+  }
+
+  return true;
+
   (void)imu_user_data;
-  (void)scale;
 }
 
 bool mgos_imu_mpu925x_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_data, float scale) {
-  return false;
+  uint8_t sel;
 
-  (void)dev;
+  if (scale > 16 * MSS2G) {
+    return false;
+  } else if (scale > 8 * MSS2G) {
+    sel = 3;  // 16G
+  } else if (scale > 4 * MSS2G) {
+    sel = 2;  // 8G
+  } else if (scale > 2 * MSS2G) {
+    sel = 1;  // 4G
+  } else {
+    sel = 0;  // 2G
+  }
+  return mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, 3, 2, sel);
+
   (void)imu_user_data;
-  (void)scale;
 }
 
 bool mgos_imu_mpu925x_acc_get_odr(struct mgos_imu_acc *dev, void *imu_user_data, float *odr) {
@@ -217,19 +241,43 @@ bool mgos_imu_mpu925x_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data,
 }
 
 bool mgos_imu_mpu925x_gyro_get_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float *scale) {
-  return false;
+  uint8_t sel;
 
-  (void)dev;
+  if (!mgos_i2c_getbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, 3, 2, &sel)) {
+    return false;
+  }
+  switch (sel) {
+  case 3: *scale = 2000 * DEG2RAD; break;
+
+  case 2: *scale = 1000 * DEG2RAD; break;
+
+  case 1: *scale = 500 * DEG2RAD; break;
+
+  default: *scale = 250 * DEG2RAD; break;
+  }
+
+  return true;
+
   (void)imu_user_data;
-  (void)scale;
 }
 
 bool mgos_imu_mpu925x_gyro_set_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float scale) {
-  return false;
+  uint8_t sel;
 
-  (void)dev;
+  if (scale > 2000 * RAD2DEG) {
+    return false;
+  } else if (scale > 1000 * RAD2DEG) {
+    sel = 3;  // 2000DPS
+  } else if (scale > 500 * RAD2DEG) {
+    sel = 2;  // 1000DPS
+  } else if (scale > 250 * RAD2DEG) {
+    sel = 1;  // 500DPS
+  } else {
+    sel = 0;  // 250DPS
+  }
+  return mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, 3, 2, sel);
+
   (void)imu_user_data;
-  (void)scale;
 }
 
 bool mgos_imu_mpu925x_gyro_get_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float *odr) {
