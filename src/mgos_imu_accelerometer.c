@@ -230,3 +230,31 @@ bool mgos_imu_accelerometer_get_offset(struct mgos_imu *imu, float *x, float *y,
   }
   return true;
 }
+
+bool mgos_imu_accelerometer_get_scale(struct mgos_imu *imu, float *scale) {
+  if (!imu || !imu->acc || !imu->acc->get_scale || !scale) {
+    return false;
+  }
+  return imu->acc->get_scale(imu->acc, imu->user_data, scale);
+}
+
+bool mgos_imu_accelerometer_set_scale(struct mgos_imu *imu, float scale) {
+  if (!imu || !imu->acc || !imu->acc->set_scale) {
+    return false;
+  }
+  return imu->acc->set_scale(imu->acc, imu->user_data, scale);
+}
+
+bool mgos_imu_accelerometer_get_odr(struct mgos_imu *imu, float *hertz) {
+  if (!imu || !imu->acc || !imu->acc->get_odr || !hertz) {
+    return false;
+  }
+  return imu->acc->get_odr(imu->acc, imu->user_data, hertz);
+}
+
+bool mgos_imu_accelerometer_set_odr(struct mgos_imu *imu, float hertz) {
+  if (!imu || !imu->acc || !imu->acc->set_odr) {
+    return false;
+  }
+  return imu->acc->set_odr(imu->acc, imu->user_data, hertz);
+}

@@ -249,3 +249,31 @@ bool mgos_imu_gyroscope_set_orientation(struct mgos_imu *imu, float v[9]) {
   memcpy(imu->gyro->orientation, v, sizeof(float) * 9);
   return true;
 }
+
+bool mgos_imu_gyroscope_get_scale(struct mgos_imu *imu, float *scale) {
+  if (!imu || !imu->gyro || !imu->gyro->get_scale || !scale) {
+    return false;
+  }
+  return imu->gyro->get_scale(imu->gyro, imu->user_data, scale);
+}
+
+bool mgos_imu_gyroscope_set_scale(struct mgos_imu *imu, float scale) {
+  if (!imu || !imu->gyro || !imu->gyro->set_scale) {
+    return false;
+  }
+  return imu->gyro->set_scale(imu->gyro, imu->user_data, scale);
+}
+
+bool mgos_imu_gyroscope_get_odr(struct mgos_imu *imu, float *hertz) {
+  if (!imu || !imu->gyro || !imu->gyro->get_odr || !hertz) {
+    return false;
+  }
+  return imu->gyro->get_odr(imu->gyro, imu->user_data, hertz);
+}
+
+bool mgos_imu_gyroscope_set_odr(struct mgos_imu *imu, float hertz) {
+  if (!imu || !imu->gyro || !imu->gyro->set_odr) {
+    return false;
+  }
+  return imu->gyro->set_odr(imu->gyro, imu->user_data, hertz);
+}

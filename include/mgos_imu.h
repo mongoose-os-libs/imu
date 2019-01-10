@@ -77,6 +77,18 @@ bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z);
 bool mgos_imu_gyroscope_get_offset(struct mgos_imu *imu, float *x, float *y, float *z);
 bool mgos_imu_gyroscope_set_offset(struct mgos_imu *imu, float x, float y, float z);
 
+// Get/set gyroscope scale in units of Rad/sec
+// The driver will set the scale to at least the given `scale` parameter, eg 17
+// Will return true upon success, false if setting the scale is not feasible.
+bool mgos_imu_gyroscope_get_scale(struct mgos_imu *imu, float *scale);
+bool mgos_imu_gyroscope_set_scale(struct mgos_imu *imu, float scale);
+
+// Get/set gyroscope output data rate in units Hertz
+// The driver will set the data rate to at least the given `hertz` parameter, eg 100
+// Will return true upon success, false if setting the data rate is not feasible.
+bool mgos_imu_gyroscope_get_odr(struct mgos_imu *imu, float *hertz);
+bool mgos_imu_gyroscope_set_odr(struct mgos_imu *imu, float hertz);
+
 // Get/set gyroscope axes orientation relatve to accelerometer
 // *vector is a list of 9 floats which determine how much of a certain sensor axis
 // should be blended into calls to mgos_imu_gyroscope_get().
@@ -103,6 +115,18 @@ bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float 
 bool mgos_imu_accelerometer_get_offset(struct mgos_imu *imu, float *x, float *y, float *z);
 bool mgos_imu_accelerometer_set_offset(struct mgos_imu *imu, float x, float y, float z);
 
+// Get/set accelerometer scale in units of m/s/s
+// The driver will set the scale to at least the given `scale` parameter, eg 20 m/s/s
+// Will return true upon success, false if setting the scale is not feasible.
+bool mgos_imu_accelerometer_get_scale(struct mgos_imu *imu, float *scale);
+bool mgos_imu_accelerometer_set_scale(struct mgos_imu *imu, float scale);
+
+// Get/set accelerometer output data rate in units Hertz
+// The driver will set the data rate to at least the given `hertz` parameter, eg 100
+// Will return true upon success, false if setting the data rate is not feasible.
+bool mgos_imu_accelerometer_get_odr(struct mgos_imu *imu, float *hertz);
+bool mgos_imu_accelerometer_set_odr(struct mgos_imu *imu, float hertz);
+
 
 // Magnetometer functions
 bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_mag_type type);
@@ -114,6 +138,18 @@ const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu);
 
 // Return magnetometer data in units of microtesla (1000 microTesla = 10 Gauss)
 bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
+
+// Get/set magnetometer scale in units of uTesla
+// The driver will set the scale to at least the given `scale` parameter, eg 400
+// Will return true upon success, false if setting the scale is not feasible.
+bool mgos_imu_magnetometer_get_scale(struct mgos_imu *imu, float *scale);
+bool mgos_imu_magnetometer_set_scale(struct mgos_imu *imu, float scale);
+
+// Get/set magnetometer output data rate in units Hertz
+// The driver will set the data rate to at least the given `hertz` parameter, eg 100
+// Will return true upon success, false if setting the data rate is not feasible.
+bool mgos_imu_magnetometer_get_odr(struct mgos_imu *imu, float *hertz);
+bool mgos_imu_magnetometer_set_odr(struct mgos_imu *imu, float hertz);
 
 // Get/set magnetometer axes orientation relative to accelerometer
 // *vector is a list of 9 floats which determine how much of a certain sensor axis

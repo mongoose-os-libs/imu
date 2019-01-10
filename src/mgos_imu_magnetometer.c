@@ -226,3 +226,31 @@ bool mgos_imu_magnetometer_set_orientation(struct mgos_imu *imu, float v[9]) {
   memcpy(imu->mag->orientation, v, sizeof(float) * 9);
   return true;
 }
+
+bool mgos_imu_magnetometer_get_scale(struct mgos_imu *imu, float *scale) {
+  if (!imu || !imu->mag || !imu->mag->get_scale || !scale) {
+    return false;
+  }
+  return imu->mag->get_scale(imu->mag, imu->user_data, scale);
+}
+
+bool mgos_imu_magnetometer_set_scale(struct mgos_imu *imu, float scale) {
+  if (!imu || !imu->mag || !imu->mag->set_scale) {
+    return false;
+  }
+  return imu->mag->set_scale(imu->mag, imu->user_data, scale);
+}
+
+bool mgos_imu_magnetometer_get_odr(struct mgos_imu *imu, float *hertz) {
+  if (!imu || !imu->mag || !imu->mag->get_odr || !hertz) {
+    return false;
+  }
+  return imu->mag->get_odr(imu->mag, imu->user_data, hertz);
+}
+
+bool mgos_imu_magnetometer_set_odr(struct mgos_imu *imu, float hertz) {
+  if (!imu || !imu->mag || !imu->mag->set_odr) {
+    return false;
+  }
+  return imu->mag->set_odr(imu->mag, imu->user_data, hertz);
+}
