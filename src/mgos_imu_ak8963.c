@@ -92,35 +92,3 @@ bool mgos_imu_ak8963_read(struct mgos_imu_mag *dev, void *imu_user_data) {
 
   (void)imu_user_data;
 }
-
-bool mgos_imu_ak8963_get_scale(struct mgos_imu_mag *dev, void *imu_user_data, float *scale) {
-  return false;
-
-  (void)dev;
-  (void)imu_user_data;
-  (void)scale;
-}
-
-bool mgos_imu_ak8963_set_scale(struct mgos_imu_mag *dev, void *imu_user_data, float scale) {
-  return false;
-
-  (void)dev;
-  (void)imu_user_data;
-  (void)scale;
-}
-
-bool mgos_imu_ak8963_get_odr(struct mgos_imu_mag *dev, void *imu_user_data, float *odr) {
-  return false;
-
-  (void)dev;
-  (void)imu_user_data;
-  (void)odr;
-}
-
-bool mgos_imu_ak8963_set_odr(struct mgos_imu_mag *dev, void *imu_user_data, float odr) {
-  return false;
-
-  (void)dev;
-  (void)imu_user_data;
-  (void)odr;
-}
