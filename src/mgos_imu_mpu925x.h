@@ -67,13 +67,9 @@ bool mgos_imu_mpu925x_acc_create(struct mgos_imu_acc *dev, void *imu_user_data);
 bool mgos_imu_mpu925x_acc_read(struct mgos_imu_acc *dev, void *imu_user_data);
 bool mgos_imu_mpu925x_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_data, float *scale);
 bool mgos_imu_mpu925x_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_data, float scale);
-bool mgos_imu_mpu925x_acc_get_odr(struct mgos_imu_acc *dev, void *imu_user_data, float *odr);
-bool mgos_imu_mpu925x_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data, float odr);
 
 bool mgos_imu_mpu925x_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data);
 bool mgos_imu_mpu925x_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data);
 bool mgos_imu_mpu925x_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data);
-bool mgos_imu_mpu925x_gyro_get_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float *odr);
-bool mgos_imu_mpu925x_gyro_set_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float odr);
 bool mgos_imu_mpu925x_gyro_get_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float *scale);
 bool mgos_imu_mpu925x_gyro_set_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float scale);

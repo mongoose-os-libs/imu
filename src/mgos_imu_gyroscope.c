@@ -175,8 +175,6 @@ bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
     imu->gyro->detect    = mgos_imu_mpu925x_gyro_detect;
     imu->gyro->create    = mgos_imu_mpu925x_gyro_create;
     imu->gyro->read      = mgos_imu_mpu925x_gyro_read;
-    imu->gyro->get_odr   = mgos_imu_mpu925x_gyro_get_odr;
-    imu->gyro->set_odr   = mgos_imu_mpu925x_gyro_set_odr;
     imu->gyro->get_scale = mgos_imu_mpu925x_gyro_get_scale;
     imu->gyro->set_scale = mgos_imu_mpu925x_gyro_set_scale;
     if (!imu->user_data) {

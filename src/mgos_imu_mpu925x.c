@@ -224,22 +224,6 @@ bool mgos_imu_mpu925x_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_dat
   (void)imu_user_data;
 }
 
-bool mgos_imu_mpu925x_acc_get_odr(struct mgos_imu_acc *dev, void *imu_user_data, float *odr) {
-  return false;
-
-  (void)dev;
-  (void)imu_user_data;
-  (void)odr;
-}
-
-bool mgos_imu_mpu925x_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data, float odr) {
-  return false;
-
-  (void)dev;
-  (void)imu_user_data;
-  (void)odr;
-}
-
 bool mgos_imu_mpu925x_gyro_get_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float *scale) {
   uint8_t sel;
 
@@ -278,20 +262,4 @@ bool mgos_imu_mpu925x_gyro_set_scale(struct mgos_imu_gyro *dev, void *imu_user_d
   return mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, 3, 2, sel);
 
   (void)imu_user_data;
-}
-
-bool mgos_imu_mpu925x_gyro_get_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float *odr) {
-  return false;
-
-  (void)dev;
-  (void)imu_user_data;
-  (void)odr;
-}
-
-bool mgos_imu_mpu925x_gyro_set_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float odr) {
-  return false;
-
-  (void)dev;
-  (void)imu_user_data;
-  (void)odr;
 }
