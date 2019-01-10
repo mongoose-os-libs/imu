@@ -34,3 +34,7 @@
 bool mgos_imu_ak8963_detect(struct mgos_imu_mag *dev, void *imu_user_data);
 bool mgos_imu_ak8963_create(struct mgos_imu_mag *dev, void *imu_user_data);
 bool mgos_imu_ak8963_read(struct mgos_imu_mag *dev, void *imu_user_data);
+bool mgos_imu_ak8963_get_scale(struct mgos_imu_mag *dev, void *imu_user_data, float *scale);
+bool mgos_imu_ak8963_set_scale(struct mgos_imu_mag *dev, void *imu_user_data, float scale);
+bool mgos_imu_ak8963_get_odr(struct mgos_imu_mag *dev, void *imu_user_data, float *odr);
+bool mgos_imu_ak8963_set_odr(struct mgos_imu_mag *dev, void *imu_user_data, float odr);

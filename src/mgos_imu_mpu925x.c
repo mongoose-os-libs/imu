@@ -183,3 +183,67 @@ struct mgos_imu_mpu925x_userdata *mgos_imu_mpu925x_userdata_create(void) {
   iud->initialized = false;
   return iud;
 }
+
+bool mgos_imu_mpu925x_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_data, float *scale) {
+  return false;
+
+  (void)dev;
+  (void)imu_user_data;
+  (void)scale;
+}
+
+bool mgos_imu_mpu925x_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_data, float scale) {
+  return false;
+
+  (void)dev;
+  (void)imu_user_data;
+  (void)scale;
+}
+
+bool mgos_imu_mpu925x_acc_get_odr(struct mgos_imu_acc *dev, void *imu_user_data, float *odr) {
+  return false;
+
+  (void)dev;
+  (void)imu_user_data;
+  (void)odr;
+}
+
+bool mgos_imu_mpu925x_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data, float odr) {
+  return false;
+
+  (void)dev;
+  (void)imu_user_data;
+  (void)odr;
+}
+
+bool mgos_imu_mpu925x_gyro_get_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float *scale) {
+  return false;
+
+  (void)dev;
+  (void)imu_user_data;
+  (void)scale;
+}
+
+bool mgos_imu_mpu925x_gyro_set_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float scale) {
+  return false;
+
+  (void)dev;
+  (void)imu_user_data;
+  (void)scale;
+}
+
+bool mgos_imu_mpu925x_gyro_get_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float *odr) {
+  return false;
+
+  (void)dev;
+  (void)imu_user_data;
+  (void)odr;
+}
+
+bool mgos_imu_mpu925x_gyro_set_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float odr) {
+  return false;
+
+  (void)dev;
+  (void)imu_user_data;
+  (void)odr;
+}

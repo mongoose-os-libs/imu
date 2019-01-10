@@ -163,9 +163,13 @@ bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
 
   case ACC_MPU9250:
   case ACC_MPU9255:
-    imu->acc->detect = mgos_imu_mpu925x_acc_detect;
-    imu->acc->create = mgos_imu_mpu925x_acc_create;
-    imu->acc->read   = mgos_imu_mpu925x_acc_read;
+    imu->acc->detect    = mgos_imu_mpu925x_acc_detect;
+    imu->acc->create    = mgos_imu_mpu925x_acc_create;
+    imu->acc->read      = mgos_imu_mpu925x_acc_read;
+    imu->acc->get_odr   = mgos_imu_mpu925x_acc_get_odr;
+    imu->acc->set_odr   = mgos_imu_mpu925x_acc_set_odr;
+    imu->acc->get_scale = mgos_imu_mpu925x_acc_get_scale;
+    imu->acc->set_scale = mgos_imu_mpu925x_acc_set_scale;
     if (!imu->user_data) {
       imu->user_data = mgos_imu_mpu925x_userdata_create();
     }

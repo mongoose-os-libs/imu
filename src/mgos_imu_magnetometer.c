@@ -165,9 +165,13 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
     break;
 
   case MAG_AK8963:
-    imu->mag->detect = mgos_imu_ak8963_detect;
-    imu->mag->create = mgos_imu_ak8963_create;
-    imu->mag->read   = mgos_imu_ak8963_read;
+    imu->mag->detect    = mgos_imu_ak8963_detect;
+    imu->mag->create    = mgos_imu_ak8963_create;
+    imu->mag->read      = mgos_imu_ak8963_read;
+    imu->mag->get_odr   = mgos_imu_ak8963_get_odr;
+    imu->mag->set_odr   = mgos_imu_ak8963_set_odr;
+    imu->mag->get_scale = mgos_imu_ak8963_get_scale;
+    imu->mag->set_scale = mgos_imu_ak8963_set_scale;
     break;
 
   case MAG_AK8975:
