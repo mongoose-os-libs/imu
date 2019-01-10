@@ -42,7 +42,7 @@ static bool mgos_imu_lsm6dsl_accgyro_create(struct mgos_i2c *i2c, uint8_t i2cadd
   mgos_usleep(10000);
 
   // CTRL3_C: BOOT=0; BDU=1; H_LACTIVE=1; PP_OD=0; SIM=0; IF_INC=1; BLE=0; SW_RESET=0;
-  mgos_i2c_write_reg_b(i2c, i2caddr, MGOS_LSM6DSL_REG_CTRL3_C, 0xc4);
+  mgos_i2c_write_reg_b(i2c, i2caddr, MGOS_LSM6DSL_REG_CTRL3_C, 0x44);
 
   return true;
 
