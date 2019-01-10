@@ -2,7 +2,6 @@ author: Pim van Pelt <pim@ipng.nl>
 description: Library that implements various IMU devices
 type: lib
 version: 1.0
-platforms: [esp32, esp8266]
 
 tags:
   - c
