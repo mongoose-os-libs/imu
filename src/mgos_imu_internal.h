@@ -100,7 +100,7 @@ struct mgos_imu_acc {
 
   struct mgos_i2c *         i2c;
   uint8_t                   i2caddr;
-  enum mgos_imu_acc_type    type;
+  struct mgos_imu_acc_opts  opts;
 
   void *                    user_data;
 

@@ -61,9 +61,9 @@ bool mgos_imu_lsm303d_acc_detect(struct mgos_imu_acc *dev, void *imu_user_data) 
 
   if (mgos_imu_lsm303d_detect(dev->i2c, dev->i2caddr, &devid)) {
     if (devid == MGOS_LSM303D_DEVID) {
-      dev->type = ACC_LSM303D;
+      dev->opts.type = ACC_LSM303D;
     } else{
-      dev->type = ACC_LSM303DLM;
+      dev->opts.type = ACC_LSM303DLM;
     }
     return true;
   }

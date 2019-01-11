@@ -99,9 +99,15 @@ bool mgos_imu_gyroscope_set_odr(struct mgos_imu *imu, float hertz);
 bool mgos_imu_gyroscope_get_orientation(struct mgos_imu *imu, float v[9]);
 bool mgos_imu_gyroscope_set_orientation(struct mgos_imu *imu, float v[9]);
 
+struct mgos_imu_acc_opts {
+  enum mgos_imu_acc_type type;  // Accelerometer type.
+  float odr;                    // Data rate, in Hz. See doc for set_odr().
+  float scale;                  // Scale. See doc for set_scale().
+  bool no_rst;                  // Do not perform reset of the device when configuring.
+};
 
 // Accelerometer functions
-bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_acc_type type);
+bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, const struct mgos_imu_acc_opts *opts);
 bool mgos_imu_accelerometer_destroy(struct mgos_imu *imu);
 bool mgos_imu_accelerometer_present(struct mgos_imu *imu);
 
