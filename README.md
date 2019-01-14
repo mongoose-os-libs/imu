@@ -219,6 +219,9 @@ static void imu_cb(void *user_data) {
 enum mgos_app_init_result mgos_app_init(void) {
   struct mgos_i2c *i2c = mgos_i2c_get_global();
   struct mgos_imu *imu = mgos_imu_create();
+  struct mgos_imu_acc_opts acc_opts;
+  struct mgos_imu_gyro_opts gyro_opts;
+  struct mgos_imu_mag_opts mag_opts;
 
   if (!i2c) {
     LOG(LL_ERROR, ("I2C bus missing, set i2c.enable=true in mos.yml"));
@@ -230,11 +233,22 @@ enum mgos_app_init_result mgos_app_init(void) {
     return false;
   }
 
-  if (!mgos_imu_accelerometer_create_i2c(imu, i2c, 0x68, ACC_MPU9250))
+  acc_opts.type = ACC_MPU9250;
+  acc_opts.scale = 16.0; // G
+  acc_opts.odr = 100;    // Hz
+  if (!mgos_imu_accelerometer_create_i2c(imu, i2c, 0x68, &acc_opts))
     LOG(LL_ERROR, ("Cannot create accelerometer on IMU"));
-  if (!mgos_imu_gyroscope_create_i2c(imu, i2c, 0x68, GYRO_MPU9250))
+
+  acc_opts.type = ACC_MPU9250;
+  acc_opts.scale = 2000; // deg/sec
+  acc_opts.odr = 100;    // Hz
+  if (!mgos_imu_gyroscope_create_i2c(imu, i2c, 0x68, &gyro_opts))
     LOG(LL_ERROR, ("Cannot create gyroscope on IMU"));
-  if (!mgos_imu_magnetometer_create_i2c(imu, i2c, 0x0C, MAG_AK8963))
+
+  mag_opts.type = MAG_AK8963;
+  mag_opts.scale = 12.0; // Gauss
+  mag_opts.odr = 10;     // Hz
+  if (!mgos_imu_magnetometer_create_i2c(imu, i2c, 0x0C, &mag_opts))
     LOG(LL_ERROR, ("Cannot create magnetometer on IMU"));
 
   mgos_set_timer(1000, true, imu_cb, imu);
