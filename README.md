@@ -76,9 +76,9 @@ polling the sensor for the data. It returns `true` if the read succeeded, in
 error occurred, `false` is returned and the contents of `x`, `y` and `z` are
 unmodified. Note the units of the return values:
 
-*   ***magnetometer*** returns units of `microTesla`.
-*   ***accelerometer*** returns units of `m/s/s`.
-*   ***gyroscope*** returns units of `radians per second`.
+*   ***magnetometer*** returns units of `Gauss`.
+*   ***accelerometer*** returns units of `G`.
+*   ***gyroscope*** returns units of `degrees per second`.
 
 `const char *mgos_imu_*_get_name()` -- This returns a symbolic name of the
 attached sensor, which is guaranteed to be less than or equal to 10 characters

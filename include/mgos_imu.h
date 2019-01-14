@@ -77,15 +77,15 @@ bool mgos_imu_gyroscope_present(struct mgos_imu *imu);
 // String representation of the sensor types, guaranteed to be less than or equal to 10 chars
 const char *mgos_imu_gyroscope_get_name(struct mgos_imu *imu);
 
-// Return gyroscope data in units of Rads/sec
+// Return gyroscope data in units of degrees/sec
 bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
-// Get/set gyroscope offset in units of m/s/s
+// Get/set gyroscope offset in units of degrees/sec
 bool mgos_imu_gyroscope_get_offset(struct mgos_imu *imu, float *x, float *y, float *z);
 bool mgos_imu_gyroscope_set_offset(struct mgos_imu *imu, float x, float y, float z);
 
-// Get/set gyroscope scale in units of Rad/sec
-// The driver will set the scale to at least the given `scale` parameter, eg 17
+// Get/set gyroscope scale in units of degrees/sec
+// The driver will set the scale to at least the given `scale` parameter, eg 1000
 // Will return true upon success, false if setting the scale is not feasible.
 bool mgos_imu_gyroscope_get_scale(struct mgos_imu *imu, float *scale);
 bool mgos_imu_gyroscope_set_scale(struct mgos_imu *imu, float scale);
@@ -121,14 +121,14 @@ bool mgos_imu_accelerometer_present(struct mgos_imu *imu);
 // String representation of the sensor types, guaranteed to be less than or equal to 10 chars
 const char *mgos_imu_accelerometer_get_name(struct mgos_imu *imu);
 
-// Return accelerometer data in units of m/s/s
+// Return accelerometer data in units of G
 bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
-// Get/set accelerometer offset in units of m/s/s
+// Get/set accelerometer offset in units of G
 bool mgos_imu_accelerometer_get_offset(struct mgos_imu *imu, float *x, float *y, float *z);
 bool mgos_imu_accelerometer_set_offset(struct mgos_imu *imu, float x, float y, float z);
 
-// Get/set accelerometer scale in units of m/s/s
+// Get/set accelerometer scale in units of G
 // The driver will set the scale to at least the given `scale` parameter, eg 20 m/s/s
 // Will return true upon success, false if setting the scale is not feasible.
 bool mgos_imu_accelerometer_get_scale(struct mgos_imu *imu, float *scale);
@@ -156,10 +156,10 @@ bool mgos_imu_magnetometer_present(struct mgos_imu *imu);
 // String representation of the sensor types, guaranteed to be less than or equal to 10 chars
 const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu);
 
-// Return magnetometer data in units of microtesla (1000 microTesla = 10 Gauss)
+// Return magnetometer data in units of Gauss
 bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *z);
 
-// Get/set magnetometer scale in units of uTesla
+// Get/set magnetometer scale in units of Gauss
 // The driver will set the scale to at least the given `scale` parameter, eg 400
 // Will return true upon success, false if setting the scale is not feasible.
 bool mgos_imu_magnetometer_get_scale(struct mgos_imu *imu, float *scale);

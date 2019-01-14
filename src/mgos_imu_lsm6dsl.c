@@ -77,19 +77,6 @@ bool mgos_imu_lsm6dsl_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
     iud->initialized = true;
   }
 
-  if (dev->opts.scale >= 0) {
-    if (!mgos_imu_lsm6dsl_acc_set_scale(dev, imu_user_data, dev->opts.scale)) {
-      return false;
-    }
-  }
-
-  if (dev->opts.odr >= 0) {
-    if (!mgos_imu_lsm6dsl_acc_set_odr(dev, imu_user_data, dev->opts.odr)) {
-      return false;
-    }
-  }
-
-  dev->scale = dev->opts.scale / 32767.0f;
   return true;
 }
 
@@ -145,7 +132,9 @@ bool mgos_imu_lsm6dsl_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_dat
   } else {
     return false;
   }
-  return mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 2, 2, fs);
+  if (!mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 2, 2, fs)) return false;
+  dev->opts.scale = scale;
+  dev->scale = dev->opts.scale / 32767.0f;
 
   (void)imu_user_data;
 }
@@ -238,7 +227,8 @@ bool mgos_imu_lsm6dsl_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data,
     return false;
   }
 
-  return mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 4, 4, lsm6_odr);
+  if (!mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 4, 4, lsm6_odr)) return false;
+  dev->opts.odr = odr;
 
   (void)imu_user_data;
 }
