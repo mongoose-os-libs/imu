@@ -139,6 +139,7 @@ bool mgos_imu_lsm6dsl_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_dat
   if (!mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 2, 2, fs)) return false;
   dev->opts.scale = scale;
   dev->scale = dev->opts.scale / 32767.0f;
+  return true;
 
   (void)imu_user_data;
 }
@@ -233,6 +234,7 @@ bool mgos_imu_lsm6dsl_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data,
 
   if (!mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 4, 4, lsm6_odr)) return false;
   dev->opts.odr = odr;
+  return true;
 
   (void)imu_user_data;
 }
