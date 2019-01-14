@@ -46,7 +46,7 @@ bool mgos_imu_mma8451_create(struct mgos_imu_acc *dev, void *imu_user_data) {
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MMA8451_REG_CTRL_REG1, 0x19);
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MMA8451_REG_CTRL_REG2, 0x12);
 
-  dev->scale = (8.f / 32767.5) * G2MSS;
+  dev->scale = (8.f / 32767.5);
   return true;
 
   (void)imu_user_data;

@@ -76,9 +76,9 @@ polling the sensor for the data. It returns `true` if the read succeeded, in
 error occurred, `false` is returned and the contents of `x`, `y` and `z` are
 unmodified. Note the units of the return values:
 
-*   ***magnetometer*** returns units of `microTesla`.
-*   ***accelerometer*** returns units of `m/s/s`.
-*   ***gyroscope*** returns units of `radians per second`.
+*   ***magnetometer*** returns units of `Gauss`.
+*   ***accelerometer*** returns units of `G`.
+*   ***gyroscope*** returns units of `degrees per second`.
 
 `const char *mgos_imu_*_get_name()` -- This returns a symbolic name of the
 attached sensor, which is guaranteed to be less than or equal to 10 characters
@@ -105,6 +105,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   LSM303D and LSM303DLM
 *   MMA8451
 *   LSM9DS1
+*   LSM6DSL
 
 ### Gyroscope
 
@@ -112,6 +113,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   L3GD20 and L3GD20H
 *   ITG3205
 *   LSM9DS1
+*   LSM6DSL
 
 ### Magnetometer
 
@@ -217,6 +219,9 @@ static void imu_cb(void *user_data) {
 enum mgos_app_init_result mgos_app_init(void) {
   struct mgos_i2c *i2c = mgos_i2c_get_global();
   struct mgos_imu *imu = mgos_imu_create();
+  struct mgos_imu_acc_opts acc_opts;
+  struct mgos_imu_gyro_opts gyro_opts;
+  struct mgos_imu_mag_opts mag_opts;
 
   if (!i2c) {
     LOG(LL_ERROR, ("I2C bus missing, set i2c.enable=true in mos.yml"));
@@ -228,11 +233,22 @@ enum mgos_app_init_result mgos_app_init(void) {
     return false;
   }
 
-  if (!mgos_imu_accelerometer_create_i2c(imu, i2c, 0x68, ACC_MPU9250))
+  acc_opts.type = ACC_MPU9250;
+  acc_opts.scale = 16.0; // G
+  acc_opts.odr = 100;    // Hz
+  if (!mgos_imu_accelerometer_create_i2c(imu, i2c, 0x68, &acc_opts))
     LOG(LL_ERROR, ("Cannot create accelerometer on IMU"));
-  if (!mgos_imu_gyroscope_create_i2c(imu, i2c, 0x68, GYRO_MPU9250))
+
+  acc_opts.type = ACC_MPU9250;
+  acc_opts.scale = 2000; // deg/sec
+  acc_opts.odr = 100;    // Hz
+  if (!mgos_imu_gyroscope_create_i2c(imu, i2c, 0x68, &gyro_opts))
     LOG(LL_ERROR, ("Cannot create gyroscope on IMU"));
-  if (!mgos_imu_magnetometer_create_i2c(imu, i2c, 0x0C, MAG_AK8963))
+
+  mag_opts.type = MAG_AK8963;
+  mag_opts.scale = 12.0; // Gauss
+  mag_opts.odr = 10;     // Hz
+  if (!mgos_imu_magnetometer_create_i2c(imu, i2c, 0x0C, &mag_opts))
     LOG(LL_ERROR, ("Cannot create magnetometer on IMU"));
 
   mgos_set_timer(1000, true, imu_cb, imu);

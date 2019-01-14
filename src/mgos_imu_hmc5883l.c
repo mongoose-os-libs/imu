@@ -56,7 +56,7 @@ bool mgos_imu_hmc5883l_create(struct mgos_imu_mag *dev, void *imu_user_data) {
   }
   mgos_usleep(1000);
 
-  dev->scale   = 0.92 * GAUSS2UTESLA;
+  dev->scale   = 0.92;
   dev->bias[0] = 1.0;
   dev->bias[1] = 1.0;
   dev->bias[2] = 1.0;

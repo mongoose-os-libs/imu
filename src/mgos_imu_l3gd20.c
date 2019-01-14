@@ -27,9 +27,9 @@ bool mgos_imu_l3gd20_detect(struct mgos_imu_gyro *dev, void *imu_user_data) {
 
   device_id = mgos_i2c_read_reg_b(dev->i2c, dev->i2caddr, MGOS_L3GD20_REG_WHO_AM_I);
   switch (device_id) {
-  case MGOS_L3GD20_DEVID: dev->type = GYRO_L3GD20; return true;
+  case MGOS_L3GD20_DEVID: dev->opts.type = GYRO_L3GD20; return true;
 
-  case MGOS_L3GD20H_DEVID: dev->type = GYRO_L3GD20H; return true;
+  case MGOS_L3GD20H_DEVID: dev->opts.type = GYRO_L3GD20H; return true;
 
   default:
     break;
@@ -61,7 +61,7 @@ bool mgos_imu_l3gd20_create(struct mgos_imu_gyro *dev, void *imu_user_data) {
   }
 
   // Datasheet says 2000dps is 0.07 deg per LSB.
-  dev->scale = (2000.f * 1.1468625f * DEG2RAD) / 32767.5f;
+  dev->scale = (2000.f * 1.1468625f) / 32767.5f;
 
   return true;
 

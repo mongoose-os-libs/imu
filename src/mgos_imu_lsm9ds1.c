@@ -89,7 +89,7 @@ bool mgos_imu_lsm9ds1_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
    #define SENSITIVITY_ACCELEROMETER_8  0.000244
    #define SENSITIVITY_ACCELEROMETER_16 0.000732
    */
-  dev->scale = (0.000244 * G2MSS);
+  dev->scale = 0.000244;
   return true;
 }
 
@@ -146,7 +146,7 @@ bool mgos_imu_lsm9ds1_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data
    #define SENSITIVITY_GYROSCOPE_500    0.0175
    #define SENSITIVITY_GYROSCOPE_2000   0.07
    */
-  dev->scale = 0.07f * DEG2RAD;
+  dev->scale = 0.07f;
   return true;
 }
 
@@ -211,7 +211,7 @@ bool mgos_imu_lsm9ds1_mag_create(struct mgos_imu_mag *dev, void *imu_user_data) 
    #define SENSITIVITY_MAGNETOMETER_12  0.00043
    #define SENSITIVITY_MAGNETOMETER_16  0.00058
    */
-  dev->scale   = 0.00043 * GAUSS2UTESLA;
+  dev->scale   = 0.00043;
   dev->bias[0] = 1.f;
   dev->bias[1] = 1.f;
   dev->bias[2] = 1.f;

@@ -63,9 +63,9 @@ bool mgos_imu_mpu925x_acc_detect(struct mgos_imu_acc *dev, void *imu_user_data) 
 
   if (mgos_imu_mpu925x_detect(dev->i2c, dev->i2caddr, &devid)) {
     if (devid == MGOS_MPU9250_DEVID_9255) {
-      dev->type = ACC_MPU9255;
+      dev->opts.type = ACC_MPU9255;
     } else{
-      dev->type = ACC_MPU9250;
+      dev->opts.type = ACC_MPU9250;
     }
     return true;
   }
@@ -88,10 +88,6 @@ bool mgos_imu_mpu925x_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
     }
     iud->initialized = true;
   }
-  if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, MGOS_MPU9250_ACCEL_FS_SEL_16G)) {
-    return false;
-  }
-  dev->scale = (16.0f * G2MSS) / 32768.0f;
   if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG2, MGOS_MPU9250_DLPF_41)) {
     return false;
   }
@@ -120,9 +116,9 @@ bool mgos_imu_mpu925x_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data
 
   if (mgos_imu_mpu925x_detect(dev->i2c, dev->i2caddr, &devid)) {
     if (devid == MGOS_MPU9250_DEVID_9255) {
-      dev->type = GYRO_MPU9255;
+      dev->opts.type = GYRO_MPU9255;
     } else{
-      dev->type = GYRO_MPU9250;
+      dev->opts.type = GYRO_MPU9250;
     }
     return true;
   }
@@ -145,10 +141,6 @@ bool mgos_imu_mpu925x_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data
     }
     iud->initialized = true;
   }
-  if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, MGOS_MPU9250_GYRO_FS_SEL_2000DPS)) {
-    return false;
-  }
-  dev->scale = 2000.0f / 32767.5f * DEG2RAD;
   if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_CONFIG, MGOS_MPU9250_DLPF_41)) {
     return false;
   }
@@ -182,4 +174,97 @@ struct mgos_imu_mpu925x_userdata *mgos_imu_mpu925x_userdata_create(void) {
   }
   iud->initialized = false;
   return iud;
+}
+
+bool mgos_imu_mpu925x_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_data, float *scale) {
+  uint8_t sel;
+
+  if (!mgos_i2c_getbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, 3, 2, &sel)) {
+    return false;
+  }
+  switch (sel) {
+  case 3: *scale = 16; break;
+
+  case 2: *scale = 8; break;
+
+  case 1: *scale = 4; break;
+
+  default: *scale = 2; break;
+  }
+
+  return true;
+
+  (void)imu_user_data;
+}
+
+bool mgos_imu_mpu925x_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_data, float scale) {
+  uint8_t sel;
+
+  if (scale > 16) {
+    return false;
+  } else if (scale > 8) {
+    sel = 3;  // 16G
+    scale = 16.f;
+  } else if (scale > 4) {
+    sel = 2;  // 8G
+    scale = 8.f;
+  } else if (scale > 2) {
+    sel = 1;  // 4G
+    scale = 4.f;
+  } else {
+    sel = 0;  // 2G
+    scale = 2.f;
+  }
+  if (!mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, 3, 2, sel)) return false;
+  dev->opts.scale = scale;
+  dev->scale = scale / 32768.0f;
+  return true;
+  (void)imu_user_data;
+}
+
+bool mgos_imu_mpu925x_gyro_get_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float *scale) {
+  uint8_t sel;
+
+  if (!mgos_i2c_getbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, 3, 2, &sel)) {
+    return false;
+  }
+  switch (sel) {
+  case 3: *scale = 2000; break;
+
+  case 2: *scale = 1000; break;
+
+  case 1: *scale = 500; break;
+
+  default: *scale = 250; break;
+  }
+
+  return true;
+
+  (void)imu_user_data;
+}
+
+bool mgos_imu_mpu925x_gyro_set_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float scale) {
+  uint8_t sel;
+
+  if (scale > 2000) {
+    return false;
+  } else if (scale > 1000) {
+    sel = 3;  // 2000DPS
+    scale = 2000.f;
+  } else if (scale > 500) {
+    sel = 2;  // 1000DPS
+    scale = 1000.f;
+  } else if (scale > 250) {
+    sel = 1;  // 500DPS
+    scale = 500.f;
+  } else {
+    sel = 0;  // 250DPS
+    scale = 250.f;
+  }
+  if (!mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, 3, 2, sel)) return false;
+  dev->opts.scale = scale;
+  dev->scale = scale / 32768.0f;
+  return true;
+
+  (void)imu_user_data;
 }
