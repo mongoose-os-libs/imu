@@ -23,6 +23,19 @@
 extern "C" {
 #endif
 
+// Conversion constants between m/s/s and G's
+#define MSS2G           (.10196798f)
+#define G2MSS           (9.807f)
+
+// Conversion constants between Rad/sec and Deg/sec
+#define DEG2RAD         (.017453292519943f) /* PI / 180 */
+#define RAD2DEG         (57.2957795130823f) /* 180 / PI */
+
+// Conversion constants between uTesla and Gauss (1 tesla = 10^4 gauss)
+#define UTESLA2GAUSS    (0.01f)
+#define GAUSS2UTESLA    (100.f)
+
+
 enum mgos_imu_acc_type {
   ACC_NONE = 0,
   ACC_MPU9250,
