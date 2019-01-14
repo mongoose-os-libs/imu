@@ -123,12 +123,16 @@ bool mgos_imu_lsm6dsl_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_dat
 
   if (scale <= 2) {
     fs = 0;
+    scale = 2.f;
   } else if (scale <= 4) {
     fs = 2;
+    scale = 4.f;
   } else if (scale <= 8) {
     fs = 3;
+    scale = 8.f;
   } else if (scale <= 16) {
     fs = 1;
+    scale = 16.f;
   } else {
     return false;
   }

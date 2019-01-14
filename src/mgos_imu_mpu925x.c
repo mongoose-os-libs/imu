@@ -216,6 +216,7 @@ bool mgos_imu_mpu925x_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_dat
     scale = 2.f;
   }
   if (!mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, 3, 2, sel)) return false;
+  dev->opts.scale = scale;
   dev->scale = scale / 32768.0f;
   return true;
   (void)imu_user_data;
@@ -261,6 +262,7 @@ bool mgos_imu_mpu925x_gyro_set_scale(struct mgos_imu_gyro *dev, void *imu_user_d
     scale = 250.f;
   }
   if (!mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, 3, 2, sel)) return false;
+  dev->opts.scale = scale;
   dev->scale = scale / 32768.0f;
   return true;
 
