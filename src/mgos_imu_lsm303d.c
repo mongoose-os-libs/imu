@@ -93,7 +93,7 @@ bool mgos_imu_lsm303d_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM303D_REG_CTRL1, 0x6F);
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM303D_REG_CTRL2, 0x18);
 
-  dev->scale = (8.f * G2MSS) / 32767.5;
+  dev->scale = 8.f / 32767.5;
   return true;
 }
 
@@ -155,7 +155,7 @@ bool mgos_imu_lsm303d_mag_create(struct mgos_imu_mag *dev, void *imu_user_data) 
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM303D_REG_CTRL6, 0x60);
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM303D_REG_CTRL7, 0x00);
 
-  dev->scale   = (12.f * GAUSS2UTESLA) / 32767.5;
+  dev->scale   = 12.f / 32767.5;
   dev->bias[0] = 1.0f;
   dev->bias[1] = 1.0f;
   dev->bias[2] = 1.0f;

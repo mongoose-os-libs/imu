@@ -91,7 +91,7 @@ bool mgos_imu_mpu925x_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
   if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG, MGOS_MPU9250_ACCEL_FS_SEL_16G)) {
     return false;
   }
-  dev->scale = (16.0f * G2MSS) / 32768.0f;
+  dev->scale = 16.0f / 32768.0f;
   if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_ACCEL_CONFIG2, MGOS_MPU9250_DLPF_41)) {
     return false;
   }
@@ -148,7 +148,7 @@ bool mgos_imu_mpu925x_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data
   if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_GYRO_CONFIG, MGOS_MPU9250_GYRO_FS_SEL_2000DPS)) {
     return false;
   }
-  dev->scale = 2000.0f / 32767.5f * DEG2RAD;
+  dev->scale = 2000.0f / 32767.5f;
   if (!mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_MPU9250_REG_CONFIG, MGOS_MPU9250_DLPF_41)) {
     return false;
   }
@@ -191,13 +191,13 @@ bool mgos_imu_mpu925x_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_dat
     return false;
   }
   switch (sel) {
-  case 3: *scale = 16 * G2MSS; break;
+  case 3: *scale = 16; break;
 
-  case 2: *scale = 8 * G2MSS; break;
+  case 2: *scale = 8; break;
 
-  case 1: *scale = 4 * G2MSS; break;
+  case 1: *scale = 4; break;
 
-  default: *scale = 2 * G2MSS; break;
+  default: *scale = 2; break;
   }
 
   return true;
@@ -208,13 +208,13 @@ bool mgos_imu_mpu925x_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_dat
 bool mgos_imu_mpu925x_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_data, float scale) {
   uint8_t sel;
 
-  if (scale > 16 * MSS2G) {
+  if (scale > 16) {
     return false;
-  } else if (scale > 8 * MSS2G) {
+  } else if (scale > 8) {
     sel = 3;  // 16G
-  } else if (scale > 4 * MSS2G) {
+  } else if (scale > 4) {
     sel = 2;  // 8G
-  } else if (scale > 2 * MSS2G) {
+  } else if (scale > 2) {
     sel = 1;  // 4G
   } else {
     sel = 0;  // 2G
@@ -231,13 +231,13 @@ bool mgos_imu_mpu925x_gyro_get_scale(struct mgos_imu_gyro *dev, void *imu_user_d
     return false;
   }
   switch (sel) {
-  case 3: *scale = 2000 * DEG2RAD; break;
+  case 3: *scale = 2000; break;
 
-  case 2: *scale = 1000 * DEG2RAD; break;
+  case 2: *scale = 1000; break;
 
-  case 1: *scale = 500 * DEG2RAD; break;
+  case 1: *scale = 500; break;
 
-  default: *scale = 250 * DEG2RAD; break;
+  default: *scale = 250; break;
   }
 
   return true;
@@ -248,13 +248,13 @@ bool mgos_imu_mpu925x_gyro_get_scale(struct mgos_imu_gyro *dev, void *imu_user_d
 bool mgos_imu_mpu925x_gyro_set_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float scale) {
   uint8_t sel;
 
-  if (scale > 2000 * RAD2DEG) {
+  if (scale > 2000) {
     return false;
-  } else if (scale > 1000 * RAD2DEG) {
+  } else if (scale > 1000) {
     sel = 3;  // 2000DPS
-  } else if (scale > 500 * RAD2DEG) {
+  } else if (scale > 500) {
     sel = 2;  // 1000DPS
-  } else if (scale > 250 * RAD2DEG) {
+  } else if (scale > 250) {
     sel = 1;  // 500DPS
   } else {
     sel = 0;  // 250DPS

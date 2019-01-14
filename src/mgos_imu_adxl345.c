@@ -47,7 +47,7 @@ bool mgos_imu_adxl345_create(struct mgos_imu_acc *dev, void *imu_user_data) {
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ADXL345_REG_BW_RATE, 0x0B);
 
   // FULL_RES: 3.9mg/LSB always
-  dev->scale = 0.0039 * G2MSS;
+  dev->scale = 0.0039;
   return true;
 
   (void)imu_user_data;

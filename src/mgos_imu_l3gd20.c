@@ -61,7 +61,7 @@ bool mgos_imu_l3gd20_create(struct mgos_imu_gyro *dev, void *imu_user_data) {
   }
 
   // Datasheet says 2000dps is 0.07 deg per LSB.
-  dev->scale = (2000.f * 1.1468625f * DEG2RAD) / 32767.5f;
+  dev->scale = (2000.f * 1.1468625f) / 32767.5f;
 
   return true;
 

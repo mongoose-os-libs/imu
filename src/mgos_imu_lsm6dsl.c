@@ -117,13 +117,13 @@ bool mgos_imu_lsm6dsl_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_dat
     return false;
   }
   switch (fs) {
-  case 0: *scale = 2 * G2MSS; break;
+  case 0: *scale = 2; break;
 
-  case 1: *scale = 16 * G2MSS; break;
+  case 1: *scale = 16; break;
 
-  case 2: *scale = 4 * G2MSS; break;
+  case 2: *scale = 4; break;
 
-  case 3: *scale = 8 * G2MSS; break;
+  case 3: *scale = 8; break;
   }
 
   return true;
@@ -134,13 +134,13 @@ bool mgos_imu_lsm6dsl_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_dat
 bool mgos_imu_lsm6dsl_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_data, float scale) {
   uint8_t fs = 0;
 
-  if (scale <= 2 * G2MSS) {
+  if (scale <= 2) {
     fs = 0;
-  } else if (scale <= 4 * G2MSS) {
+  } else if (scale <= 4) {
     fs = 2;
-  } else if (scale <= 8 * G2MSS) {
+  } else if (scale <= 8) {
     fs = 3;
-  } else if (scale <= 16 * G2MSS) {
+  } else if (scale <= 16) {
     fs = 1;
   } else {
     return false;
@@ -267,7 +267,7 @@ bool mgos_imu_lsm6dsl_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data
   // CTRL2_G: ODR_XL=0100 (104Hz ODR); FS_XL=11 (2000dps); FS_125=0; 0
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL2_G, 0x4c);
 
-  dev->scale = 2000.f * .035 * 1e-3 * DEG2RAD;
+  dev->scale = 2000.f * .035 * 1e-3;
   return true;
 }
 
