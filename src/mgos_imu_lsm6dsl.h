@@ -19,15 +19,15 @@
 #include <stdint.h>
 #include "mgos_imu_internal.h"
 
-#define MGOS_LSM6DSL_DEFAULT_I2CADDR                 (0x6b)
-#define MGOS_LSM6DSL_DEVID                           (0x6A)
+#define MGOS_LSM6DSL_DEFAULT_I2CADDR    (0x6b)
+#define MGOS_LSM6DSL_DEVID              (0x6A)
 
 enum mgos_imu_lsm6dsl_fifo_mode {
-  MGOS_LSM6DSL_FIFO_MODE_BYPASS = 0,
-  MGOS_LSM6DSL_FIFO_MODE_FIFO = 1,
-  MGOS_LSM6DSL_FIFO_MODE_CONT_FIFO = 3,
+  MGOS_LSM6DSL_FIFO_MODE_BYPASS      = 0,
+  MGOS_LSM6DSL_FIFO_MODE_FIFO        = 1,
+  MGOS_LSM6DSL_FIFO_MODE_CONT_FIFO   = 3,
   MGOS_LSM6DSL_FIFO_MODE_BYPASS_CONT = 4,
-  MGOS_LSM6DSL_FIFO_MODE_CONT = 6,
+  MGOS_LSM6DSL_FIFO_MODE_CONT        = 6,
 };
 
 // LSM6DSL -- Registers (Acc/Gyro)
@@ -150,33 +150,33 @@ bool mgos_imu_lsm6dsl_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data
 bool mgos_imu_lsm6dsl_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data);
 
 // Interrupts
-#define MGOS_LSM6DSL_INT_DRDY_XL     (1 << 0)
-#define MGOS_LSM6DSL_INT_DRDY_G      (1 << 1)
-#define MGOS_LSM6DSL_INT_FIFO_THR    (1 << 3)
-#define MGOS_LSM6DSL_INT_FIFO_OVR    (1 << 4)
-#define MGOS_LSM6DSL_INT_FIFO_FULL   (1 << 5)
-#define MGOS_LSM6DSL_INT_TIMER       (1 << 8)
-#define MGOS_LSM6DSL_INT_TILT        (1 << 9)
-#define MGOS_LSM6DSL_INT_D6D         (1 << 10)
-#define MGOS_LSM6DSL_INT_DBL_TAP     (1 << 11)
-#define MGOS_LSM6DSL_INT_FF          (1 << 12)
-#define MGOS_LSM6DSL_INT_WU          (1 << 13)
-#define MGOS_LSM6DSL_INT_TAP         (1 << 14)
-#define MGOS_LSM6DSL_INT_INACT       (1 << 15)
+#define MGOS_LSM6DSL_INT_DRDY_XL        (1 << 0)
+#define MGOS_LSM6DSL_INT_DRDY_G         (1 << 1)
+#define MGOS_LSM6DSL_INT_FIFO_THR       (1 << 3)
+#define MGOS_LSM6DSL_INT_FIFO_OVR       (1 << 4)
+#define MGOS_LSM6DSL_INT_FIFO_FULL      (1 << 5)
+#define MGOS_LSM6DSL_INT_TIMER          (1 << 8)
+#define MGOS_LSM6DSL_INT_TILT           (1 << 9)
+#define MGOS_LSM6DSL_INT_D6D            (1 << 10)
+#define MGOS_LSM6DSL_INT_DBL_TAP        (1 << 11)
+#define MGOS_LSM6DSL_INT_FF             (1 << 12)
+#define MGOS_LSM6DSL_INT_WU             (1 << 13)
+#define MGOS_LSM6DSL_INT_TAP            (1 << 14)
+#define MGOS_LSM6DSL_INT_INACT          (1 << 15)
 // These interrupt sources are only available on INT1 or INT2 pin.
-#define MGOS_LSM6DSL_INT1_BOOT        (1 << 2)
-#define MGOS_LSM6DSL_INT1_SIGN_MOT    (1 << 6)
-#define MGOS_LSM6DSL_INT1_STEP_DET    (1 << 7)
-#define MGOS_LSM6DSL_INT2_DRDY_TEMP   (1 << 18)
-#define MGOS_LSM6DSL_INT2_STEP_OVR    (1 << 22)
-#define MGOS_LSM6DSL_INT2_STEP_DELTA  (1 << 23)
+#define MGOS_LSM6DSL_INT1_BOOT          (1 << 2)
+#define MGOS_LSM6DSL_INT1_SIGN_MOT      (1 << 6)
+#define MGOS_LSM6DSL_INT1_STEP_DET      (1 << 7)
+#define MGOS_LSM6DSL_INT2_DRDY_TEMP     (1 << 18)
+#define MGOS_LSM6DSL_INT2_STEP_OVR      (1 << 22)
+#define MGOS_LSM6DSL_INT2_STEP_DELTA    (1 << 23)
 
 // Set INT1 and/or INT2 interrupt handlers.
 // One or both can be specified, unused should be set to -1.
 // If both pins are set and are the same, will configure the device to send INT2 interrupts to INT1.
 bool mgos_imu_lsm6dsl_set_int_handler(
-    struct mgos_imu *imu, int int1_gpio, int int2_gpio,
-    mgos_imu_lsm6dsl_int_cb cb, void *user_data);
+  struct mgos_imu *imu, int int1_gpio, int int2_gpio,
+  mgos_imu_lsm6dsl_int_cb cb, void *user_data);
 
 // Enable/disable specific interrupt sources.
 bool mgos_imu_lsm6dsl_int1_enable(struct mgos_imu *imu, uint32_t int1_mask);

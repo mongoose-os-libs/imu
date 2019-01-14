@@ -32,7 +32,7 @@ static struct mgos_imu_mag *mgos_imu_mag_create(void) {
   }
   memset(mag, 0, sizeof(struct mgos_imu_mag));
 
-  mag->type           = MAG_NONE;
+  mag->opts.type      = MAG_NONE;
   mag->orientation[0] = 1.f;
   mag->orientation[1] = 0.f;
   mag->orientation[2] = 0.f;
@@ -76,7 +76,7 @@ const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu) {
     return "VOID";
   }
 
-  switch (imu->mag->type) {
+  switch (imu->mag->opts.type) {
   case MAG_NONE: return "NONE";
 
   case MAG_AK8963: return "AK8963";
@@ -124,8 +124,8 @@ bool mgos_imu_magnetometer_get(struct mgos_imu *imu, float *x, float *y, float *
   return true;
 }
 
-bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_mag_type type) {
-  if (!imu) {
+bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, const struct mgos_imu_mag_opts *opts) {
+  if (!imu || !i2c || !opts) {
     return false;
   }
   if (imu->mag) {
@@ -137,8 +137,8 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
   }
   imu->mag->i2c     = i2c;
   imu->mag->i2caddr = i2caddr;
-  imu->mag->type    = type;
-  switch (type) {
+  imu->mag->opts    = *opts;
+  switch (opts->type) {
   case MAG_LSM9DS1:
     imu->mag->detect = mgos_imu_lsm9ds1_mag_detect;
     imu->mag->create = mgos_imu_lsm9ds1_mag_create;
@@ -165,9 +165,9 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
     break;
 
   case MAG_AK8963:
-    imu->mag->detect    = mgos_imu_ak8963_detect;
-    imu->mag->create    = mgos_imu_ak8963_create;
-    imu->mag->read      = mgos_imu_ak8963_read;
+    imu->mag->detect = mgos_imu_ak8963_detect;
+    imu->mag->create = mgos_imu_ak8963_create;
+    imu->mag->read   = mgos_imu_ak8963_read;
     break;
 
   case MAG_AK8975:
@@ -183,29 +183,40 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
     break;
 
   default:
-    LOG(LL_ERROR, ("Unknown magnetometer type %d", type));
+    LOG(LL_ERROR, ("Unknown magnetometer type %d", opts->type));
     mgos_imu_magnetometer_destroy(imu);
     return false;
   }
 
   if (imu->mag->detect) {
     if (!imu->mag->detect(imu->mag, imu->user_data)) {
-      LOG(LL_ERROR, ("Could not detect magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_magnetometer_get_name(imu), i2caddr));
+      LOG(LL_ERROR, ("Could not detect magnetometer type %d (%s) at I2C 0x%02x",
+                     opts->type, mgos_imu_magnetometer_get_name(imu), i2caddr));
       mgos_imu_magnetometer_destroy(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully detected magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_magnetometer_get_name(imu), i2caddr));
+      LOG(LL_DEBUG, ("Successfully detected magnetometer type %d (%s) at I2C 0x%02x",
+                     opts->type, mgos_imu_magnetometer_get_name(imu), i2caddr));
     }
   }
 
   if (imu->mag->create) {
     if (!imu->mag->create(imu->mag, imu->user_data)) {
-      LOG(LL_ERROR, ("Could not create magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_magnetometer_get_name(imu), i2caddr));
+      LOG(LL_ERROR, ("Could not create magnetometer type %d (%s) at I2C 0x%02x",
+                     opts->type, mgos_imu_magnetometer_get_name(imu), i2caddr));
       mgos_imu_magnetometer_destroy(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully created magnetometer type %d (%s) at I2C 0x%02x", type, mgos_imu_magnetometer_get_name(imu), i2caddr));
+      LOG(LL_DEBUG, ("Successfully created magnetometer type %d (%s) at I2C 0x%02x",
+                     opts->type, mgos_imu_magnetometer_get_name(imu), i2caddr));
     }
+  }
+  if (imu->mag->set_scale) {
+    imu->mag->set_scale(imu->mag, imu->user_data, opts->scale);
+  }
+
+  if (imu->mag->set_odr) {
+    imu->mag->set_odr(imu->mag, imu->user_data, opts->odr);
   }
 
   return true;

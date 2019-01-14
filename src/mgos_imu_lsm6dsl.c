@@ -47,7 +47,9 @@ static bool mgos_imu_lsm6dsl_accgyro_create(struct mgos_i2c *i2c, uint8_t i2cadd
     mgos_usleep(15000);
     // Perform SW reset (bit auto-clears).
     mgos_i2c_write_reg_b(i2c, i2caddr, MGOS_LSM6DSL_REG_CTRL3_C, 1);
-    while (mgos_i2c_read_reg_b(i2c, i2caddr, MGOS_LSM6DSL_REG_CTRL3_C) & 1);
+    while (mgos_i2c_read_reg_b(i2c, i2caddr, MGOS_LSM6DSL_REG_CTRL3_C) & 1) {
+      ;
+    }
   }
 
   // CTRL3_C: BOOT=0; BDU=1; H_LACTIVE=1; PP_OD=0; SIM=0; IF_INC=1; BLE=0; SW_RESET=0;
@@ -76,11 +78,15 @@ bool mgos_imu_lsm6dsl_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
   }
 
   if (dev->opts.scale >= 0) {
-    if (!mgos_imu_lsm6dsl_acc_set_scale(dev, imu_user_data, dev->opts.scale)) return false;
+    if (!mgos_imu_lsm6dsl_acc_set_scale(dev, imu_user_data, dev->opts.scale)) {
+      return false;
+    }
   }
 
   if (dev->opts.odr >= 0) {
-    if (!mgos_imu_lsm6dsl_acc_set_odr(dev, imu_user_data, dev->opts.odr)) return false;
+    if (!mgos_imu_lsm6dsl_acc_set_odr(dev, imu_user_data, dev->opts.odr)) {
+      return false;
+    }
   }
 
   dev->scale = dev->opts.scale / 32767.0f;
@@ -89,10 +95,11 @@ bool mgos_imu_lsm6dsl_acc_create(struct mgos_imu_acc *dev, void *imu_user_data) 
 
 bool mgos_imu_lsm6dsl_acc_read(struct mgos_imu_acc *dev, void *imu_user_data) {
   int16_t data[3];
+
   if (!dev) {
     return false;
   }
-  if (!mgos_i2c_read_reg_n(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_OUTX_L_XL, 6, (uint8_t *) data)) {
+  if (!mgos_i2c_read_reg_n(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_OUTX_L_XL, 6, (uint8_t *)data)) {
     return false;
   }
   dev->ax = data[0];
@@ -105,14 +112,18 @@ bool mgos_imu_lsm6dsl_acc_read(struct mgos_imu_acc *dev, void *imu_user_data) {
 
 bool mgos_imu_lsm6dsl_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_data, float *scale) {
   uint8_t fs = 0;
+
   if (!mgos_i2c_getbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 2, 2, &fs)) {
     return false;
   }
   switch (fs) {
-    case 0: *scale = 2 * G2MSS; break;
-    case 1: *scale = 16 * G2MSS; break;
-    case 2: *scale = 4 * G2MSS; break;
-    case 3: *scale = 8 * G2MSS; break;
+  case 0: *scale = 2 * G2MSS; break;
+
+  case 1: *scale = 16 * G2MSS; break;
+
+  case 2: *scale = 4 * G2MSS; break;
+
+  case 3: *scale = 8 * G2MSS; break;
   }
 
   return true;
@@ -122,6 +133,7 @@ bool mgos_imu_lsm6dsl_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_dat
 
 bool mgos_imu_lsm6dsl_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_data, float scale) {
   uint8_t fs = 0;
+
   if (scale <= 2 * G2MSS) {
     fs = 0;
   } else if (scale <= 4 * G2MSS) {
@@ -140,52 +152,91 @@ bool mgos_imu_lsm6dsl_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_dat
 
 static float mgos_imu_lsm6dsl_odr_to_hz(uint8_t lsm6_odr) {
   switch (lsm6_odr) {
-    case 0: return 0.0f;
-    case 1: return 12.5f;
-    case 2: return 26.0f;
-    case 3: return 52.0f;
-    case 4: return 104.0f;
-    case 5: return 208.0f;
-    case 6: return 416.0f;
-    case 7: return 833.0f;
-    case 8: return 1666.0f;
-    case 9: return 3333.0f;
-    case 10: return 6666.0f;
-    case 11: return 1.6f;
+  case 0: return 0.0f;
+
+  case 1: return 12.5f;
+
+  case 2: return 26.0f;
+
+  case 3: return 52.0f;
+
+  case 4: return 104.0f;
+
+  case 5: return 208.0f;
+
+  case 6: return 416.0f;
+
+  case 7: return 833.0f;
+
+  case 8: return 1666.0f;
+
+  case 9: return 3333.0f;
+
+  case 10: return 6666.0f;
+
+  case 11: return 1.6f;
   }
   return -1;
 }
 
 bool mgos_imu_lsm6dsl_acc_get_odr(struct mgos_imu_acc *dev, void *imu_user_data, float *odr) {
   uint8_t odr_xl = 0;
+
   if (!mgos_i2c_getbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 4, 4, &odr_xl)) {
     return false;
   }
   *odr = mgos_imu_lsm6dsl_odr_to_hz(odr_xl);
-  return (*odr >= 0);
+  return *odr >= 0;
 
   (void)imu_user_data;
 }
 
 static uint8_t mgos_imu_lsm6dsl_hz_to_odr(float odr) {
-  if (odr == 0) return 0;
-  if (odr <= 1) return 11;  // 1.6
-  if (odr <= 12) return 1;  // 12.5
-  if (odr <= 26) return 2;
-  if (odr <= 52) return 3;
-  if (odr <= 104) return 4;
-  if (odr <= 208) return 5;
-  if (odr <= 416) return 6;
-  if (odr <= 833) return 7;
-  if (odr <= 1666) return 8;
-  if (odr <= 3333) return 9;
-  if (odr <= 6666) return 10;
+  if (odr == 0) {
+    return 0;
+  }
+  if (odr <= 1) {
+    return 11;              // 1.6
+  }
+  if (odr <= 12) {
+    return 1;               // 12.5
+  }
+  if (odr <= 26) {
+    return 2;
+  }
+  if (odr <= 52) {
+    return 3;
+  }
+  if (odr <= 104) {
+    return 4;
+  }
+  if (odr <= 208) {
+    return 5;
+  }
+  if (odr <= 416) {
+    return 6;
+  }
+  if (odr <= 833) {
+    return 7;
+  }
+  if (odr <= 1666) {
+    return 8;
+  }
+  if (odr <= 3333) {
+    return 9;
+  }
+  if (odr <= 6666) {
+    return 10;
+  }
   return 0xff;
 }
 
 bool mgos_imu_lsm6dsl_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data, float odr) {
   uint8_t lsm6_odr = mgos_imu_lsm6dsl_hz_to_odr(odr);
-  if (lsm6_odr == 0xff) return false;
+
+  if (lsm6_odr == 0xff) {
+    return false;
+  }
 
   return mgos_i2c_setbits_reg_b(dev->i2c, dev->i2caddr, MGOS_LSM6DSL_REG_CTRL1_XL, 4, 4, lsm6_odr);
 
@@ -252,36 +303,71 @@ struct mgos_imu_lsm6dsl_userdata *mgos_imu_lsm6dsl_userdata_create(void) {
 static bool mgos_imu_lsm6dsl_get_and_clear_ints(struct mgos_imu *imu, uint32_t *res) {
   uint32_t ints = 0;
   // Query all the possible interrupt sources.
-  uint8_t regs[4] = {0};
+  uint8_t regs[4] = { 0 };
+
   if (!mgos_i2c_read_reg_n(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_WAKE_UP_SRC, 4, regs)) {
     return false;
   }
   uint8_t wake_up_src = regs[0];
-  if (wake_up_src & 0b00100000) ints |= MGOS_LSM6DSL_INT_FF;
-  if (wake_up_src & 0b00001000) ints |= MGOS_LSM6DSL_INT_WU;
+  if (wake_up_src & 0b00100000) {
+    ints |= MGOS_LSM6DSL_INT_FF;
+  }
+  if (wake_up_src & 0b00001000) {
+    ints |= MGOS_LSM6DSL_INT_WU;
+  }
   uint8_t tap_src = regs[1];
-  if (tap_src & 0b00100000) ints |= MGOS_LSM6DSL_INT_TAP;
-  if (tap_src & 0b00010000) ints |= MGOS_LSM6DSL_INT_DBL_TAP;
+  if (tap_src & 0b00100000) {
+    ints |= MGOS_LSM6DSL_INT_TAP;
+  }
+  if (tap_src & 0b00010000) {
+    ints |= MGOS_LSM6DSL_INT_DBL_TAP;
+  }
   uint8_t d6d_src = regs[2];
-  if (d6d_src & 0b01000000) ints |= MGOS_LSM6DSL_INT_D6D;
+  if (d6d_src & 0b01000000) {
+    ints |= MGOS_LSM6DSL_INT_D6D;
+  }
   uint8_t status_reg = regs[3];
-  if (status_reg & 0b00000001) ints |= MGOS_LSM6DSL_INT_DRDY_XL;
-  if (status_reg & 0b00000010) ints |= MGOS_LSM6DSL_INT_DRDY_G;
-  if (status_reg & 0b00000100) ints |= MGOS_LSM6DSL_INT2_DRDY_TEMP;
+  if (status_reg & 0b00000001) {
+    ints |= MGOS_LSM6DSL_INT_DRDY_XL;
+  }
+  if (status_reg & 0b00000010) {
+    ints |= MGOS_LSM6DSL_INT_DRDY_G;
+  }
+  if (status_reg & 0b00000100) {
+    ints |= MGOS_LSM6DSL_INT2_DRDY_TEMP;
+  }
   int fifo_status2 = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_FIFO_STATUS2);
-  if (fifo_status2 < 0) return false;
-  if (fifo_status2 & 0b10000000) ints |= MGOS_LSM6DSL_INT_FIFO_THR;
-  if (fifo_status2 & 0b01000000) ints |= MGOS_LSM6DSL_INT_FIFO_OVR;
-  if (fifo_status2 & 0b00100000) ints |= MGOS_LSM6DSL_INT_FIFO_FULL;
+  if (fifo_status2 < 0) {
+    return false;
+  }
+  if (fifo_status2 & 0b10000000) {
+    ints |= MGOS_LSM6DSL_INT_FIFO_THR;
+  }
+  if (fifo_status2 & 0b01000000) {
+    ints |= MGOS_LSM6DSL_INT_FIFO_OVR;
+  }
+  if (fifo_status2 & 0b00100000) {
+    ints |= MGOS_LSM6DSL_INT_FIFO_FULL;
+  }
   if (!mgos_i2c_read_reg_n(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_FUNC_SRC1, 2, regs)) {
     return false;
   }
   uint8_t func_src1 = regs[0];
-  if (func_src1 & 0b10000000) ints |= MGOS_LSM6DSL_INT2_STEP_DELTA;
-  if (func_src1 & 0b01000000) ints |= MGOS_LSM6DSL_INT1_SIGN_MOT;
-  if (func_src1 & 0b00100000) ints |= MGOS_LSM6DSL_INT_TILT;
-  if (func_src1 & 0b00010000) ints |= MGOS_LSM6DSL_INT1_STEP_DET;
-  if (func_src1 & 0b00001000) ints |= MGOS_LSM6DSL_INT2_STEP_OVR;
+  if (func_src1 & 0b10000000) {
+    ints |= MGOS_LSM6DSL_INT2_STEP_DELTA;
+  }
+  if (func_src1 & 0b01000000) {
+    ints |= MGOS_LSM6DSL_INT1_SIGN_MOT;
+  }
+  if (func_src1 & 0b00100000) {
+    ints |= MGOS_LSM6DSL_INT_TILT;
+  }
+  if (func_src1 & 0b00010000) {
+    ints |= MGOS_LSM6DSL_INT1_STEP_DET;
+  }
+  if (func_src1 & 0b00001000) {
+    ints |= MGOS_LSM6DSL_INT2_STEP_OVR;
+  }
   /* Not sure what to do about MGOS_LSM6DSL_INT1_BOOT. Meh. */
   *res = ints;
   return true;
@@ -297,13 +383,15 @@ static void mgos_imu_lsm6dsl_irq(int pin, void *arg) {
   iud = (struct mgos_imu_lsm6dsl_userdata *)imu->user_data;
 
   uint32_t ints = 0;
-  if (!mgos_imu_lsm6dsl_get_and_clear_ints(imu, &ints)) return;
+  if (!mgos_imu_lsm6dsl_get_and_clear_ints(imu, &ints)) {
+    return;
+  }
   // Callback to user
   if (iud->int_cb) {
     iud->int_cb(imu, ints, iud->int_cb_user_data);
   }
 
-  (void) pin;
+  (void)pin;
 }
 
 bool mgos_imu_lsm6dsl_set_int_handler(struct mgos_imu *imu, int int1_gpio, int int2_gpio, mgos_imu_lsm6dsl_int_cb cb, void *user_data) {
@@ -343,51 +431,63 @@ bool mgos_imu_lsm6dsl_set_int_handler(struct mgos_imu *imu, int int1_gpio, int i
 
 bool mgos_imu_lsm6dsl_int1_enable(struct mgos_imu *imu, uint32_t int1_mask) {
   int int1_ctrl = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT1_CTRL);
-  int md1_cfg = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG);
-  if (int1_ctrl < 0 || md1_cfg < 0) return false;
-  int1_ctrl |= (uint8_t) int1_mask;
-  md1_cfg |= (uint8_t) (int1_mask >> 8);
+  int md1_cfg   = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG);
+
+  if (int1_ctrl < 0 || md1_cfg < 0) {
+    return false;
+  }
+  int1_ctrl |= (uint8_t)int1_mask;
+  md1_cfg   |= (uint8_t)(int1_mask >> 8);
   if (md1_cfg != 0) {
     if (!mgos_i2c_setbits_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_TAP_CFG, 7, 1, 1)) {
       return false;
     }
   }
   LOG(LL_INFO, ("INT1_CTRL %02x MD1_CFG %02x", int1_ctrl, md1_cfg));
-  return (mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT1_CTRL, int1_ctrl) &&
-          mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG, md1_cfg));
+  return mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT1_CTRL, int1_ctrl) &&
+         mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG, md1_cfg);
 }
 
 bool mgos_imu_lsm6dsl_int1_disable(struct mgos_imu *imu, uint32_t int1_mask) {
   int int1_ctrl = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT1_CTRL);
-  int md1_cfg = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG);
-  if (int1_ctrl < 0 || md1_cfg < 0) return false;
-  int1_ctrl &= ~((uint8_t) int1_mask);
-  md1_cfg &= ~((uint8_t) (int1_mask >> 8));
-  return (mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT1_CTRL, int1_ctrl) &&
-          mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG, md1_cfg));
+  int md1_cfg   = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG);
+
+  if (int1_ctrl < 0 || md1_cfg < 0) {
+    return false;
+  }
+  int1_ctrl &= ~((uint8_t)int1_mask);
+  md1_cfg   &= ~((uint8_t)(int1_mask >> 8));
+  return mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT1_CTRL, int1_ctrl) &&
+         mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG, md1_cfg);
 }
 
 bool mgos_imu_lsm6dsl_int2_enable(struct mgos_imu *imu, uint32_t int2_mask) {
   int int2_ctrl = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT2_CTRL);
-  int md2_cfg = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD2_CFG);
-  if (int2_ctrl < 0 || md2_cfg < 0) return false;
-  int2_ctrl |= (uint8_t) (int2_mask | (int2_mask >> 16));
-  md2_cfg |= (uint8_t) (int2_mask >> 8);
+  int md2_cfg   = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD2_CFG);
+
+  if (int2_ctrl < 0 || md2_cfg < 0) {
+    return false;
+  }
+  int2_ctrl |= (uint8_t)(int2_mask | (int2_mask >> 16));
+  md2_cfg   |= (uint8_t)(int2_mask >> 8);
   if (md2_cfg != 0) {
     if (!mgos_i2c_setbits_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_TAP_CFG, 7, 1, 1)) {
       return false;
     }
   }
-  return (mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT2_CTRL, int2_ctrl) &&
-          mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD2_CFG, md2_cfg));
+  return mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT2_CTRL, int2_ctrl) &&
+         mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD2_CFG, md2_cfg);
 }
 
 bool mgos_imu_lsm6dsl_int2_disable(struct mgos_imu *imu, uint32_t int2_mask) {
   int int2_ctrl = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT2_CTRL);
-  int md2_cfg = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD2_CFG);
-  if (int2_ctrl < 0 || md2_cfg < 0) return false;
-  int2_ctrl &= ~((uint8_t) (int2_mask | (int2_mask >> 16)));
-  md2_cfg &= ~((uint8_t) (int2_mask >> 8));
-  return (mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT2_CTRL, int2_ctrl) &&
-          mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD2_CFG, md2_cfg));
+  int md2_cfg   = mgos_i2c_read_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD2_CFG);
+
+  if (int2_ctrl < 0 || md2_cfg < 0) {
+    return false;
+  }
+  int2_ctrl &= ~((uint8_t)(int2_mask | (int2_mask >> 16)));
+  md2_cfg   &= ~((uint8_t)(int2_mask >> 8));
+  return mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT2_CTRL, int2_ctrl) &&
+         mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD2_CFG, md2_cfg);
 }

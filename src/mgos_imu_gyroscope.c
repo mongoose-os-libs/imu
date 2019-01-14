@@ -31,7 +31,7 @@ static struct mgos_imu_gyro *mgos_imu_gyro_create(void) {
   }
   memset(gyro, 0, sizeof(struct mgos_imu_gyro));
 
-  gyro->type           = GYRO_NONE;
+  gyro->opts.type      = GYRO_NONE;
   gyro->orientation[0] = 1.f;
   gyro->orientation[1] = 0.f;
   gyro->orientation[2] = 0.f;
@@ -75,7 +75,7 @@ const char *mgos_imu_gyroscope_get_name(struct mgos_imu *imu) {
     return "VOID";
   }
 
-  switch (imu->gyro->type) {
+  switch (imu->gyro->opts.type) {
   case GYRO_NONE: return "NONE";
 
   case GYRO_MPU9250: return "MPU9250";
@@ -124,8 +124,8 @@ bool mgos_imu_gyroscope_get(struct mgos_imu *imu, float *x, float *y, float *z) 
   return true;
 }
 
-bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_gyro_type type) {
-  if (!imu) {
+bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, const struct mgos_imu_gyro_opts *opts) {
+  if (!imu || !i2c || !opts) {
     return false;
   }
   if (imu->gyro) {
@@ -137,8 +137,8 @@ bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
   }
   imu->gyro->i2c     = i2c;
   imu->gyro->i2caddr = i2caddr;
-  imu->gyro->type    = type;
-  switch (type) {
+  imu->gyro->opts    = *opts;
+  switch (opts->type) {
   case GYRO_LSM6DSL:
     imu->gyro->detect = mgos_imu_lsm6dsl_gyro_detect;
     imu->gyro->create = mgos_imu_lsm6dsl_gyro_create;
@@ -183,29 +183,41 @@ bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, u
     break;
 
   default:
-    LOG(LL_ERROR, ("Unknown gyroscope type %d", type));
+    LOG(LL_ERROR, ("Unknown gyroscope type %d", opts->type));
     mgos_imu_gyroscope_destroy(imu);
     return false;
   }
   if (imu->gyro->detect) {
     if (!imu->gyro->detect(imu->gyro, imu->user_data)) {
-      LOG(LL_ERROR, ("Could not detect gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_gyroscope_get_name(imu), i2caddr));
+      LOG(LL_ERROR, ("Could not detect gyroscope type %d (%s) at I2C 0x%02x",
+                     opts->type, mgos_imu_gyroscope_get_name(imu), i2caddr));
       mgos_imu_gyroscope_destroy(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully detected gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_gyroscope_get_name(imu), i2caddr));
+      LOG(LL_DEBUG, ("Successfully detected gyroscope type %d (%s) at I2C 0x%02x",
+                     opts->type, mgos_imu_gyroscope_get_name(imu), i2caddr));
     }
   }
 
   if (imu->gyro->create) {
     if (!imu->gyro->create(imu->gyro, imu->user_data)) {
-      LOG(LL_ERROR, ("Could not create gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_gyroscope_get_name(imu), i2caddr));
+      LOG(LL_ERROR, ("Could not create gyroscope type %d (%s) at I2C 0x%02x",
+                     opts->type, mgos_imu_gyroscope_get_name(imu), i2caddr));
       mgos_imu_gyroscope_destroy(imu);
       return false;
     } else {
-      LOG(LL_DEBUG, ("Successfully created gyroscope type %d (%s) at I2C 0x%02x", type, mgos_imu_gyroscope_get_name(imu), i2caddr));
+      LOG(LL_DEBUG, ("Successfully created gyroscope type %d (%s) at I2C 0x%02x",
+                     opts->type, mgos_imu_gyroscope_get_name(imu), i2caddr));
     }
   }
+  if (imu->gyro->set_scale) {
+    imu->gyro->set_scale(imu->gyro, imu->user_data, opts->scale);
+  }
+
+  if (imu->gyro->set_odr) {
+    imu->gyro->set_odr(imu->gyro, imu->user_data, opts->odr);
+  }
+
 
   return true;
 }

@@ -63,7 +63,14 @@ struct mgos_imu *mgos_imu_create(void);
 void mgos_imu_destroy(struct mgos_imu **imu);
 
 // Gyroscope functions
-bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_gyro_type type);
+struct mgos_imu_gyro_opts {
+  enum mgos_imu_gyro_type type;   // Gyroscope type.
+  float                   odr;    // Data rate, in Hz. See doc for set_odr().
+  float                   scale;  // Scale. See doc for set_scale().
+  bool                    no_rst; // Do not perform reset of the device when configuring.
+};
+
+bool mgos_imu_gyroscope_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, const struct mgos_imu_gyro_opts *opts);
 bool mgos_imu_gyroscope_destroy(struct mgos_imu *imu);
 bool mgos_imu_gyroscope_present(struct mgos_imu *imu);
 
@@ -99,14 +106,14 @@ bool mgos_imu_gyroscope_set_odr(struct mgos_imu *imu, float hertz);
 bool mgos_imu_gyroscope_get_orientation(struct mgos_imu *imu, float v[9]);
 bool mgos_imu_gyroscope_set_orientation(struct mgos_imu *imu, float v[9]);
 
+// Accelerometer functions
 struct mgos_imu_acc_opts {
-  enum mgos_imu_acc_type type;  // Accelerometer type.
-  float odr;                    // Data rate, in Hz. See doc for set_odr().
-  float scale;                  // Scale. See doc for set_scale().
-  bool no_rst;                  // Do not perform reset of the device when configuring.
+  enum mgos_imu_acc_type type;   // Accelerometer type.
+  float                  odr;    // Data rate, in Hz. See doc for set_odr().
+  float                  scale;  // Scale. See doc for set_scale().
+  bool                   no_rst; // Do not perform reset of the device when configuring.
 };
 
-// Accelerometer functions
 bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, const struct mgos_imu_acc_opts *opts);
 bool mgos_imu_accelerometer_destroy(struct mgos_imu *imu);
 bool mgos_imu_accelerometer_present(struct mgos_imu *imu);
@@ -135,7 +142,14 @@ bool mgos_imu_accelerometer_set_odr(struct mgos_imu *imu, float hertz);
 
 
 // Magnetometer functions
-bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, enum mgos_imu_mag_type type);
+struct mgos_imu_mag_opts {
+  enum mgos_imu_mag_type type;   // Magnetometer type.
+  float                  odr;    // Data rate, in Hz. See doc for set_odr().
+  float                  scale;  // Scale. See doc for set_scale().
+  bool                   no_rst; // Do not perform reset of the device when configuring.
+};
+
+bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, const struct mgos_imu_mag_opts *opts);
 bool mgos_imu_magnetometer_destroy(struct mgos_imu *imu);
 bool mgos_imu_magnetometer_present(struct mgos_imu *imu);
 

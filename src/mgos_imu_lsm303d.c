@@ -121,9 +121,9 @@ bool mgos_imu_lsm303d_mag_detect(struct mgos_imu_mag *dev, void *imu_user_data) 
 
   if (mgos_imu_lsm303d_detect(dev->i2c, dev->i2caddr, &devid)) {
     if (devid == MGOS_LSM303D_DEVID) {
-      dev->type = MAG_LSM303D;
+      dev->opts.type = MAG_LSM303D;
     } else{
-      dev->type = MAG_LSM303DLM;
+      dev->opts.type = MAG_LSM303DLM;
     }
     return true;
   }

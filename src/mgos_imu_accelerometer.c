@@ -113,7 +113,7 @@ bool mgos_imu_accelerometer_get(struct mgos_imu *imu, float *x, float *y, float 
 }
 
 bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c, uint8_t i2caddr, const struct mgos_imu_acc_opts *opts) {
-  if (!imu) {
+  if (!imu || !i2c || !opts) {
     return false;
   }
   if (imu->acc) {
@@ -191,25 +191,32 @@ bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
   if (imu->acc->detect) {
     if (!imu->acc->detect(imu->acc, imu->user_data)) {
       LOG(LL_ERROR, ("Could not detect accelerometer type %d (%s) at I2C 0x%02x",
-            opts->type, mgos_imu_accelerometer_get_name(imu), i2caddr));
+                     opts->type, mgos_imu_accelerometer_get_name(imu), i2caddr));
       mgos_imu_accelerometer_destroy(imu);
       return false;
     } else {
       LOG(LL_DEBUG, ("Successfully detected accelerometer type %d (%s) at I2C 0x%02x",
-            opts->type, mgos_imu_accelerometer_get_name(imu), i2caddr));
+                     opts->type, mgos_imu_accelerometer_get_name(imu), i2caddr));
     }
   }
 
   if (imu->acc->create) {
     if (!imu->acc->create(imu->acc, imu->user_data)) {
       LOG(LL_ERROR, ("Could not create accelerometer type %d (%s) at I2C 0x%02x",
-            opts->type, mgos_imu_accelerometer_get_name(imu), i2caddr));
+                     opts->type, mgos_imu_accelerometer_get_name(imu), i2caddr));
       mgos_imu_accelerometer_destroy(imu);
       return false;
     } else {
       LOG(LL_DEBUG, ("Successfully created accelerometer type %d (%s) at I2C 0x%02x",
-            opts->type, mgos_imu_accelerometer_get_name(imu), i2caddr));
+                     opts->type, mgos_imu_accelerometer_get_name(imu), i2caddr));
     }
+  }
+  if (imu->acc->set_scale) {
+    imu->acc->set_scale(imu->acc, imu->user_data, opts->scale);
+  }
+
+  if (imu->acc->set_odr) {
+    imu->acc->set_odr(imu->acc, imu->user_data, opts->odr);
   }
 
   return true;

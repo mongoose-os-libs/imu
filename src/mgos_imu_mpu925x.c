@@ -120,9 +120,9 @@ bool mgos_imu_mpu925x_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data
 
   if (mgos_imu_mpu925x_detect(dev->i2c, dev->i2caddr, &devid)) {
     if (devid == MGOS_MPU9250_DEVID_9255) {
-      dev->type = GYRO_MPU9255;
+      dev->opts.type = GYRO_MPU9255;
     } else{
-      dev->type = GYRO_MPU9250;
+      dev->opts.type = GYRO_MPU9250;
     }
     return true;
   }

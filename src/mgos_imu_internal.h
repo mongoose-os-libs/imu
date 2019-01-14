@@ -68,7 +68,7 @@ struct mgos_imu_mag {
 
   struct mgos_i2c *         i2c;
   uint8_t                   i2caddr;
-  enum mgos_imu_mag_type    type;
+  struct mgos_imu_mag_opts  opts;
 
   void *                    user_data;
 
@@ -131,7 +131,7 @@ struct mgos_imu_gyro {
 
   struct mgos_i2c *          i2c;
   uint8_t                    i2caddr;
-  enum mgos_imu_gyro_type    type;
+  struct mgos_imu_gyro_opts  opts;
 
   void *                     user_data;
 
