@@ -439,7 +439,6 @@ bool mgos_imu_lsm6dsl_int1_enable(struct mgos_imu *imu, uint32_t int1_mask) {
       return false;
     }
   }
-  LOG(LL_INFO, ("INT1_CTRL %02x MD1_CFG %02x", int1_ctrl, md1_cfg));
   return mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_INT1_CTRL, int1_ctrl) &&
          mgos_i2c_write_reg_b(imu->acc->i2c, imu->acc->i2caddr, MGOS_LSM6DSL_REG_MD1_CFG, md1_cfg);
 }
