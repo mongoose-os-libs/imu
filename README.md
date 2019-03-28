@@ -106,6 +106,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   MMA8451
 *   LSM9DS1
 *   LSM6DSL
+*   MPU6000 and MPU6050
 
 ### Gyroscope
 
@@ -114,6 +115,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   ITG3205
 *   LSM9DS1
 *   LSM6DSL
+*   MPU6000 and MPU6050
 
 ### Magnetometer
 

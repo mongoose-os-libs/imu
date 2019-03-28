@@ -45,7 +45,9 @@ enum mgos_imu_acc_type {
   ACC_LSM303DLM,
   ACC_MMA8451,
   ACC_LSM9DS1,
-  ACC_LSM6DSL
+  ACC_LSM6DSL,
+  ACC_MPU6000,
+  ACC_MPU6050
 };
 
 enum mgos_imu_gyro_type {
@@ -56,7 +58,9 @@ enum mgos_imu_gyro_type {
   GYRO_L3GD20H,
   GYRO_ITG3205,
   GYRO_LSM9DS1,
-  GYRO_LSM6DSL
+  GYRO_LSM6DSL,
+  GYRO_MPU6000,
+  GYRO_MPU6050
 };
 
 enum mgos_imu_mag_type {
