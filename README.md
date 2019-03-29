@@ -241,9 +241,9 @@ enum mgos_app_init_result mgos_app_init(void) {
   if (!mgos_imu_accelerometer_create_i2c(imu, i2c, 0x68, &acc_opts))
     LOG(LL_ERROR, ("Cannot create accelerometer on IMU"));
 
-  acc_opts.type = ACC_MPU9250;
-  acc_opts.scale = 2000; // deg/sec
-  acc_opts.odr = 100;    // Hz
+  gyro_opts.type = ACC_MPU9250;
+  gyro_opts.scale = 2000; // deg/sec
+  gyro_opts.odr = 100;    // Hz
   if (!mgos_imu_gyroscope_create_i2c(imu, i2c, 0x68, &gyro_opts))
     LOG(LL_ERROR, ("Cannot create gyroscope on IMU"));
 
