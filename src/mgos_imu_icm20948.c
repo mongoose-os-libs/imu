@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google Inc.
+ * Copyright 2019 Vasily Kiniv
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,16 @@
 #include "mgos_i2c.h"
 #include "mgos_imu_icm20948.h"
 
-#define ACC_BASE_ODR  1125.f
-#define GYRO_BASE_ODR 1100.f
+#define MGOS_ICM20948_ACC_BASE_ODR  1125.f
+#define MGOS_ICM20948_GYRO_BASE_ODR 1100.f
 
 static bool mgos_imu_icm20948_change_bank(struct mgos_i2c *i2c, uint8_t i2caddr, void *imu_user_data, uint8_t bank_no) {
   struct  mgos_imu_icm20948_userdata *iud = (struct mgos_imu_icm20948_userdata *)imu_user_data;
   uint8_t bank_addr = 0x00;
+
+  if (!imu_user_data) {
+    return false;
+  }
 
   if(bank_no == iud->current_bank_no) {
     return true;
@@ -45,14 +49,17 @@ static bool mgos_imu_icm20948_change_bank(struct mgos_i2c *i2c, uint8_t i2caddr,
 }
 
 static bool mgos_imu_icm20948_detect(struct mgos_i2c *i2c, uint8_t i2caddr, void *imu_user_data) {
+  struct mgos_imu_icm20948_userdata *iud = (struct mgos_imu_icm20948_userdata *)imu_user_data;
   int device_id;
 
   if (!i2c) {
     return false;
   }
-
-  if(!mgos_imu_icm20948_change_bank(i2c, i2caddr, imu_user_data, 0)) {
+  if(!imu_user_data) {
     return false;
+  }
+  if(iud->accgyro_initialized) {
+    return true;
   }
 
   device_id = mgos_i2c_read_reg_b(i2c, i2caddr, MGOS_ICM20948_REG0_WHO_AM_I);
@@ -142,6 +149,9 @@ bool mgos_imu_icm20948_acc_read(struct mgos_imu_acc *dev, void *imu_user_data) {
 bool mgos_imu_icm20948_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_data, float *scale) {
   uint8_t fs = 0;
 
+  if (!scale) {
+    return false;
+  }
   if(!mgos_imu_icm20948_change_bank(dev->i2c, dev->i2caddr, imu_user_data, 2)) {
     return false;
   }
@@ -193,6 +203,9 @@ bool mgos_imu_icm20948_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_da
 bool mgos_imu_icm20948_acc_get_odr(struct mgos_imu_acc *dev, void *imu_user_data, float *odr) {
   uint16_t div  = 0;
 
+  if (!odr) {
+    return false;
+  }
   if(!mgos_imu_icm20948_change_bank(dev->i2c, dev->i2caddr, imu_user_data, 2)) {
     return false;
   }
@@ -204,7 +217,7 @@ bool mgos_imu_icm20948_acc_get_odr(struct mgos_imu_acc *dev, void *imu_user_data
 
   // ODR is computed as follows:
   // 1.125 kHz/(1+ACCEL_SMPLRT_DIV[11:0])
-  *odr = ACC_BASE_ODR / (div + 1);
+  *odr = MGOS_ICM20948_ACC_BASE_ODR / (div + 1);
   return *odr >= 0;
 }
 
@@ -215,7 +228,7 @@ bool mgos_imu_icm20948_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data
     return false;
   }
 
-  div = (ACC_BASE_ODR / odr) - 1;
+  div = (MGOS_ICM20948_ACC_BASE_ODR / odr) - 1;
 
   if(div > 0xfff) {
     return false;
@@ -289,6 +302,9 @@ bool mgos_imu_icm20948_gyro_read(struct mgos_imu_gyro *dev, void *imu_user_data)
 bool mgos_imu_icm20948_gyro_get_scale(struct mgos_imu_gyro *dev, void *imu_user_data, float *scale) {
   uint8_t fs = 0;
 
+  if (!scale) {
+    return false;
+  }
   if(!mgos_imu_icm20948_change_bank(dev->i2c, dev->i2caddr, imu_user_data, 2)) {
     return false;
   }
@@ -339,6 +355,9 @@ bool mgos_imu_icm20948_gyro_set_scale(struct mgos_imu_gyro *dev, void *imu_user_
 bool mgos_imu_icm20948_gyro_get_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float *odr) {
   uint8_t div  = 0;
 
+  if (!odr) {
+    return false;
+  }
   if(!mgos_imu_icm20948_change_bank(dev->i2c, dev->i2caddr, imu_user_data, 2)) {
     return false;
   }
@@ -348,17 +367,17 @@ bool mgos_imu_icm20948_gyro_get_odr(struct mgos_imu_gyro *dev, void *imu_user_da
 
   // ODR is computed as follows:
   // 1.1 kHz/(1+GYRO_SMPLRT_DIV[7:0])
-  *odr = GYRO_BASE_ODR / (div + 1);
+  *odr = MGOS_ICM20948_GYRO_BASE_ODR / (div + 1);
   return *odr >= 0;
 }
 
 bool mgos_imu_icm20948_gyro_set_odr(struct mgos_imu_gyro *dev, void *imu_user_data, float odr) {
   uint8_t div = 0;
 
-  if(odr <= 0 || odr > GYRO_BASE_ODR) {
+  if(odr <= 0 || odr > MGOS_ICM20948_GYRO_BASE_ODR) {
     return false;
   }
-  div = (GYRO_BASE_ODR / odr) - 1;
+  div = (MGOS_ICM20948_GYRO_BASE_ODR / odr) - 1;
 
   if(!mgos_imu_icm20948_change_bank(dev->i2c, dev->i2caddr, imu_user_data, 2)) {
     return false;
@@ -430,7 +449,13 @@ bool mgos_imu_icm20948_mag_read(struct mgos_imu_mag *dev, void *imu_user_data) {
 }
 
 bool mgos_imu_icm20948_mag_get_odr(struct mgos_imu_mag *dev, void *imu_user_data, float *odr) {
-  int16_t mode = mgos_i2c_read_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_CNTL2_M);
+  int16_t mode;
+
+  if (!odr) {
+    return false;
+  }
+
+  mode = mgos_i2c_read_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_CNTL2_M);
   if(mode == -1) {
     return false;
   }
