@@ -67,6 +67,7 @@ enum mgos_imu_gyro_type {
 
 enum mgos_imu_mag_type {
   MAG_NONE = 0,
+  MAG_MPU9250,
   MAG_AK8963,
   MAG_AK8975,
   MAG_MAG3110,
