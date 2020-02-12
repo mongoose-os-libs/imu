@@ -183,3 +183,7 @@ bool mgos_imu_lsm6dsl_int1_enable(struct mgos_imu *imu, uint32_t int1_mask);
 bool mgos_imu_lsm6dsl_int1_disable(struct mgos_imu *imu, uint32_t int1_mask);
 bool mgos_imu_lsm6dsl_int2_enable(struct mgos_imu *imu, uint32_t int2_mask);
 bool mgos_imu_lsm6dsl_int2_disable(struct mgos_imu *imu, uint32_t int2_mask);
+
+// Read and clear all the interrupt sources.
+// *res contains mask of MGOS_LSM6DSL_INT_* values.
+bool mgos_imu_lsm6dsl_get_and_clear_ints(struct mgos_imu *imu, uint32_t *res);

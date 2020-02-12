@@ -296,7 +296,7 @@ struct mgos_imu_lsm6dsl_userdata *mgos_imu_lsm6dsl_userdata_create(void) {
   return iud;
 }
 
-static bool mgos_imu_lsm6dsl_get_and_clear_ints(struct mgos_imu *imu, uint32_t *res) {
+bool mgos_imu_lsm6dsl_get_and_clear_ints(struct mgos_imu *imu, uint32_t *res) {
   uint32_t ints = 0;
   // Query all the possible interrupt sources.
   uint8_t regs[4] = { 0 };
