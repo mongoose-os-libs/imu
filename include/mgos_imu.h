@@ -69,6 +69,7 @@ enum mgos_imu_mag_type {
   MAG_NONE = 0,
   MAG_AK8963,
   MAG_AK8975,
+  MAG_BMM150,
   MAG_MAG3110,
   MAG_LSM303D,
   MAG_LSM303DLM,
