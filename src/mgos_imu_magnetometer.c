@@ -136,7 +136,7 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
   }
   imu->mag = mgos_imu_mag_create();
   if (!imu->mag) {
-    false;
+    return false;
   }
   imu->mag->i2c     = i2c;
   imu->mag->i2caddr = i2caddr;
