@@ -257,7 +257,7 @@ enum mgos_app_init_result mgos_app_init(void) {
     LOG(LL_ERROR, ("Cannot create magnetometer on IMU"));
 
   mgos_set_timer(1000, true, imu_cb, imu);
-  return true;
+  return MGOS_APP_INIT_SUCCESS;
 }
 ```
 
