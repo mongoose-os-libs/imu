@@ -23,6 +23,7 @@
 #include "mgos_imu_lsm9ds1.h"
 #include "mgos_imu_lsm6dsl.h"
 #include "mgos_imu_mpu60x0.h"
+#include "mgos_imu_mpu6886.h"
 #include "mgos_imu_icm20948.h"
 
 static struct mgos_imu_acc *mgos_imu_acc_create(void) {
@@ -92,6 +93,8 @@ const char *mgos_imu_accelerometer_get_name(struct mgos_imu *imu) {
 
   case ACC_MPU6050: return "MPU6050";
 
+  case ACC_MPU6886: return "MPU6886";
+
   case ACC_ICM20948: return "ICM20948";
 
   default: return "UNKNOWN";
@@ -138,6 +141,17 @@ bool mgos_imu_accelerometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2
   case ACC_MPU6000:
   case ACC_MPU6050:
     imu->acc->detect    = mgos_imu_mpu60x0_acc_detect;
+    imu->acc->create    = mgos_imu_mpu60x0_acc_create;
+    imu->acc->read      = mgos_imu_mpu60x0_acc_read;
+    imu->acc->get_scale = mgos_imu_mpu60x0_acc_get_scale;
+    imu->acc->set_scale = mgos_imu_mpu60x0_acc_set_scale;
+    if (!imu->user_data) {
+      imu->user_data = mgos_imu_mpu60x0_userdata_create();
+    }
+    break;
+
+  case ACC_MPU6886:
+    imu->acc->detect    = mgos_imu_mpu6886_acc_detect;
     imu->acc->create    = mgos_imu_mpu60x0_acc_create;
     imu->acc->read      = mgos_imu_mpu60x0_acc_read;
     imu->acc->get_scale = mgos_imu_mpu60x0_acc_get_scale;
