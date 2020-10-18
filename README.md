@@ -124,6 +124,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   MAG3110
 *   AK8963 (as found in MPU9250/MPU9255)
 *   AK8975
+*   BMM150
 *   LSM303D and LSM303DLM
 *   HMC5883L
 *   LSM9DS1

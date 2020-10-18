@@ -18,6 +18,7 @@
 #include "mgos_imu_internal.h"
 #include "mgos_imu_ak8963.h"
 #include "mgos_imu_ak8975.h"
+#include "mgos_imu_bmm150.h"
 #include "mgos_imu_mag3110.h"
 #include "mgos_imu_lsm303d.h"
 #include "mgos_imu_hmc5883l.h"
@@ -83,6 +84,8 @@ const char *mgos_imu_magnetometer_get_name(struct mgos_imu *imu) {
   case MAG_AK8963: return "AK8963";
 
   case MAG_AK8975: return "AK8975";
+
+  case MAG_BMM150: return "BMM150";
 
   case MAG_MAG3110: return "MAG3110";
 
@@ -177,6 +180,12 @@ bool mgos_imu_magnetometer_create_i2c(struct mgos_imu *imu, struct mgos_i2c *i2c
     imu->mag->detect = mgos_imu_ak8975_detect;
     imu->mag->create = mgos_imu_ak8975_create;
     imu->mag->read   = mgos_imu_ak8975_read;
+    break;
+
+  case MAG_BMM150:
+    imu->mag->detect = mgos_imu_bmm150_detect;
+    imu->mag->create = mgos_imu_bmm150_create;
+    imu->mag->read   = mgos_imu_bmm150_read;
     break;
 
   case MAG_MAG3110:

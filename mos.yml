@@ -11,9 +11,11 @@ tags:
 # List of files / directories with C sources. No slashes at the end of dir names.
 sources:
   - src
+  - third-party/bosch/src
 
 includes:
   - include
+  - third-party/bosch/include
 
 config_schema:
 
