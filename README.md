@@ -107,6 +107,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   LSM9DS1
 *   LSM6DSL
 *   MPU6000 and MPU6050
+*   MPU6886 ("just works")
 *   ICM20948
 
 ### Gyroscope
@@ -117,6 +118,7 @@ See `mgos_imu.h` for more details and an example of how to do this.
 *   LSM9DS1
 *   LSM6DSL
 *   MPU6000 and MPU6050
+*   MPU6886 (work in progress)
 *   ICM20948
 
 ### Magnetometer
